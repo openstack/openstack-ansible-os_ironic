@@ -1,0 +1,16 @@
+---
+galaxy_info:
+  author: OpenStack
+  description: Baremetal provisioning for Openstack
+  company: OpenStack
+  license: Apache
+  min_ansible_version: 1.8
+  platforms:
+  - name: Ubuntu
+    versions:
+    - trusty
+  categories:
+  - cloud
+  - baremetal
+  - system
+dependencies: []

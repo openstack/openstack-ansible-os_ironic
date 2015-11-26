@@ -1,0 +1,98 @@
+---
+# defaults file for os_ironic
+
+# Verbosity Options
+debug: False
+verbose: True
+
+# Name of the virtual env to deploy into
+ironic_venv_tag: untagged
+ironic_venv_bin: "/openstack/venvs/ironic-{{ ironic_venv_tag }}/bin"
+
+# Set this to enable or disable installing in a venv
+ironic_venv_enabled: True
+
+# System info
+ironic_system_user_name: ironic
+ironic_system_group_name: ironic
+ironic_system_shell: /bin/bash
+ironic_system_comment: ironic system user
+ironic_system_home_folder: "/var/lib/{{ ironic_system_user_name }}"
+ironic_system_log_folder: "/var/log/{{ ironic_system_user_name }}"
+
+# Ironic API
+ironic_api_program_name: ironic-api
+
+
+# Ironic Conductor
+ironic_conductor_program_name: ironic-conductor
+
+
+
+# Python Ironic Client
+python_ironic_client_program_name: ironic
+
+
+ironic_service_names:
+    - "{{ ironic_api_program_name }}"
+    - "{{ ironic_conductor_program_name }}"
+
+# Database
+ironic_database_user: ironic
+ironic_database_database: ironic
+ironic_database_address: localhost
+ironic_database_password: gu1d0
+
+# TBD(mrda): need to handle this a little better :)
+database_root_user: root
+database_root_password: sp4m3ggs
+
+# If you want to regenerate the ironic users SSH keys, on each run, set this var to True
+# Otherwise keys will be generated on the first run and not regenerated each run.
+ironic_recreate_keys: False
+
+ironic_bin: "{{ ironic_venv_bin }}"
+
+ironic_service_name: ironic
+
+ironic_common_apt_packages:
+  - python-dev
+  - python-pip
+  - git
+
+ironic_conductor_apt_packages:
+  - libmysqlclient-dev
+  - libxml2-dev
+  - rabbitmq-server
+  - mysql-server
+  - isc-dhcp-server
+  - tftpd-hpa
+  - syslinux
+  - syslinux-common
+  - libxslt1-dev
+  - qemu-utils
+  - libpq-dev
+  - python-yaml
+  - open-iscsi
+  - ipmitool
+
+ironic_pip_packages:
+  - virtualenvwrapper
+  - six
+  - tox
+  - mysql-python
+  - python_ironicclient
+
+ironicclient_pip_packages:
+  - python_ironicclient
+
+## Ironic service
+ironic_git_repo: https://git.openstack.org/openstack/ironic
+ironic_git_install_branch: c6e8e2a33c65b6269a0b1b4f5e63620c68bdc3fb  # HEAD sha as of 13 Nov 2015
+ironic_git_dest: "/opt/ironic_{{ ironic_git_install_branch | replace('/', '_') }}"
+
+## python-ironicclient
+python_ironicclient_git_repo: https://git.openstack.org/openstack/python-ironicclient
+python_ironicclient_git_install_branch: b66f5e8dd60c023d6d216c3bbc5ec22d837623c3  # HEAD sha as of 13 Nov 2015
+python_ironicclient_git_dest: "/opt/python-ironicclient_{{ python_ironicclient_git_install_branch | replace('/', '_') }}"
+

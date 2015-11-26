@@ -1,0 +1,5 @@
+- name: Do things with the openstack-ironic-role role
+  remote_user: root
+  hosts: installhost
+  roles:
+    - role: openstack-ansible-ironic
