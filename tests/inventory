@@ -1,5 +1,8 @@
 [all]
 localhost ansible_connection=local ansible_user=root
 
+# Note(mrda): 'ironicinstallhost' will need to externally resolve to where
+# you want to do an 'allinone' install, and the root account will need to have
+# your ssh public_key in it's /root/.ssh/authorized_keys file
 [installhost]
-installhost ansible_user=root ansible_ssh_port=22 ansible_ssh_host=192.168.1.21
+installhost ansible_user=root ansible_ssh_port=22 ansible_ssh_host=ironicinstallhost

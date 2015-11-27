@@ -15,15 +15,17 @@
 
 - name: Install Ironic (python system library)
   when: ironic_checkout.changed and not ironic_venv_enabled
-  pip: name="file://{{ ironic_git_dest }}"
+  pip:
+    name: "file://{{ ironic_git_dest }}"
   tags:
     - ironic-api
     - ironic-conductor
 
 - name: Install Ironic (openstack venv)
   when: ironic_checkout.changed and ironic_venv_enabled
-  pip: name="file://{{ ironic_git_dest }}" virtualenv="/openstack/venvs/ironic-{{ ironic_venv_tag }}"
+  pip:
+    name: "file://{{ ironic_git_dest }}"
+    virtualenv: "/openstack/venvs/ironic-{{ ironic_venv_tag }}"
   tags:
     - ironic-api
     - ironic-conductor
-

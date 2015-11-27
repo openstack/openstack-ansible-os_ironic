@@ -44,9 +44,8 @@
   sudo: yes
   sudo_user: "{{ ironic_system_user_name }}"
   notify:
-    - restart ironic-conductor
+    - Restart ironic services
   when: ironic_checkout.changed
   tags:
     - ironic-db-setup
     - ironic-conductor
-

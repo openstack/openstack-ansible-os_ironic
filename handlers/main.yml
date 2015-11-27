@@ -21,3 +21,8 @@
   with_items: ironic_service_names
   failed_when: false
 
+- name: Restart tftpd-hpa
+  service:
+    name: "tftpd-hpa"
+    state: restarted
+  failed_when: false

@@ -15,12 +15,15 @@
 
 - name: Install Python-Ironicclient (python system library)
   when: python_ironicclient_checkout.changed and not ironic_venv_enabled
-  pip: name="file://{{ python_ironicclient_git_dest }}"
+  pip:
+    name: "file://{{ python_ironicclient_git_dest }}"
   tags:
     - ironic-client
 
 - name: Install Python-Ironicclient (openstack venv)
   when: python_ironicclient_checkout.changed and ironic_venv_enabled
-  pip: name="file://{{ python_ironicclient_git_dest }}" virtualenv="/openstack/venvs/ironic-{{ ironic_venv_tag }}"
+  pip:
+    name: "file://{{ python_ironicclient_git_dest }}"
+    virtualenv: "/openstack/venvs/ironic-{{ ironic_venv_tag }}"
   tags:
     - ironic-client

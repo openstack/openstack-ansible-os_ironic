@@ -123,3 +123,30 @@
   tags:
     - ironic-api
     - ironic-conductor
+
+- name: Install common dependencies via apt
+  apt:
+    pkg: "{{ item }}"
+    state: latest
+  register: install_packages
+  until: install_packages|success
+  retries: 5
+  delay: 2
+  with_items: ironic_common_apt_packages
+  tags:
+    - ironic-install
+    - ironic-apt-packages
+
+- name: Install common dependencies via pip
+  pip:
+    name: "{{ item }}"
+    state: present
+    extra_args: "{{ pip_install_options|default('') }}"
+  register: install_packages
+  until: install_packages|success
+  retries: 5
+  delay: 2
+  with_items: ironic_common_pip_packages
+  tags:
+    - ironic-install
+    - ironic-pip-packages

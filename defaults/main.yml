@@ -1,5 +1,19 @@
 ---
-# defaults file for os_ironic
+# Copyright 2015, Rackspace US, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Defaults file for openstack-ansible-ironic
 
 # Verbosity Options
 debug: False
@@ -23,15 +37,11 @@ ironic_system_log_folder: "/var/log/{{ ironic_system_user_name }}"
 # Ironic API
 ironic_api_program_name: ironic-api
 
-
 # Ironic Conductor
 ironic_conductor_program_name: ironic-conductor
 
-
-
 # Python Ironic Client
 python_ironic_client_program_name: ironic
-
 
 ironic_service_names:
     - "{{ ironic_api_program_name }}"
@@ -47,8 +57,9 @@ ironic_database_password: gu1d0
 database_root_user: root
 database_root_password: sp4m3ggs
 
-# If you want to regenerate the ironic users SSH keys, on each run, set this var to True
-# Otherwise keys will be generated on the first run and not regenerated each run.
+# If you want to regenerate the ironic users SSH keys, on each run, set this
+# var to True. Otherwise keys will be generated on the first run and not
+# regenerated each run.
 ironic_recreate_keys: False
 
 ironic_bin: "{{ ironic_venv_bin }}"
@@ -59,6 +70,9 @@ ironic_common_apt_packages:
   - python-dev
   - python-pip
   - git
+
+ironic_common_pip_packages:
+  - virtualenvwrapper
 
 ironic_conductor_apt_packages:
   - libmysqlclient-dev
@@ -76,17 +90,10 @@ ironic_conductor_apt_packages:
   - open-iscsi
   - ipmitool
 
-ironic_pip_packages:
-  - virtualenvwrapper
-  - six
-  - tox
+ironic_conductor_pip_packages:
   - mysql-python
-  - python_ironicclient
 
-ironicclient_pip_packages:
-  - python_ironicclient
-
-## Ironic service
+## ironic service
 ironic_git_repo: https://git.openstack.org/openstack/ironic
 ironic_git_install_branch: c6e8e2a33c65b6269a0b1b4f5e63620c68bdc3fb  # HEAD sha as of 13 Nov 2015
 ironic_git_dest: "/opt/ironic_{{ ironic_git_install_branch | replace('/', '_') }}"

@@ -21,7 +21,7 @@
     system_group: "{{ ironic_system_group_name }}"
     service_home: "{{ ironic_system_home_folder }}"
 # TODO(mrda): define groups
-#  when: inventory_hostname in groups['ironic_api_metadata']
+#  when: inventory_hostname in groups['tbd']
 
 - include: ironic_upstart_common_init.yml
   vars:
@@ -31,5 +31,5 @@
     system_group: "{{ ironic_system_group_name }}"
     service_home: "{{ ironic_system_home_folder }}"
 # TODO(mrda): define groups
-#  when: inventory_hostname in groups['ironic_cert']
+#  when: inventory_hostname in groups['tbd']
 

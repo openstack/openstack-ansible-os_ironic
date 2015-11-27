@@ -15,6 +15,10 @@
 
 ROLE_NAME=$(basename $(pwd))
 
+# Note(mrda): In testing we often cycle machines, so this just helps our
+#             testing efforts.  Don't do this in production.
+export ANSIBLE_HOST_KEY_CHECKING=False
+
 pushd tests
   ansible-playbook -i inventory local_install.yml -e rolename=${ROLE_NAME}
 popd
