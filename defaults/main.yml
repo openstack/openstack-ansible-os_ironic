@@ -45,24 +45,6 @@ ironic_service_names:
 # Is this Ironic installation working standalone?
 ironic_standalone: True
 
-# Integrated Openstack configuration
-ironic_openstack_driver_list: agent_ipmitool
-ironic_openstack_auth_strategy: keystone
-ironic_openstack_api_url: ''  # Not required when we have keystone
-ironic_openstack_dhcp_provider: neutron
-ironic_openstack_sync_power_state_interval: 60
-
-# Standalone Ironic configuration
-ironic_standalone_driver_list: pxe_amt # for testing with a NUC
-ironic_standalone_auth_strategy: noauth
-# TODO(mrda): We need to know what the public endpoint for ironic is
-ironic_standalone_api_url: "api_url=http://{{ ansible_default_ipv4['address'] }}:6385/"
-ironic_standalone_dhcp_provider: none
-ironic_standalone_sync_power_state_interval: -1
-
-# Common configuration
-ironic_node_name: ironic
-
 # Database
 ironic_database_user: ironic
 ironic_database_database: ironic
@@ -72,6 +54,25 @@ ironic_database_password: gu1d0
 # TBD(mrda): need to handle this a little better :)
 database_root_user: root
 database_root_password: sp4m3ggs
+
+# Integrated Openstack configuration
+ironic_openstack_driver_list: agent_ipmitool
+ironic_openstack_auth_strategy: keystone
+ironic_openstack_api_url: ''  # Not required when we have keystone
+ironic_openstack_dhcp_provider: neutron
+ironic_openstack_sync_power_state_interval: 60
+ironic_openstack_db_connection_string: "mysql://{{ ironic_database_user }}:{{ ironic_database_password }}@localhost/ironic"
+
+# Standalone Ironic configuration
+ironic_standalone_driver_list: pxe_amt # for testing with a NUC
+ironic_standalone_auth_strategy: noauth
+ironic_standalone_api_url: "api_url=http://{{ ansible_default_ipv4['address'] }}:6385/"
+ironic_standalone_dhcp_provider: none
+ironic_standalone_sync_power_state_interval: -1
+ironic_standalone_db_connection_string: "mysql://{{ ironic_database_user }}:{{ ironic_database_password }}@localhost/ironic"
+
+# Common configuration
+ironic_node_name: ironic
 
 # If you want to regenerate the ironic users SSH keys, on each run, set this
 # var to True. Otherwise keys will be generated on the first run and not

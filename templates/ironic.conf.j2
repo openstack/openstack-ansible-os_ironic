@@ -751,7 +751,7 @@ sync_power_state_interval={{ ironic_sync_power_state_interval }}
 # Deprecated group/name - [DEFAULT]/sql_connection
 # Deprecated group/name - [DATABASE]/sql_connection
 # Deprecated group/name - [sql]/connection
-#connection=<None>
+connection={{ ironic_db_connection_string }}
 
 # The SQLAlchemy connection string to use to connect to the
 # slave database. (string value)

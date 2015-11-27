@@ -20,6 +20,7 @@
     ironic_api_url: "{{ ironic_standalone_api_url }}"
     ironic_dhcp_provider: "{{ ironic_standalone_dhcp_provider }}"
     ironic_sync_power_state_interval: "{{ ironic_standalone_sync_power_state_interval }}"
+    ironic_db_connection_string: "{{ ironic_standalone_db_connection_string }}"
   when: ironic_standalone
 
 - name: Setup ironic for integrated Openstack usage
@@ -29,6 +30,7 @@
     ironic_api_url: "{{ ironic_openstack_api_url }}"
     ironic_dhcp_provider: "{{ ironic_openstack_dhcp_provider }}"
     ironic_sync_power_state_interval: "{{ ironic_openstack_sync_power_state_interval }}"
+    ironic_db_connection_string: "{{ ironic_openstack_db_connection_string }}"
   when: not ironic_standalone
 
 - name: Build the ironic.conf configuration file

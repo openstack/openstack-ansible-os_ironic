@@ -39,8 +39,8 @@
   tags:
     - ironic-db-setup
 
-- name: Synchronize database schema
-  command: "{{ ironic_bin }}/ironic-dbsync upgrade"
+- name: Create database schema
+  command: "{{ ironic_bin }}/ironic-dbsync --config-file /etc/ironic/ironic.conf create_schema"
   sudo: yes
   sudo_user: "{{ ironic_system_user_name }}"
   notify:
