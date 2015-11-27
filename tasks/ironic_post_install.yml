@@ -1,0 +1,48 @@
+---
+# Copyright 2015, Rackspace US, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+- name: Setup ironic for standalone usage
+  set_fact:
+    ironic_driver_list: "{{ ironic_standalone_driver_list }}"
+    ironic_auth_strategy: "{{ ironic_standalone_auth_strategy }}"
+    ironic_api_url: "{{ ironic_standalone_api_url }}"
+    ironic_dhcp_provider: "{{ ironic_standalone_dhcp_provider }}"
+    ironic_sync_power_state_interval: "{{ ironic_standalone_sync_power_state_interval }}"
+  when: ironic_standalone
+
+- name: Setup ironic for integrated Openstack usage
+  set_fact:
+    ironic_driver_list: "{{ ironic_openstack_driver_list }}"
+    ironic_auth_strategy: "{{ ironic_openstack_auth_strategy }}"
+    ironic_api_url: "{{ ironic_openstack_api_url }}"
+    ironic_dhcp_provider: "{{ ironic_openstack_dhcp_provider }}"
+    ironic_sync_power_state_interval: "{{ ironic_openstack_sync_power_state_interval }}"
+  when: not ironic_standalone
+
+- name: Build the ironic.conf configuration file
+  template:
+    src: "ironic.conf.j2"
+    dest: "/etc/ironic/ironic.conf"
+    mode: "0644"
+    owner: "root"
+    group: "root"
+  notify:
+    - Restart ironic services
+  tags:
+    - ironic-init
+
+
+# TODO(mrda): Configure rabbit if standalone
+

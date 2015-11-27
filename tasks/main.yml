@@ -18,6 +18,7 @@
   - include: ironic_conductor_pre_install.yml
   - include: ironic_install.yml
   - include: python_ironicclient_install.yml
+  - include: ironic_post_install.yml
   - include: ironic_conductor_post_install.yml
   - include: ironic_db_setup.yml
   - include: ironic_upstart_init.yml

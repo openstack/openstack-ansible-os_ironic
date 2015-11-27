@@ -34,18 +34,34 @@ ironic_system_comment: ironic system user
 ironic_system_home_folder: "/var/lib/{{ ironic_system_user_name }}"
 ironic_system_log_folder: "/var/log/{{ ironic_system_user_name }}"
 
-# Ironic API
+# Ironic Program and Service names
 ironic_api_program_name: ironic-api
-
-# Ironic Conductor
 ironic_conductor_program_name: ironic-conductor
-
-# Python Ironic Client
 python_ironic_client_program_name: ironic
-
 ironic_service_names:
     - "{{ ironic_api_program_name }}"
     - "{{ ironic_conductor_program_name }}"
+
+# Is this Ironic installation working standalone?
+ironic_standalone: True
+
+# Integrated Openstack configuration
+ironic_openstack_driver_list: agent_ipmitool
+ironic_openstack_auth_strategy: keystone
+ironic_openstack_api_url: ''  # Not required when we have keystone
+ironic_openstack_dhcp_provider: neutron
+ironic_openstack_sync_power_state_interval: 60
+
+# Standalone Ironic configuration
+ironic_standalone_driver_list: pxe_amt # for testing with a NUC
+ironic_standalone_auth_strategy: noauth
+# TODO(mrda): We need to know what the public endpoint for ironic is
+ironic_standalone_api_url: "api_url=http://{{ ansible_default_ipv4['address'] }}:6385/"
+ironic_standalone_dhcp_provider: none
+ironic_standalone_sync_power_state_interval: -1
+
+# Common configuration
+ironic_node_name: ironic
 
 # Database
 ironic_database_user: ironic
