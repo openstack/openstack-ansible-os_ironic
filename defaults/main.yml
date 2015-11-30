@@ -19,6 +19,9 @@
 debug: False
 verbose: True
 
+# Update source
+update_src: True
+
 # Name of the virtual env to deploy into
 ironic_venv_tag: untagged
 ironic_venv_bin: "/openstack/venvs/ironic-{{ ironic_venv_tag }}/bin"

@@ -17,7 +17,7 @@
   git: repo=https://github.com/openstack/ironic.git
        dest={{ ironic_git_dest }}
        version={{ ironic_git_install_branch }}
-       update=no
+       update={{ update_src }}
   register: ironic_checkout
   tags:
     - ironic-api
@@ -27,7 +27,7 @@
   git: repo=https://github.com/openstack/python-ironicclient.git
        dest={{ python_ironicclient_git_dest }}
        version={{ python_ironicclient_git_install_branch }}
-       update=no
+       update={{ update_src }}
   register: python_ironicclient_checkout
   tags:
     - ironic-client
