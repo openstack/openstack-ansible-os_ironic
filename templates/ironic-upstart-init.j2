@@ -13,6 +13,7 @@ respawn limit 10 5
 
 # Set the RUNBIN environment variable
 env RUNBIN="{{ ironic_bin }}/{{ program_name }}"
+env RUNOPTS="--config-file /etc/ironic/ironic.conf"
 
 # Change directory to service users home
 chdir "{{ service_home }}"
@@ -42,5 +43,6 @@ exec start-stop-daemon --start \
                        --make-pidfile \
                        --pidfile /var/run/{{ program_name }}/{{ program_name }}.pid \
                        --exec "{{ program_override|default('$RUNBIN') }}" \
-                       -- {{ program_config_options|default('') }} \
+                       -- {{ program_config_options|default('$RUNOPTS') }} \
                        --log-file={{ ironic_system_log_folder }}/{{ program_name }}.log
+
