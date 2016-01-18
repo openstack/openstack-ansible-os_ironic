@@ -13,17 +13,38 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Install Python-Ironicclient (python system library)
-  when: python_ironicclient_checkout.changed and not ironic_venv_enabled
+- name: Install pip packages (venv)
   pip:
-    name: "file://{{ python_ironicclient_git_dest }}"
+    name: "{{ item }}"
+    state: present
+    virtualenv: "{{ ironic_venv_bin | dirname }}"
+    virtualenv_site_packages: "no"
+    extra_args: "{{ pip_install_options|default('') }}"
+  register: install_packages
+  until: install_packages|success
+  retries: 5
+  delay: 2
+  with_items:
+    - "{{ python_ironicclient_pip_packages }}"
+  when:
+    - ironic_venv_enabled | bool
   tags:
-    - ironic-client
+    - ironicclient-install
+    - ironicclient-pip-packages
 
-- name: Install Python-Ironicclient (openstack venv)
-  when: python_ironicclient_checkout.changed and ironic_venv_enabled
+- name: Install pip packages (no venv)
   pip:
-    name: "file://{{ python_ironicclient_git_dest }}"
-    virtualenv: "/openstack/venvs/ironic-{{ ironic_venv_tag }}"
+    name: "{{ item }}"
+    state: present
+    extra_args: "{{ pip_install_options|default('') }}"
+  register: install_packages
+  until: install_packages|success
+  retries: 5
+  delay: 2
+  with_items:
+    - "{{ python_ironicclient_pip_packages }}"
+  when: not ironic_venv_enabled | bool
   tags:
-    - ironic-client
+    - ironicclient-install
+    - ironicclient-pip-packages
+

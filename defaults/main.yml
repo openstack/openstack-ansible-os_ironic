@@ -49,10 +49,10 @@ ironic_service_names:
 ironic_standalone: True
 
 # Database
-ironic_database_user: ironic
-ironic_database_database: ironic
-ironic_database_address: localhost
-ironic_database_password: gu1d0
+ironic_galera_user: ironic
+ironic_galera_database: ironic
+ironic_galera_address: localhost
+ironic_galera_password: gu1d0
 
 # TBD(mrda): need to handle this a little better :)
 database_root_user: root
@@ -93,6 +93,12 @@ ironic_common_apt_packages:
 
 ironic_common_pip_packages:
   - virtualenvwrapper
+
+ironic_pip_packages:
+  - ironic
+
+python_ironicclient_pip_packages:
+  - python_ironicclient
 
 ironic_conductor_apt_packages:
   - libmysqlclient-dev

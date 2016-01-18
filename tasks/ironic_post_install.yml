@@ -45,6 +45,3 @@
   tags:
     - ironic-init
 
-
-# TODO(mrda): Configure rabbit if standalone
-
