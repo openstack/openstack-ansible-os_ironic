@@ -1232,7 +1232,7 @@ auth_strategy={{ ironic_auth_strategy }}
 #
 
 # Complete public Identity API endpoint. (string value)
-#auth_uri=<None>
+auth_uri={{ keystone_service_internaluri }}
 
 # API version of the admin Identity API endpoint. (string
 # value)
@@ -1432,7 +1432,7 @@ admin_tenant_name={{ ironic_service_project_name }}
 #
 
 # URL for connecting to neutron. (string value)
-url={{ neutron_service_publicuri }}
+url={{ neutron_service_adminurl }}
 
 # Timeout value for connecting to neutron in seconds. (integer
 # value)
