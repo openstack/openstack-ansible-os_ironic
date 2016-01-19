@@ -999,7 +999,7 @@ dhcp_provider={{ ironic_dhcp_provider }}
 #
 
 # Default glance hostname or IP address. (string value)
-#glance_host=$my_ip
+glance_host={{ external_lb_vip_address }}
 
 # Default glance port. (integer value)
 #glance_port=9292
@@ -1389,7 +1389,7 @@ auth_strategy={{ ironic_auth_strategy }}
 # Complete admin Identity API endpoint. This should specify
 # the unversioned root endpoint e.g. https://localhost:35357/
 # (string value)
-#identity_uri=<None>
+identity_uri={{ keystone_service_publicuri }}
 
 # This option is deprecated and may be removed in a future
 # release. Single shared secret with the Keystone
@@ -1400,13 +1400,13 @@ auth_strategy={{ ironic_auth_strategy }}
 #admin_token=<None>
 
 # Service username. (string value)
-#admin_user=<None>
+admin_user={{ ironic_service_user_name }}
 
 # Service user password. (string value)
-#admin_password=<None>
+admin_password={{ ironic_service_password }}
 
 # Service tenant name. (string value)
-#admin_tenant_name=admin
+admin_tenant_name={{ ironic_service_project_name }}
 
 
 [matchmaker_redis]
@@ -1432,7 +1432,7 @@ auth_strategy={{ ironic_auth_strategy }}
 #
 
 # URL for connecting to neutron. (string value)
-#url=http://$my_ip:9696
+url={{ neutron_service_publicuri }}
 
 # Timeout value for connecting to neutron in seconds. (integer
 # value)
