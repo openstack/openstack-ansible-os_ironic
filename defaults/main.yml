@@ -46,17 +46,16 @@ ironic_service_names:
     - "{{ ironic_conductor_program_name }}"
 
 # Is this Ironic installation working standalone?
-ironic_standalone: True
+ironic_standalone: False
 
 # Database
 ironic_galera_user: ironic
 ironic_galera_database: ironic
-ironic_galera_address: localhost
 ironic_galera_password: gu1d0
 
 # TBD(mrda): need to handle this a little better :)
-database_root_user: root
-database_root_password: sp4m3ggs
+#database_root_user: root
+#database_root_password: sp4m3ggs
 
 # Integrated Openstack configuration
 ironic_openstack_driver_list: agent_ipmitool
@@ -64,7 +63,7 @@ ironic_openstack_auth_strategy: keystone
 ironic_openstack_api_url: ''  # Not required when we have keystone
 ironic_openstack_dhcp_provider: neutron
 ironic_openstack_sync_power_state_interval: 60
-ironic_openstack_db_connection_string: "mysql://{{ ironic_database_user }}:{{ ironic_database_password }}@localhost/ironic"
+ironic_openstack_db_connection_string: "mysql://{{ ironic_galera_user }}:{{ ironic_galera_password }}@{{ ironic_galera_address }}/ironic"
 
 # Standalone Ironic configuration
 ironic_standalone_driver_list: pxe_amt # for testing with a NUC
@@ -72,7 +71,7 @@ ironic_standalone_auth_strategy: noauth
 ironic_standalone_api_url: "api_url=http://{{ ansible_default_ipv4['address'] }}:6385/"
 ironic_standalone_dhcp_provider: none
 ironic_standalone_sync_power_state_interval: -1
-ironic_standalone_db_connection_string: "mysql://{{ ironic_database_user }}:{{ ironic_database_password }}@localhost/ironic"
+ironic_standalone_db_connection_string: "mysql://{{ ironic_galera_user }}:{{ ironic_galera_password }}@{{ ironic_galera_address }}/ironic"
 
 # Common configuration
 ironic_node_name: ironic
@@ -95,16 +94,15 @@ ironic_common_pip_packages:
   - virtualenvwrapper
 
 ironic_pip_packages:
+  - mysql-python
   - ironic
 
 python_ironicclient_pip_packages:
   - python_ironicclient
 
 ironic_conductor_apt_packages:
-  - libmysqlclient-dev
   - libxml2-dev
   - rabbitmq-server
-  - mysql-server
   - isc-dhcp-server
   - tftpd-hpa
   - syslinux
@@ -119,13 +117,13 @@ ironic_conductor_apt_packages:
 ironic_conductor_pip_packages:
   - mysql-python
 
-## ironic service
-ironic_git_repo: https://git.openstack.org/openstack/ironic
-ironic_git_install_branch: c6e8e2a33c65b6269a0b1b4f5e63620c68bdc3fb  # HEAD sha as of 13 Nov 2015
-ironic_git_dest: "/opt/ironic_{{ ironic_git_install_branch | replace('/', '_') }}"
+## RabbitMQ info
+ironic_rabbitmq_userid: ironic
+ironic_rabbitmq_vhost: /ironic
+ironic_rabbitmq_password: ch4rl0tt3     # TODO(mrda): Manage secrets
 
-## python-ironicclient
-python_ironicclient_git_repo: https://git.openstack.org/openstack/python-ironicclient
-python_ironicclient_git_install_branch: b66f5e8dd60c023d6d216c3bbc5ec22d837623c3  # HEAD sha as of 13 Nov 2015
-python_ironicclient_git_dest: "/opt/python-ironicclient_{{ python_ironicclient_git_install_branch | replace('/', '_') }}"
+# Auth
+ironic_service_user_name: "ironic"
+ironic_service_password: "4nn3"         # TODO(mrda): Manage secrets
+
 

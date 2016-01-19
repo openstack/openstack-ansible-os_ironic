@@ -534,7 +534,7 @@ host={{ ironic_node_name }}
 # URL of Ironic API service. If not set ironic can get the
 # current value from the keystone service catalog. (string
 # value)
-{{ ironic_api_url }}
+api_url={{ ironic_api_url }}
 
 # Seconds between conductor heart beats. (integer value)
 #heartbeat_interval=10
@@ -1689,25 +1689,25 @@ auth_strategy={{ ironic_auth_strategy }}
 
 # The RabbitMQ broker port where a single node is used.
 # (integer value)
-#rabbit_port=5672
+rabbit_port={{ rabbitmq_port }}
 
 # RabbitMQ HA cluster host:port pairs. (list value)
-#rabbit_hosts=$rabbit_host:$rabbit_port
+rabbit_hosts={{ rabbitmq_servers }}
 
 # Connect over SSL for RabbitMQ. (boolean value)
-#rabbit_use_ssl=false
+rabbit_use_ssl={{ rabbitmq_use_ssl }}
 
 # The RabbitMQ userid. (string value)
-#rabbit_userid=guest
+rabbit_userid={{ ironic_rabbitmq_userid }}
 
 # The RabbitMQ password. (string value)
-#rabbit_password=guest
+rabbit_password={{ ironic_rabbitmq_password }}
 
 # The RabbitMQ login method. (string value)
 #rabbit_login_method=AMQPLAIN
 
 # The RabbitMQ virtual host. (string value)
-#rabbit_virtual_host=/
+rabbit_virtual_host={{ ironic_rabbitmq_vhost }}
 
 # How frequently to retry connecting with RabbitMQ. (integer
 # value)

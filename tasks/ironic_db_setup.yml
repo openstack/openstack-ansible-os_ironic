@@ -28,7 +28,7 @@
   mysql_user:
     login_user: "{{ galera_root_user }}"
     login_password: "{{ galera_root_password }}"
-    login_host: "{{ ironic_database_address }}"
+    login_host: "{{ ironic_galera_address }}"
     name: "{{ ironic_galera_user }}"
     password: "{{ ironic_galera_password }}"
     host: "{{ item }}"
@@ -36,21 +36,21 @@
     priv: "{{ ironic_galera_database }}.*:ALL"
   with_items:
     - "localhost"
+    - "{{ ironic_galera_address }}"
     - "%"
-  when: ironic_db.changed == True
   tags:
     - ironic-db-setup
 
-- name: Create database schema
-  command: "{{ ironic_bin }}/ironic-dbsync --config-file /etc/ironic/ironic.conf create_schema"
-  sudo: yes
-  sudo_user: "{{ ironic_system_user_name }}"
-  notify:
-    - Restart ironic services
-  when: ironic_db.changed == True
-  tags:
-    - ironic-db-setup
-    - ironic-conductor
+#- name: Create database schema
+##  command: "{{ ironic_bin }}/ironic-dbsync --config-file /etc/ironic/ironic.conf create_schema"
+#  sudo: yes
+#  sudo_user: "{{ ironic_system_user_name }}"
+#  notify:
+#    - Restart ironic services
+#  when: ironic_db.changed == True
+#  tags:
+#    - ironic-db-setup
+#    - ironic-conductor
 
 - name: Update database schema
   command: "{{ ironic_bin }}/ironic-dbsync --config-file /etc/ironic/ironic.conf upgrade"
@@ -58,7 +58,7 @@
   sudo_user: "{{ ironic_system_user_name }}"
   notify:
     - Restart ironic services
-  when: ironic_db.changed == False
+#  when: ironic_db.changed == False
   tags:
     - ironic-db-setup
     - ironic-conductor

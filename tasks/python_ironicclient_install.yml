@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Install pip packages (venv)
+- name: Install python-ironicclient pip packages (venv)
   pip:
     name: "{{ item }}"
     state: present
@@ -32,7 +32,7 @@
     - ironicclient-install
     - ironicclient-pip-packages
 
-- name: Install pip packages (no venv)
+- name: Install python-ironicclient pip packages (no venv)
   pip:
     name: "{{ item }}"
     state: present

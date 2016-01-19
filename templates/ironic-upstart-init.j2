@@ -13,7 +13,7 @@ respawn limit 10 5
 
 # Set the RUNBIN environment variable
 env RUNBIN="{{ ironic_bin }}/{{ program_name }}"
-env RUNOPTS="--config-file /etc/ironic/ironic.conf"
+env RUNOPTS="-v -d --config-file /etc/ironic/ironic.conf"
 
 # Change directory to service users home
 chdir "{{ service_home }}"

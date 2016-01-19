@@ -26,4 +26,8 @@ galaxy_info:
   - cloud
   - baremetal
   - system
-dependencies: []
+dependencies:
+  - pip_lock_down
+  - apt_package_pinning
+  - galera_client
+  - openstack_openrc
