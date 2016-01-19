@@ -45,6 +45,31 @@ ironic_service_names:
     - "{{ ironic_api_program_name }}"
     - "{{ ironic_conductor_program_name }}"
 
+ironic_service_name: ironic
+ironic_service_type: baremetal
+ironic_service_proto: http
+ironic_service_publicuri_proto: "{{ openstack_service_publicuri_proto | default(ironic_service_proto) }}"
+ironic_service_adminuri_proto: "{{ openstack_service_adminuri_proto | default(ironic_service_proto) }}"
+ironic_service_internaluri_proto: "{{ openstack_service_internaluri_proto | default(ironic_service_proto) }}"
+ironic_service_port: 8774
+ironic_service_description: "Ironic Baremetal Service"
+ironic_service_publicuri: "{{ ironic_service_publicuri_proto }}://{{ external_lb_vip_address }}:{{ ironic_service_port }}"
+ironic_service_publicurl: "{{ ironic_service_publicuri }}/v2.1/%(tenant_id)s"
+ironic_service_adminuri: "{{ ironic_service_adminuri_proto }}://{{ internal_lb_vip_address }}:{{ ironic_service_port }}"
+ironic_service_adminurl: "{{ ironic_service_adminuri }}/v2.1/%(tenant_id)s"
+ironic_service_internaluri: "{{ ironic_service_internaluri_proto }}://{{ internal_lb_vip_address }}:{{ ironic_service_port }}"
+ironic_service_internalurl: "{{ ironic_service_internaluri }}/v2.1/%(tenant_id)s"
+ironic_program_name: ironic-api
+ironic_service_region: RegionOne
+ironic_service_project_name: "service"
+ironic_service_project_domain_id: default
+ironic_service_user_domain_id: default
+ironic_service_user_name: "ironic"
+ironic_service_role_name: "admin"
+
+ironic_service_in_ldap: False
+
+
 # Is this Ironic installation working standalone?
 ironic_standalone: False
 

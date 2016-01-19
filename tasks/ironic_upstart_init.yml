@@ -20,8 +20,7 @@
     system_user: "{{ ironic_system_user_name }}"
     system_group: "{{ ironic_system_group_name }}"
     service_home: "{{ ironic_system_home_folder }}"
-# TODO(mrda): define groups
-#  when: inventory_hostname in groups['tbd']
+  when: inventory_hostname in groups['ironic_api']
 
 - include: ironic_upstart_common_init.yml
   vars:
@@ -30,6 +29,4 @@
     system_user: "{{ ironic_system_user_name }}"
     system_group: "{{ ironic_system_group_name }}"
     service_home: "{{ ironic_system_home_folder }}"
-# TODO(mrda): define groups
-#  when: inventory_hostname in groups['tbd']
-
+  when: inventory_hostname in groups['ironic_conductor']
