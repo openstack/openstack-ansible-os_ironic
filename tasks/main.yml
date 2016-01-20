@@ -16,18 +16,26 @@
   - include: ironic_pre_install.yml
   - include: ironic_install.yml
 
+  - include: ironic_api_install.yml
+    when: >
+      inventory_hostname in groups['ironic_api']
+
   - include: ironic_conductor_install.yml
     when: >
-      inventory_hostname == groups['ironic_conductor'][0]
+      inventory_hostname in groups['ironic_conductor']
 
   - include: python_ironicclient_install.yml
 
   - include: ironic_post_install.yml
 
+  - include: ironic_api_post_install.yml
+    when: >
+      inventory_hostname in groups['ironic_api']
+
   - include: ironic_conductor_post_install.yml
     when: >
-      inventory_hostname == groups['ironic_conductor'][0]
-
+      inventory_hostname in groups['ironic_conductor']
+ 
   - include: ironic_db_setup.yml
     when: >
       inventory_hostname == groups['ironic_conductor'][0]

@@ -13,14 +13,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- include: ironic_upstart_common_init.yml
-  vars:
-    program_name: "{{ ironic_api_program_name }}"
-    service_name: "{{ ironic_service_name }}"
-    system_user: "{{ ironic_system_user_name }}"
-    system_group: "{{ ironic_system_group_name }}"
-    service_home: "{{ ironic_system_home_folder }}"
-  when: inventory_hostname in groups['ironic_api']
+#- include: ironic_upstart_common_init.yml
+#  vars:
+#    program_name: "{{ ironic_api_program_name }}"
+#    service_name: "{{ ironic_service_name }}"
+#    system_user: "{{ ironic_system_user_name }}"
+#    system_group: "{{ ironic_system_group_name }}"
+#    service_home: "{{ ironic_system_home_folder }}"
+#  when: inventory_hostname in groups['ironic_api']
 
 - include: ironic_upstart_common_init.yml
   vars:
