@@ -38,7 +38,7 @@ ironic_system_home_folder: "/var/lib/{{ ironic_system_user_name }}"
 ironic_system_log_folder: "/var/log/{{ ironic_system_user_name }}"
 
 # Ironic Program and Service names
-ironic_api_program_name: ironic-api
+ironic_api_program_name: apache2
 ironic_conductor_program_name: ironic-conductor
 python_ironic_client_program_name: ironic
 ironic_service_names:
@@ -120,6 +120,14 @@ ironic_pip_packages:
   - mysql-python
   - ironic
 
+ironic_api_apt_packages:
+  - apache2
+  - apache2-utils
+  - libapache2-mod-wsgi
+
+ironic_api_pip_packages:
+  - mysql-python
+
 python_ironicclient_pip_packages:
   - python_ironicclient
 
@@ -149,4 +157,6 @@ ironic_rabbitmq_password: ch4rl0tt3     # TODO(mrda): Manage secrets
 ironic_service_user_name: "ironic"
 ironic_service_password: "4nn3"         # TODO(mrda): Manage secrets
 
-
+# Apache settings
+ironic_wsgi_threads: 1
+ironic_wsgi_processes: "{{ ansible_processor_vcpus | default (1) * 2 }}"
