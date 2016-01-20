@@ -45,3 +45,14 @@
   tags:
     - ironic-init
 
+- name: Build the policy.json file
+  template:
+    src: "policy.json.j2"
+    dest: "/etc/ironic/policy.json"
+    mode: "0644"
+    owner: "root"
+    group: "root"
+  notify:
+    - Restart ironic services
+  tags:
+    - ironic-init
