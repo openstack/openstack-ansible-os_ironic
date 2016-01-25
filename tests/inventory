@@ -1,5 +1,5 @@
 [all]
-localhost ansible_connection=local ansible_user=root
+localhost ansible_connection=local ansible_become=True
 
 # Note(mrda): 'ironicinstallhost' will need to externally resolve to where
 # you want to do an 'allinone' install, and the root account will need to have
