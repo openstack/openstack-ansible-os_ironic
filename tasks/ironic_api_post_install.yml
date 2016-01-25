@@ -23,7 +23,7 @@
     - { src: "ironic-ports.conf.j2", dest: "/etc/apache2/ports.conf" }
     - { src: "ironic-httpd.conf.j2", dest: "/etc/apache2/sites-available/ironic-httpd.conf" }
   notify:
-    - Restart Apache
+    - Restart ironic services
   tags:
     - ironic-httpd
 
@@ -32,7 +32,7 @@
     path: "/etc/apache2/sites-enabled/000-default.conf"
     state: "absent"
   notify:
-    - Restart Apache
+    - Restart ironic services
   tags:
     - ironic-httpd
 
@@ -44,7 +44,7 @@
   with_items:
     - { src: "/etc/apache2/sites-available/ironic-httpd.conf", dest: "/etc/apache2/sites-enabled/ironic-httpd.conf", state: "link" }
   notify:
-    - Restart Apache
+    - Restart ironic services
   tags:
     - ironic-httpd
 
@@ -56,6 +56,6 @@
     group: "{{ ironic_system_group_name }}"
     mode: "0755"
   notify:
-    - Restart Apache
+    - Restart ironic services
   tags:
     - ironic-config

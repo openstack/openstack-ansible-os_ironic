@@ -1,7 +1,7 @@
 # {{ ansible_managed }}
 
 <VirtualHost *:{{ ironic_service_port }}>
-    WSGIDaemonProcess ironic-api user={{ ironic_system_user_name }} group={{ ironic_group_name }} processes={{ ironic_wsgi_processes }} threads={{ ironic_wsgi_threads }} display-name=%{GROUP}
+    WSGIDaemonProcess ironic-api user={{ ironic_system_user_name }} group={{ ironic_system_group_name }} processes={{ ironic_wsgi_processes }} threads={{ ironic_wsgi_threads }} display-name=%{GROUP}
     WSGIScriptAlias / /var/www/cgi-bin/ironic/ironic.wsgi
     SetEnv APACHE_RUN_USER {{ ironic_system_user_name }}
     SetEnv APACHE_RUN_GROUP {{ ironic_system_group_name }}
