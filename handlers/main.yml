@@ -26,3 +26,9 @@
     name: "tftpd-hpa"
     state: restarted
   failed_when: false
+
+- name: Restart isc-dhcp-server
+  service:
+    name: "isc-dhcp-server"
+    state: restarted
+  failed_when: false

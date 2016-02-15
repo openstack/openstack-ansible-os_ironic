@@ -31,6 +31,20 @@
   file:
     path: "/etc/apache2/sites-enabled/000-default.conf"
     state: "absent"
+  when: not ironic_standalone
+  notify:
+    - Restart ironic services
+  tags:
+    - ironic-httpd
+
+- name: Enable default apache site vhost
+  file:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    state: "{{ item.state }}"
+  with_items:
+    - { src: "/etc/apache2/sites-available/000-default.conf", dest: "/etc/apache2/sites-enabled/000-default.conf", state: "link" }
+  when: ironic_standalone
   notify:
     - Restart ironic services
   tags:

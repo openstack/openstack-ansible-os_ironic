@@ -41,24 +41,12 @@
   tags:
     - ironic-db-setup
 
-#- name: Create database schema
-##  command: "{{ ironic_bin }}/ironic-dbsync --config-file /etc/ironic/ironic.conf create_schema"
-#  sudo: yes
-#  sudo_user: "{{ ironic_system_user_name }}"
-#  notify:
-#    - Restart ironic services
-#  when: ironic_db.changed == True
-#  tags:
-#    - ironic-db-setup
-#    - ironic-conductor
-
 - name: Update database schema
   command: "{{ ironic_bin }}/ironic-dbsync --config-file /etc/ironic/ironic.conf upgrade"
   sudo: yes
   sudo_user: "{{ ironic_system_user_name }}"
   notify:
     - Restart ironic services
-#  when: ironic_db.changed == False
   tags:
     - ironic-db-setup
     - ironic-conductor

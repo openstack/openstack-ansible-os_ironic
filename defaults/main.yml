@@ -70,16 +70,14 @@ ironic_service_in_ldap: False
 
 
 # Is this Ironic installation working standalone?
+# If you're wanting Ironic to work without being integrated to other OpenStack
+# services, set this to True, and update the dhcp configuration appropriately
 ironic_standalone: False
 
 # Database
 ironic_galera_user: ironic
 ironic_galera_database: ironic
-ironic_galera_password: gu1d0
-
-# TBD(mrda): need to handle this a little better :)
-#database_root_user: root
-#database_root_password: sp4m3ggs
+ironic_galera_password: "gu1d0"          # TODO(mrda): Manage secrets
 
 # Integrated Openstack configuration
 ironic_openstack_driver_list: agent_ipmitool
@@ -134,8 +132,6 @@ python_ironicclient_pip_packages:
 ironic_conductor_apt_packages:
   - libxml2-dev
   - rabbitmq-server
-  - isc-dhcp-server
-  - tftpd-hpa
   - syslinux
   - syslinux-common
   - libxslt1-dev
@@ -144,6 +140,10 @@ ironic_conductor_apt_packages:
   - python-yaml
   - open-iscsi
   - ipmitool
+
+ironic_conductor_standalone_apt_packages:
+  - isc-dhcp-server
+  - tftpd-hpa
 
 ironic_conductor_pip_packages:
   - mysql-python
