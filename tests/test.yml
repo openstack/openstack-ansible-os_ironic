@@ -17,4 +17,4 @@
   hosts: localhost
   remote_user: root
   roles:
-    - role: openstack-ansible-ironic
+    - role: "{{ rolename | basename }}"

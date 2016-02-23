@@ -35,7 +35,7 @@
   - include: ironic_conductor_post_install.yml
     when: >
       inventory_hostname in groups['ironic_conductor']
- 
+
   - include: ironic_db_setup.yml
     when: >
       inventory_hostname == groups['ironic_conductor'][0]

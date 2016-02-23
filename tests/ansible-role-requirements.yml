@@ -1,2 +1,8 @@
-# This is a file to contain the extra roles required for the testing
-# to complete. It is currently intentionally empty.
+- name: galera_client
+  src: https://git.openstack.org/openstack/openstack-ansible-galera_client
+  scm: git
+  version: master
+- name: pip_install
+  src: https://git.openstack.org/openstack/openstack-ansible-pip_install
+  scm: git
+  version: master

@@ -43,8 +43,8 @@
 
 - name: Update database schema
   command: "{{ ironic_bin }}/ironic-dbsync --config-file /etc/ironic/ironic.conf upgrade"
-  sudo: yes
-  sudo_user: "{{ ironic_system_user_name }}"
+  become: yes
+  become_user: "{{ ironic_system_user_name }}"
   notify:
     - Restart ironic services
   tags:

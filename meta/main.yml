@@ -27,7 +27,8 @@ galaxy_info:
   - baremetal
   - system
 dependencies:
-  - pip_lock_down
-  - apt_package_pinning
   - galera_client
-  - openstack_openrc
+  - pip_install
+# TODO(mrda): Add in openstack_openrc once this role is split out
+# from openstack-ansible, as it's useful for standalone use.
+#  - openstack_openrc
