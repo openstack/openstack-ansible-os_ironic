@@ -21,7 +21,7 @@
   notify:
     - Restart isc-dhcp-server
   tags:
-    - tftpd-hpa
+    - isc-dhcp-server
 
 - name: Create /tftpboot
   file:
@@ -30,7 +30,6 @@
     owner: "{{ ironic_system_user_name }}"
     group: "{{ ironic_system_group_name }}"
     mode: "0755"
-  when: ironic_standalone
   tags:
     - tftpd-hpa
 
@@ -38,7 +37,6 @@
   copy:
     src: tftpd-hpa
     dest: /etc/default/tftpd-hpa
-  when: ironic_standalone
   notify:
     - Restart tftpd-hpa
   tags:
@@ -48,7 +46,6 @@
   copy:
     src: map-file
     dest: /tftpboot/map-file
-  when: ironic_standalone
   notify:
     - Restart tftpd-hpa
   tags:
@@ -57,32 +54,30 @@
 - name: Check to see if pxlinux.0 is required
   stat: path=/tftpboot/pxelinux.0
   register: pxelinux_exists
-  when: ironic_standalone
   tags:
     - tftpd-hpa
 
 - name: Check to see if chain.c32 is required
   stat: path=/tftpboot/chain.c32
   register: chain32_exists
-  when: ironic_standalone
   tags:
     - tftpd-hpa
 
 - name: Check pxlinux.0 exists
   stat: path=/usr/lib/syslinux/pxelinux.0
   register: pxelinux_stat
-  when: not pxelinux_exists and ironic_standalone
+  when: not pxelinux_exists
   tags:
     - tftpd-hpa
 
 - name: Copy syslinux pxlinux.0
   command: cp /usr/lib/syslinux/pxelinux.0 /tftpboot/pxelinux.0
-  when: not pxelinux_exists and pxelinux_stat.stat.exists and ironic_standalone
+  when: not pxelinux_exists and pxelinux_stat.stat.exists
   tags:
     - tftpd-hpa
 
 - name: Copy syslinux chain.c32
   command: cp /usr/lib/syslinux/chain.c32 /tftpboot/chain.c32
-  when: not chain32_exists and chain32_stat.stat.exists and ironic_standalone
+  when: not chain32_exists and chain32_stat.stat.exists
   tags:
     - tftpd-hpa
