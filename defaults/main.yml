@@ -88,7 +88,7 @@ ironic_openstack_sync_power_state_interval: 60
 ironic_openstack_db_connection_string: "mysql://{{ ironic_galera_user }}:{{ ironic_galera_password }}@{{ ironic_galera_address }}/ironic"
 
 # Standalone Ironic configuration
-ironic_standalone_driver_list: pxe_amt # for testing with a NUC
+ironic_standalone_driver_list: agent_ipmitool
 ironic_standalone_auth_strategy: noauth
 ironic_standalone_api_url: "api_url=http://{{ ansible_default_ipv4['address'] }}:6385/"
 ironic_standalone_dhcp_provider: none
