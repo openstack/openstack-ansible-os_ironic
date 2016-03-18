@@ -127,7 +127,7 @@ ironic_api_pip_packages:
   - mysql-python
 
 python_ironicclient_pip_packages:
-  - python_ironicclient
+  - python-ironicclient
 
 ironic_conductor_apt_packages:
   - libxml2-dev
