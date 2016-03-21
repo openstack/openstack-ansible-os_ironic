@@ -19,8 +19,16 @@
 debug: False
 verbose: True
 
-# Update source
-update_src: True
+# These variables are used in 'developer mode' in order to allow the role
+# to build an environment directly from a git source without the presence
+# of an OpenStack-Ansible repo_server.
+ironic_git_repo: https://git.openstack.org/openstack/ironic
+ironic_git_install_branch: master
+ironic_requirements_git_repo: https://git.openstack.org/openstack/requirements
+ironic_requirements_git_install_branch: master
+ironic_developer_mode: false
+ironic_developer_constraints:
+  - "git+{{ ironic_git_repo }}@{{ ironic_git_install_branch }}#egg=ironic"
 
 # Name of the virtual env to deploy into
 ironic_venv_tag: untagged
@@ -110,9 +118,10 @@ ironic_common_apt_packages:
   - python-pip
   - git
 
-ironic_common_pip_packages:
-  - python-keystoneclient
-  - virtualenvwrapper
+ironic_requires_pip_packages:
+  - virtualenv
+  - virtualenv-tools
+  - python-keystoneclient # Keystoneclient needed for the OSA keystone lib
 
 ironic_pip_packages:
   - mysql-python

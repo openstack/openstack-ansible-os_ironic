@@ -13,13 +13,71 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+- name: Create developer mode constraint file
+  copy:
+    dest: "/opt/developer-pip-constraints.txt"
+    content: |
+      {% for item in ironic_developer_constraints %}
+      {{ item }}
+      {% endfor %}
+  when:
+    - ironic_developer_mode | bool
+  tags:
+    - ironic-install
+    - ironic-pip-packages
+
+- name: Clone requirements git repository
+  git:
+    repo: "{{ ironic_requirements_git_repo }}"
+    dest: "/opt/requirements"
+    clone: yes
+    update: yes
+    version: "{{ ironic_requirements_git_install_branch }}"
+  when:
+    - ironic_developer_mode | bool
+  tags:
+    - ironic-install
+    - ironic-pip-packages
+
+- name: Add constraints to pip_install_options fact for developer mode
+  set_fact:
+    pip_install_options_fact: "{{ pip_install_options|default('') }} --constraint /opt/developer-pip-constraints.txt --constraint /opt/requirements/upper-constraints.txt"
+  when:
+    - ironic_developer_mode | bool
+  tags:
+    - ironic-install
+    - ironic-pip-packages
+
+- name: Set pip_install_options_fact when not in developer mode
+  set_fact:
+    pip_install_options_fact: "{{ pip_install_options|default('') }}"
+  when:
+    - not ironic_developer_mode | bool
+  tags:
+    - ironic-install
+    - ironic-pip-packages
+
+- name: Install requires pip packages
+  pip:
+    name: "{{ item }}"
+    state: present
+    extra_args: "{{ pip_install_options_fact }}"
+  register: install_packages
+  until: install_packages|success
+  retries: 5
+  delay: 2
+  with_items: ironic_requires_pip_packages
+  tags:
+    - ironic-install
+    - ironic-pip-packages
+
 - name: Install pip packages (venv)
   pip:
     name: "{{ item }}"
     state: present
     virtualenv: "{{ ironic_venv_bin | dirname }}"
     virtualenv_site_packages: "no"
-    extra_args: "{{ pip_install_options|default('') }}"
+    extra_args: "{{ pip_install_options_fact }}"
   register: install_packages
   until: install_packages|success
   retries: 5
@@ -28,6 +86,7 @@
     - "{{ ironic_pip_packages }}"
   when:
     - ironic_venv_enabled | bool
+    - ironic_developer_mode | bool
   tags:
     - ironic-install
     - ironic-pip-packages
@@ -36,14 +95,16 @@
   pip:
     name: "{{ item }}"
     state: present
-    extra_args: "{{ pip_install_options|default('') }}"
+    extra_args: "{{ pip_install_options_fact }}"
   register: install_packages
   until: install_packages|success
   retries: 5
   delay: 2
   with_items:
     - "{{ ironic_pip_packages }}"
-  when: not ironic_venv_enabled | bool
+  when:
+    - not ironic_venv_enabled | bool
+    - not ironic_developer_mode | bool
   tags:
     - ironic-install
     - ironic-pip-packages

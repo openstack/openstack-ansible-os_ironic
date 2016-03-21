@@ -19,7 +19,7 @@
     state: present
     virtualenv: "{{ ironic_venv_bin | dirname }}"
     virtualenv_site_packages: "no"
-    extra_args: "{{ pip_install_options|default('') }}"
+    extra_args: "{{ pip_install_options_fact }}"
   register: install_packages
   until: install_packages|success
   retries: 5
@@ -36,7 +36,7 @@
   pip:
     name: "{{ item }}"
     state: present
-    extra_args: "{{ pip_install_options|default('') }}"
+    extra_args: "{{ pip_install_options_fact }}"
   register: install_packages
   until: install_packages|success
   retries: 5

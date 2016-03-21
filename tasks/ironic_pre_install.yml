@@ -139,20 +139,6 @@
     - ironic-install
     - ironic-apt-packages
 
-- name: Install common dependencies via pip
-  pip:
-    name: "{{ item }}"
-    state: present
-    extra_args: "{{ pip_install_options|default('') }}"
-  register: install_packages
-  until: install_packages|success
-  retries: 5
-  delay: 2
-  with_items: ironic_common_pip_packages
-  tags:
-    - ironic-install
-    - ironic-pip-packages
-
 - include: ironic_messaging_setup.yml
   when: >
     inventory_hostname == groups['ironic_all'][0]
