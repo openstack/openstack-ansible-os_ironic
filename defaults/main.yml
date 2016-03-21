@@ -124,19 +124,14 @@ ironic_requires_pip_packages:
   - python-keystoneclient # Keystoneclient needed for the OSA keystone lib
 
 ironic_pip_packages:
-  - mysql-python
+  - MySQL-python
   - ironic
+  - python-ironicclient
 
 ironic_api_apt_packages:
   - apache2
   - apache2-utils
   - libapache2-mod-wsgi
-
-ironic_api_pip_packages:
-  - mysql-python
-
-python_ironicclient_pip_packages:
-  - python-ironicclient
 
 ironic_conductor_apt_packages:
   - libxml2-dev
@@ -153,9 +148,6 @@ ironic_conductor_apt_packages:
 ironic_conductor_standalone_apt_packages:
   - isc-dhcp-server
   - tftpd-hpa
-
-ironic_conductor_pip_packages:
-  - mysql-python
 
 ## RabbitMQ info
 ironic_rabbitmq_userid: ironic
