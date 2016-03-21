@@ -71,6 +71,107 @@
     - ironic-install
     - ironic-pip-packages
 
+- name: Get local venv checksum
+  stat:
+    path: "/var/cache/{{ ironic_venv_download_url | basename }}"
+    get_md5: False
+  when:
+    - not ironic_developer_mode | bool
+    - ironic_venv_enabled | bool
+  register: local_venv_stat
+  tags:
+    - ironic-install
+    - ironic-pip-packages
+
+- name: Get remote venv checksum
+  uri:
+    url: "{{ ironic_venv_download_url | replace('tgz', 'checksum') }}"
+    return_content: True
+  when:
+    - not ironic_developer_mode | bool
+    - ironic_venv_enabled | bool
+  register: remote_venv_checksum
+  tags:
+    - ironic-install
+    - ironic-pip-packages
+
+# TODO: When project moves to ansible 2 we can pass this a sha256sum which will:
+#       a) allow us to remove force: yes
+#       b) allow the module to calculate the checksum of dest file which would
+#          result in file being downloaded only if provided and dest sha256sum
+#          checksums differ
+- name: Attempt venv download
+  get_url:
+    url: "{{ ironic_venv_download_url }}"
+    dest: "/var/cache/{{ ironic_venv_download_url | basename }}"
+    force: yes
+  ignore_errors: true
+  register: get_venv
+  when:
+    - not ironic_developer_mode | bool
+    - ironic_venv_enabled | bool
+    - (local_venv_stat.stat.exists == False or
+        {{ local_venv_stat.stat.checksum is defined and local_venv_stat.stat.checksum != remote_venv_checksum.content | trim }})
+  tags:
+    - ironic-install
+    - ironic-pip-packages
+
+- name: Set ironic get_venv fact
+  set_fact:
+    ironic_get_venv: "{{ get_venv }}"
+  when: ironic_venv_enabled | bool
+  tags:
+    - ironic-install
+    - ironic-pip-packages
+
+- name: Remove existing venv
+  file:
+    path: "{{ ironic_venv_bin | dirname }}"
+    state: absent
+  when:
+    - ironic_venv_enabled | bool
+    - ironic_get_venv | changed
+  tags:
+    - ironic-install
+    - ironic-pip-packages
+
+- name: Create ironic venv dir
+  file:
+    path: "{{ ironic_venv_bin | dirname }}"
+    state: directory
+  when:
+    - not ironic_developer_mode | bool
+    - ironic_venv_enabled | bool
+    - ironic_get_venv | changed
+  tags:
+    - ironic-install
+    - ironic-pip-packages
+
+- name: Unarchive pre-built venv
+  unarchive:
+    src: "/var/cache/{{ ironic_venv_download_url | basename }}"
+    dest: "{{ ironic_venv_bin | dirname }}"
+    copy: "no"
+  when:
+    - not ironic_developer_mode | bool
+    - ironic_venv_enabled | bool
+    - ironic_get_venv | changed
+  notify: Restart ironic services
+  tags:
+    - ironic-install
+    - ironic-pip-packages
+
+- name: Update virtualenv path
+  command: >
+    virtualenv-tools --update-path=auto {{ ironic_venv_bin | dirname }}
+  when:
+    - not ironic_developer_mode | bool
+    - ironic_venv_enabled | bool
+    - ironic_get_venv | success
+  tags:
+    - ironic-install
+    - ironic-pip-packages
+
 - name: Install pip packages (venv)
   pip:
     name: "{{ item }}"
@@ -85,7 +186,8 @@
   with_items: ironic_pip_packages
   when:
     - ironic_venv_enabled | bool
-    - ironic_developer_mode | bool
+    - ironic_get_venv | failed or ironic_developer_mode | bool
+  notify: Restart ironic services
   tags:
     - ironic-install
     - ironic-pip-packages
@@ -103,6 +205,7 @@
   when:
     - not ironic_venv_enabled | bool
     - not ironic_developer_mode | bool
+  notify: Restart ironic services
   tags:
     - ironic-install
     - ironic-pip-packages

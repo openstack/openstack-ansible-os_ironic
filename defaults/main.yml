@@ -113,6 +113,8 @@ ironic_recreate_keys: False
 
 ironic_bin: "{{ ironic_venv_bin }}"
 
+ironic_venv_download_url: http://127.0.0.1/venvs/untagged/ubuntu/ironic.tgz
+
 ironic_common_apt_packages:
   - python-dev
   - python-pip
@@ -122,6 +124,7 @@ ironic_requires_pip_packages:
   - virtualenv
   - virtualenv-tools
   - python-keystoneclient # Keystoneclient needed for the OSA keystone lib
+  - httplib2 # for Ansible's uri module
 
 ironic_pip_packages:
   - MySQL-python
