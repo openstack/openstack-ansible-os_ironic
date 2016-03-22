@@ -13,36 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Create database for ironic
-  mysql_db:
-    login_user: "{{ galera_root_user }}"
-    login_password: "{{ galera_root_password }}"
-    login_host: "{{ ironic_galera_address }}"
-    name: "{{ ironic_galera_database }}"
-    state: "present"
-  register: ironic_db
-  tags:
-    - ironic-db-setup
-
-- name: Grant access to the DB
-  mysql_user:
-    login_user: "{{ galera_root_user }}"
-    login_password: "{{ galera_root_password }}"
-    login_host: "{{ ironic_galera_address }}"
-    name: "{{ ironic_galera_user }}"
-    password: "{{ ironic_galera_password }}"
-    host: "{{ item }}"
-    state: "present"
-    priv: "{{ ironic_galera_database }}.*:ALL"
-  with_items:
-    - "localhost"
-    - "{{ ironic_galera_address }}"
-    - "%"
-  tags:
-    - ironic-db-setup
-
 - name: Update database schema
-  command: "{{ ironic_bin }}/ironic-dbsync --config-file /etc/ironic/ironic.conf upgrade"
+  command: "{{ ironic_bin }}/ironic-dbsync upgrade"
   become: yes
   become_user: "{{ ironic_system_user_name }}"
   notify:

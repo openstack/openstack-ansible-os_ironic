@@ -139,7 +139,3 @@
     - ironic-install
     - ironic-apt-packages
 
-- include: ironic_messaging_setup.yml
-  when: >
-    inventory_hostname == groups['ironic_all'][0]
-
