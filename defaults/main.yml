@@ -115,11 +115,6 @@ ironic_bin: "{{ ironic_venv_bin }}"
 
 ironic_venv_download_url: http://127.0.0.1/venvs/untagged/ubuntu/ironic.tgz
 
-ironic_common_apt_packages:
-  - python-dev
-  - python-pip
-  - git
-
 ironic_requires_pip_packages:
   - virtualenv
   - virtualenv-tools
@@ -138,7 +133,6 @@ ironic_api_apt_packages:
 
 ironic_conductor_apt_packages:
   - libxml2-dev
-  - rabbitmq-server
   - syslinux
   - syslinux-common
   - libxslt1-dev
