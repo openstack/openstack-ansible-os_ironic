@@ -1,5 +1,5 @@
 ---
-# Copyright 2014, Rackspace US, Inc.
+# Copyright 2016, Rackspace US, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,18 +13,95 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- include: ironic_service_add.yml
-  vars:
-    service_user_name: "{{ ironic_service_user_name }}"
-    service_tenant_name: "{{ ironic_service_project_name }}"
+# Create a service
+- name: Ensure ironic service
+  keystone:
+    command: "ensure_service"
+    login_user: "{{ keystone_admin_user_name }}"
+    login_password: "{{ keystone_auth_admin_password }}"
+    login_project_name: "{{ keystone_admin_tenant_name }}"
+    endpoint: "{{ keystone_service_adminurl }}"
     service_name: "{{ ironic_service_name }}"
     service_type: "{{ ironic_service_type }}"
-    service_region: "{{ ironic_service_region }}"
-    service_description: "{{ ironic_service_description }}"
-    service_password: "{{ ironic_service_password }}"
-    service_publicurl: "{{ ironic_service_publicurl }}"
-    service_internalurl: "{{ ironic_service_internalurl }}"
-    service_adminurl: "{{ ironic_service_adminurl }}"
-    role_name: "{{ ironic_service_role_name }}"
+    description: "{{ ironic_service_description }}"
+    insecure: "{{ keystone_service_adminuri_insecure }}"
+  register: add_service
+  until: add_service|success
+  retries: 5
+  delay: 2
   tags:
-    - ironic-api
+    - ironic-api-setup
+    - ironic-service-add
+    - ironic-setup
+
+# Create an admin user
+- name: Ensure ironic user
+  keystone:
+    command: "ensure_user"
+    login_user: "{{ keystone_admin_user_name }}"
+    login_password: "{{ keystone_auth_admin_password }}"
+    login_project_name: "{{ keystone_admin_tenant_name }}"
+    endpoint: "{{ keystone_service_adminurl }}"
+    user_name: "{{ ironic_service_user_name }}"
+    project_name: "{{ ironic_service_project_name }}"
+    password: "{{ ironic_service_password }}"
+    insecure: "{{ keystone_service_adminuri_insecure }}"
+  register: add_service
+  when: not ironic_service_in_ldap | bool
+  until: add_service|success
+  retries: 5
+  delay: 10
+  tags:
+    - ironic-api-setup
+    - ironic-service-add
+    - ironic-setup
+
+# Add a role to the user
+- name: Ensure ironic user to admin role
+  keystone:
+    command: "ensure_user_role"
+    login_user: "{{ keystone_admin_user_name }}"
+    login_password: "{{ keystone_auth_admin_password }}"
+    login_project_name: "{{ keystone_admin_tenant_name }}"
+    endpoint: "{{ keystone_service_adminurl }}"
+    user_name: "{{ ironic_service_user_name }}"
+    project_name: "{{ ironic_service_project_name }}"
+    role_name: "{{ ironic_service_role_name }}"
+    insecure: "{{ keystone_service_adminuri_insecure }}"
+  register: add_service
+  when: not ironic_service_in_ldap | bool
+  until: add_service|success
+  retries: 5
+  delay: 10
+  tags:
+    - ironic-api-setup
+    - ironic-service-add
+    - ironic-setup
+
+# Create an endpoint
+- name: Ensure ironic endpoint
+  keystone:
+    command: "ensure_endpoint"
+    login_user: "{{ keystone_admin_user_name }}"
+    login_password: "{{ keystone_auth_admin_password }}"
+    login_project_name: "{{ keystone_admin_tenant_name }}"
+    endpoint: "{{ keystone_service_adminurl }}"
+    region_name: "{{ ironic_service_region }}"
+    service_name: "{{ ironic_service_name }}"
+    service_type: "{{ ironic_service_type }}"
+    insecure: "{{ keystone_service_adminuri_insecure }}"
+    endpoint_list:
+      - url: "{{ ironic_service_publicurl }}"
+        interface: "public"
+      - url: "{{ ironic_service_internalurl }}"
+        interface: "internal"
+      - url: "{{ ironic_service_adminurl }}"
+        interface: "admin"
+  register: add_service
+  until: add_service|success
+  retries: 5
+  delay: 10
+  tags:
+    - ironic-api-setup
+    - ironic-service-add
+    - ironic-setup
