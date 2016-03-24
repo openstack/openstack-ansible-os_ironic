@@ -1,0 +1,77 @@
+---
+# Copyright 2016, Rackspace US, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+- name: Playbook for configuring the LXC host
+  hosts: localhost
+  pre_tasks:
+    # Make sure OS does not have a stale package cache.
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+      when: ansible_os_family == 'Debian'
+    - name: Ensure root's new public ssh key is in authorized_keys
+      authorized_key:
+        user: root
+        key: "{{ hostvars['127.0.0.1']['lxc_container_ssh_key'] }}"
+        manage_dir: no
+    - set_fact:
+        lxc_container_ssh_key: "{{ hostvars['127.0.0.1']['lxc_container_ssh_key'] }}"
+    - name: Check if this is an OpenStack-CI nodepool instance
+      stat:
+        path: /etc/nodepool/provider
+      register: nodepool
+    - name: Set the files to copy into the container cache for OpenStack-CI instances
+      set_fact:
+        lxc_container_cache_files:
+          - { src: '/etc/pip.conf', dest: '/etc/pip.conf' }
+          - { src: '/etc/apt/apt.conf.d/99unauthenticated', dest: '/etc/apt/apt.conf.d/99unauthenticated' }
+      when: nodepool.stat.exists | bool
+    - name: Determine the existing Ubuntu repo configuration
+      shell: 'awk "/^deb .*ubuntu\/? {{ ansible_distribution_release }} main/ {print \$2; exit}" /etc/apt/sources.list'
+      register: ubuntu_repo
+      changed_when: false
+    - name: Set apt repo facts based on discovered information
+      set_fact:
+        lxc_container_template_main_apt_repo: "{{ ubuntu_repo.stdout }}"
+        lxc_container_template_security_apt_rep: "{{ ubuntu_repo.stdout }}"
+  roles:
+    - role: "lxc_hosts"
+      lxc_net_address: 10.100.100.1
+      lxc_net_dhcp_range: 10.100.100.200,10.100.100.250
+      lxc_net_bridge: lxcbr0
+      lxc_kernel_options:
+        - { key: 'fs.inotify.max_user_instances', value: 1024 }
+      lxc_container_caches:
+        - url: "https://rpc-repo.rackspace.com/container_images/rpc-trusty-container.tgz"
+          name: "trusty.tgz"
+          sha256sum: "56c6a6e132ea7d10be2f3e8104f47136ccf408b30e362133f0dc4a0a9adb4d0c"
+          chroot_path: trusty/rootfs-amd64
+    - role: "openstack_openrc"
+  post_tasks:
+    # In the gate these packages get installed into .tox/functional, which is
+    # not where we need them to be.  If we can figure out how to override this
+    # we can revert to using the pip module instead.
+    - name: Install pip packages
+      command: /usr/local/bin/pip install {{ item }}
+      register: install_packages
+      until: install_packages|success
+      retries: 5
+      delay: 2
+      with_items:
+        - lxc-python2
+        - python-openstackclient
+        - python-ironicclient
+  vars_files:
+    - test-vars.yml

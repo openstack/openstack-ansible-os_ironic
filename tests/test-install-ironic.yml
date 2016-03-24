@@ -1,0 +1,62 @@
+---
+# Copyright 2015, Rackspace US, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+- name: Playbook for installing Ironic
+  hosts: ironic_all
+  remote_user: root
+  pre_tasks:
+    - name: Ensure Rabbitmq vhost
+      rabbitmq_vhost:
+        name: "{{ ironic_rabbitmq_vhost }}"
+        state: "present"
+      delegate_to: "10.100.100.101"
+    - name: Ensure rabbitmq user
+      rabbitmq_user:
+        user: "{{ ironic_rabbitmq_userid }}"
+        password: "{{ ironic_rabbitmq_password }}"
+        vhost: "{{ ironic_rabbitmq_vhost }}"
+        configure_priv: ".*"
+        read_priv: ".*"
+        write_priv: ".*"
+        state: "present"
+      delegate_to: "10.100.100.101"
+    - name: Create database for ironic
+      mysql_db:
+        login_user: "{{ galera_root_user }}"
+        login_password: "{{ galera_root_password }}"
+        login_host: "localhost"
+        name: "{{ ironic_galera_database }}"
+        state: "present"
+      delegate_to: "10.100.100.101"
+      run_once: true
+    - name: Grant access to the DB
+      mysql_user:
+        login_user: "{{ galera_root_user }}"
+        login_password: "{{ galera_root_password }}"
+        login_host: "localhost"
+        name: "{{ ironic_galera_user }}"
+        password: "{{ ironic_galera_password }}"
+        host: "{{ item }}"
+        state: "present"
+        priv: "{{ ironic_galera_database }}.*:ALL"
+      with_items:
+        - "localhost"
+        - "%"
+      delegate_to: "10.100.100.101"
+      run_once: true
+  roles:
+    - role: "{{ rolename | basename }}"
+  vars_files:
+    - test-vars.yml

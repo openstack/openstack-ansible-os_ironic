@@ -33,26 +33,73 @@
     ironic_db_connection_string: "{{ ironic_openstack_db_connection_string }}"
   when: not ironic_standalone
 
-- name: Build the ironic.conf configuration file
-  template:
-    src: "ironic.conf.j2"
-    dest: "/etc/ironic/ironic.conf"
-    mode: "0644"
-    owner: "root"
-    group: "root"
-  notify:
-    - Restart ironic services
+- name: Get ironic command path
+  command: which ironic
+  register: ironic_command_path
+  when:
+    - not ironic_venv_enabled | bool
   tags:
-    - ironic-init
+    - ironic-command-bin
 
-- name: Build the policy.json file
-  template:
-    src: "policy.json.j2"
-    dest: "/etc/ironic/policy.json"
+- name: Set ironic command path
+  set_fact:
+    ironic_bin: "{{ ironic_command_path.stdout | dirname }}"
+  when:
+    - not ironic_venv_enabled | bool
+  tags:
+    - ironic-command-bin
+
+- name: Generate ironic config
+  config_template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ item.owner|default(ironic_system_user_name) }}"
+    group: "{{ item.group|default(ironic_system_group_name) }}"
     mode: "0644"
+    config_overrides: "{{ item.config_overrides }}"
+    config_type: "{{ item.config_type }}"
+  with_items:
+    - src: "ironic.conf.j2"
+      dest: "/etc/ironic/ironic.conf"
+      config_overrides: "{{ ironic_ironic_conf_overrides }}"
+      config_type: "ini"
+    - src: "rootwrap.conf.j2"
+      dest: "/etc/ironic/rootwrap.conf"
+      owner: "root"
+      group: "root"
+      config_overrides: "{{ ironic_rootwrap_conf_overrides }}"
+      config_type: "ini"
+    - src: "policy.json.j2"
+      dest: "/etc/ironic/policy.json"
+      config_overrides: "{{ ironic_policy_overrides }}"
+      config_type: "json"
+  notify: Restart ironic services
+  tags:
+    - ironic-config
+    - ironic-post-install
+
+- name: Copy ironic rootwrap filter config
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
     owner: "root"
     group: "root"
-  notify:
-    - Restart ironic services
+  with_items:
+    - { src: "rootwrap.d/ironic-images.filters", dest: "/etc/ironic/rootwrap.d/ironic-images.filters" }
+    - { src: "rootwrap.d/ironic-lib.filters", dest: "/etc/ironic/rootwrap.d/ironic-lib.filters" }
+    - { src: "rootwrap.d/ironic-utils.filters", dest: "/etc/ironic/rootwrap.d/ironic-utils.filters" }
+  notify: Restart ironic services
   tags:
-    - ironic-init
+    - ironic-config
+    - ironic-post-install
+
+- name: Include sudoers file
+  template:
+    src: "sudoers.j2"
+    dest: "/etc/sudoers.d/{{ ironic_system_user_name }}_sudoers"
+    mode: "0440"
+    owner: "root"
+    group: "root"
+  tags:
+    - ironic-api
+    - ironic-conductor

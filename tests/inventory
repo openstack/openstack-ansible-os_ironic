@@ -1,8 +1,47 @@
 [all]
-localhost ansible_connection=local ansible_become=True
+localhost ansible_connection=local ansible_become=True ansible_user=root
+infra1 ansible_host=10.100.100.101 ansible_become=True ansible_user=root
+ironic1 ansible_host=10.100.100.102 ansible_become=True ansible_user=root
 
 # Note(mrda): 'ironicinstallhost' will need to externally resolve to where
 # you want to do an 'allinone' install, and the root account will need to have
 # your ssh public_key in it's /root/.ssh/authorized_keys file
 [installhost]
 installhost ansible_user=root ansible_ssh_port=22 ansible_ssh_host=ironicinstallhost
+
+[ironic_all:children]
+ironic_api
+ironic_conductor
+ironic_server
+
+[ironic_api]
+ironic1
+
+[ironic_conductor]
+ironic1
+
+[ironic_server]
+ironic1
+
+[hosts]
+localhost
+
+[all_containers]
+infra1
+ironic1
+
+[keystone_all]
+infra1
+
+[service_all:children]
+rabbitmq_all
+galera_all
+
+[rabbitmq_all]
+infra1
+
+[galera_all]
+infra1
+
+[utility_all]
+localhost

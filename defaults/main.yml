@@ -23,9 +23,9 @@ verbose: True
 # to build an environment directly from a git source without the presence
 # of an OpenStack-Ansible repo_server.
 ironic_git_repo: https://git.openstack.org/openstack/ironic
-ironic_git_install_branch: master
+ironic_git_install_branch: stable/mitaka
 ironic_requirements_git_repo: https://git.openstack.org/openstack/requirements
-ironic_requirements_git_install_branch: master
+ironic_requirements_git_install_branch: stable/mitaka
 ironic_developer_mode: false
 ironic_developer_constraints:
   - "git+{{ ironic_git_repo }}@{{ ironic_git_install_branch }}#egg=ironic"
@@ -85,7 +85,6 @@ ironic_standalone: False
 # Database
 ironic_galera_user: ironic
 ironic_galera_database: ironic
-ironic_galera_password: "gu1d0"          # TODO(mrda): Manage secrets
 
 # Integrated Openstack configuration
 ironic_openstack_driver_list: agent_ipmitool
@@ -149,12 +148,25 @@ ironic_conductor_standalone_apt_packages:
 ## RabbitMQ info
 ironic_rabbitmq_userid: ironic
 ironic_rabbitmq_vhost: /ironic
-ironic_rabbitmq_password: ch4rl0tt3     # TODO(mrda): Manage secrets
 
 # Auth
 ironic_service_user_name: "ironic"
-ironic_service_password: "4nn3"         # TODO(mrda): Manage secrets
 
 # Apache settings
 ironic_wsgi_threads: 1
 ironic_wsgi_processes: "{{ ansible_processor_vcpus | default (1) * 2 }}"
+
+### OpenStack Services to integrate with
+
+# Glance
+# ironic_glance_host: x.x.x.x
+ironic_glance_auth_strategy: "{{ ironic_openstack_auth_strategy }}"
+
+# Neutron
+# neutron_service_adminurl:
+ironic_neutron_auth_strategy: "{{ ironic_openstack_auth_strategy }}"
+
+### Config Overrides
+ironic_ironic_conf_overrides: {}
+ironic_rootwrap_conf_overrides: {}
+ironic_policy_overrides: {}

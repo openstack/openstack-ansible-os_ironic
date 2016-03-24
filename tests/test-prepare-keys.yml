@@ -1,5 +1,5 @@
 ---
-# Copyright 2015, Rackspace US, Inc.
+# Copyright 2016, Rackspace US, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,24 +12,20 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-galaxy_info:
-  author: OpenStack
-  description: Baremetal provisioning for Openstack
-  company: OpenStack
-  license: Apache
-  min_ansible_version: 1.8
-  platforms:
-  - name: Ubuntu
-    versions:
-    - trusty
-  categories:
-  - cloud
-  - baremetal
-  - system
-dependencies:
-  - apt_package_pinning
-  - galera_client
-  - openstack_openrc
-  - role: pip_lock_down
-    when:
-      - not ironic_developer_mode | bool
+
+- name: Playbook for establishing ssh keys
+  hosts: 127.0.0.1
+  connection: local
+  become: false
+  pre_tasks:
+    - name: Create ssh key pair for root
+      user:
+        name: "{{ ansible_ssh_user }}"
+        generate_ssh_key: "yes"
+        ssh_key_bits: 2048
+        ssh_key_file: ".ssh/id_rsa"
+    - name: Get the calling user's key
+      command: cat ~/.ssh/id_rsa.pub
+      register: key_get
+    - set_fact:
+        lxc_container_ssh_key: "{{ key_get.stdout }}"

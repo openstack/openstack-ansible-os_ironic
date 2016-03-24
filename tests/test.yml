@@ -1,5 +1,5 @@
 ---
-# Copyright 2015, Rackspace US, Inc.
+# Copyright 2016, Rackspace US, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,8 +13,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Playbook for role testing
-  hosts: localhost
-  remote_user: root
-  roles:
-    - role: "{{ rolename | basename }}"
+# Prepare the user ssh keys
+- include: test-prepare-keys.yml
+
+# Prepare the host
+- include: test-prepare-host.yml
+
+# Prepare the containers
+- include: test-prepare-containers.yml
+
+# Install RabbitMQ/MariaDB
+- include: test-install-infra.yml
+
+# Install Keystone
+- include: test-install-keystone.yml
+
+# Install Ironic
+- include: test-install-ironic.yml

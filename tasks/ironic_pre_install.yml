@@ -114,14 +114,3 @@
   tags:
     - ironic-api
     - ironic-conductor
-
-- name: Include sudoers file
-  template:
-    src: "sudoers.j2"
-    dest: "/etc/sudoers.d/{{ ironic_system_user_name }}_sudoers"
-    mode: "0440"
-    owner: "root"
-    group: "root"
-  tags:
-    - ironic-api
-    - ironic-conductor
