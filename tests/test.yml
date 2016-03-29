@@ -30,3 +30,8 @@
 
 # Install Ironic
 - include: test-install-ironic.yml
+
+# Test REST API
+- include: test-rest-api.yml
+
+
