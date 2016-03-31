@@ -27,9 +27,12 @@ galaxy_info:
   - baremetal
   - system
 dependencies:
-  - apt_package_pinning
-  - galera_client
-  - openstack_openrc
   - role: pip_lock_down
     when:
       - not ironic_developer_mode | bool
+  - role: pip_install
+    when:
+      - ironic_developer_mode | bool
+  - apt_package_pinning
+  - galera_client
+  - openstack_openrc
