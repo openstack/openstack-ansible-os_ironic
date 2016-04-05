@@ -17,7 +17,6 @@
 
 # Verbosity Options
 debug: False
-verbose: True
 
 # These variables are used in 'developer mode' in order to allow the role
 # to build an environment directly from a git source without the presence
@@ -73,18 +72,34 @@ ironic_service_project_name: "service"
 ironic_service_project_domain_id: default
 ironic_service_user_domain_id: default
 ironic_service_role_name: "admin"
-
 ironic_service_in_ldap: False
 
+# Ironic image store information
+ironic_swift_image_container: glance_images
+ironic_swift_api_version: v1
+# The ironic swift auth account and swift endpoints will be generated using the
+#  known swift data as provided by swift stat. If you wish to set either of these
+#  items to something else define these variables.
+# ironic_swift_auth_account: AUTH_1234567890
+# ironic_swift_endpoint: https://localhost:8080
 
 # Is this Ironic installation working standalone?
 # If you're wanting Ironic to work without being integrated to other OpenStack
 # services, set this to True, and update the dhcp configuration appropriately
 ironic_standalone: False
 
+# Enables or disables automated cleaning. Automated cleaning
+# is a configurable set of steps, such as erasing disk drives,
+# that are performed on the node to ensure it is in a baseline
+# state and ready to be deployed to.
+ironic_automated_clean: false
+
 # Database
 ironic_galera_user: ironic
 ironic_galera_database: ironic
+
+## Keystone authentication middleware
+ironic_keystone_auth_plugin: password
 
 # Integrated Openstack configuration
 ironic_openstack_driver_list: agent_ipmitool
@@ -102,6 +117,11 @@ ironic_standalone_dhcp_provider: none
 ironic_standalone_sync_power_state_interval: -1
 ironic_standalone_db_connection_string: "mysql+pymysql://{{ ironic_galera_user }}:{{ ironic_galera_password }}@{{ ironic_galera_address }}/ironic"
 
+# Ironic db tuning
+ironic_db_max_overflow: 10
+ironic_db_max_pool_size: 120
+ironic_db_pool_timeout: 30
+
 # Common configuration
 ironic_node_name: ironic
 
@@ -114,6 +134,8 @@ ironic_bin: "{{ ironic_venv_bin }}"
 
 ironic_venv_download_url: http://127.0.0.1/venvs/untagged/ubuntu/ironic.tgz
 
+ironic_tftp_server_address: "{{ ansible_ssh_host }}"
+
 ironic_requires_pip_packages:
   - virtualenv
   - virtualenv-tools
@@ -124,6 +146,7 @@ ironic_pip_packages:
   - PyMySQL
   - ironic
   - python-ironicclient
+  - python-swiftclient
 
 ironic_api_apt_packages:
   - apache2
@@ -164,7 +187,6 @@ ironic_wsgi_processes: "{{ (_ironic_wsgi_processes | int > 1) | ternary(_ironic_
 ironic_glance_auth_strategy: "{{ ironic_openstack_auth_strategy }}"
 
 # Neutron
-# neutron_service_adminurl:
 ironic_neutron_auth_strategy: "{{ ironic_openstack_auth_strategy }}"
 
 ### Config Overrides

@@ -66,6 +66,7 @@
     - { path: "{{ ironic_system_home_folder }}/.ssh", mode: "0700" }
     - { path: "{{ ironic_system_home_folder }}/images" }
     - { path: "{{ ironic_system_home_folder }}/master_images" }
+    - { path: "{{ ironic_system_home_folder }}/cache/api", mode: "0700" }
     - { path: "/var/lock/ironic" }
     - { path: "/var/run/ironic" }
     - { path: "/var/www/cgi-bin", owner: root, group: root }
