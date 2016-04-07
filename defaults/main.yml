@@ -154,7 +154,8 @@ ironic_service_user_name: "ironic"
 
 # Apache settings
 ironic_wsgi_threads: 1
-ironic_wsgi_processes: "{{ ansible_processor_vcpus | default (1) * 2 }}"
+_ironic_wsgi_processes: "{{ ansible_processor_vcpus | default(1) // 4 }}"
+ironic_wsgi_processes: "{{ (_ironic_wsgi_processes | int > 1) | ternary(_ironic_wsgi_processes, 1) }}"
 
 ### OpenStack Services to integrate with
 

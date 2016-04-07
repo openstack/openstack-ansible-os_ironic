@@ -1893,7 +1893,7 @@ rabbit_virtual_host={{ ironic_rabbitmq_vhost }}
 
 # Maximum number of connections to keep queued. (integer
 # value)
-#pool_max_size=10
+pool_max_size = {{ ironic_wsgi_processes }}
 
 # Maximum number of connections to create above
 # `pool_max_size`. (integer value)
