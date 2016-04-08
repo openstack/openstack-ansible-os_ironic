@@ -163,10 +163,10 @@ ironic_conductor_apt_packages:
   - python-yaml
   - open-iscsi
   - ipmitool
+  - tftpd-hpa
 
 ironic_conductor_standalone_apt_packages:
   - isc-dhcp-server
-  - tftpd-hpa
 
 ## RabbitMQ info
 ironic_rabbitmq_userid: ironic

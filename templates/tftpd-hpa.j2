@@ -1,4 +1,4 @@
 TFTP_USERNAME="tftp"
 TFTP_DIRECTORY="/tftpboot"
-TFTP_ADDRESS="[::]:69"
+TFTP_ADDRESS="{{ ironic_tftp_server_address }}:69"
 TFTP_OPTIONS="-vvvv --map-file /tftpboot/map-file"

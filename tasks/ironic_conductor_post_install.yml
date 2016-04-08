@@ -34,8 +34,8 @@
     - tftpd-hpa
 
 - name: Copy in tftpd-hpa config file
-  copy:
-    src: tftpd-hpa
+  template:
+    src: tftpd-hpa.j2
     dest: /etc/default/tftpd-hpa
   notify:
     - Restart tftpd-hpa
