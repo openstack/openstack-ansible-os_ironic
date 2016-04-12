@@ -34,4 +34,5 @@
 # Test REST API
 - include: test-rest-api.yml
 
-
+# Test the ironicclient CLI
+- include: test-ironic-cli.yml
