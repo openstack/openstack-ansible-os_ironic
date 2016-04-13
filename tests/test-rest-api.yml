@@ -7,14 +7,26 @@
     # needed by the functional test playbook below
     - name: Install httplib2 so we can use the uri module
       pip:
-        name: httplib2
+        name: "{{ item }}"
+      with_items:
+        - httplib2
+        - python-openstackclient
+    - name: Get auth token
+      shell: >
+        . /root/openrc && openstack token issue --format yaml | awk '/^id\:/ {print $2}'
+      register: get_keystone_token
+    - name: set token
+      set_fact:
+        keystone_token: "{{ get_keystone_token.stdout }}"
     - name: Check the ironic-api
       uri:
         url: "{{ ironic_service_publicuri }}"
+        HEADER_X-Auth-Token: "{{ keystone_token }}"
         status_code: 200
     - name: list chassis
       uri:
         url: "{{ ironic_service_publicuri }}/v1/chassis"
+        HEADER_X-Auth-Token: "{{ keystone_token }}"
         status_code: 200
         return_content: yes
       register: chassis_list
@@ -22,6 +34,7 @@
       assert: that="chassis_list.json.chassis == []"
     - name: list drivers
       uri:
+        HEADER_X-Auth-Token: "{{ keystone_token }}"
         url: "{{ ironic_service_publicuri }}/v1/drivers"
         status_code: 200
         return_content: yes
@@ -31,6 +44,7 @@
     - name: list nodes
       uri:
         url: "{{ ironic_service_publicuri }}/v1/nodes"
+        HEADER_X-Auth-Token: "{{ keystone_token }}"
         status_code: 200
         return_content: yes
       register: node_list
@@ -42,6 +56,7 @@
         method: POST
         HEADER_Content-Type: "application/json"
         HEADER_X-OpenStack-Ironic-API-Version: "1.9"
+        HEADER_X-Auth-Token: "{{ keystone_token }}"
         body_format: json
         body: "{\"name\": \"restnode\", \"driver\": \"agent_ipmitool\", \"driver_info\": {\"ipmi_address\": \"1.2.3.4\"}}"
         status_code: 201
@@ -58,15 +73,17 @@
         method: POST
         HEADER_Content-Type: "application/json"
         HEADER_X-OpenStack-Ironic-API-Version: "1.9"
+        HEADER_X-Auth-Token: "{{ keystone_token }}"
         body_format: json
         body: " {\"node_uuid\": \"{{ node_response.json.uuid }}\", \"address\": \"00:00:00:00:00:01\"}"
         status_code: 201
         return_content: yes
     - name: list ports
       uri:
+        url: "{{ ironic_service_publicuri }}/v1/ports"
+        HEADER_X-Auth-Token: "{{ keystone_token }}"
         HEADER_Content-Type: "application/json"
         HEADER_X-OpenStack-Ironic-API-Version: "1.9"
-        url: "{{ ironic_service_publicuri }}/v1/ports"
         body: " {\"node\": \"{{ node_response.json.uuid }}\"}"
         body_format: json
         return_content: yes
@@ -82,15 +99,17 @@
         method: POST
         HEADER_Content-Type: "application/json"
         HEADER_X-OpenStack-Ironic-API-Version: "1.9"
+        HEADER_X-Auth-Token: "{{ keystone_token }}"
         body_format: json
         body: " {\"node_uuid\": \"{{ node_response.json.uuid }}\", \"address\": \"00:00:00:00:00:02\"}"
         status_code: 201
         return_content: yes
     - name: list ports again
       uri:
+        url: "{{ ironic_service_publicuri }}/v1/ports"
+        HEADER_X-Auth-Token: "{{ keystone_token }}"
         HEADER_Content-Type: "application/json"
         HEADER_X-OpenStack-Ironic-API-Version: "1.9"
-        url: "{{ ironic_service_publicuri }}/v1/ports"
         body: " {\"node\": \"{{ node_response.json.uuid }}\"}"
         body_format: json
         return_content: yes
@@ -104,6 +123,7 @@
         url: "{{ ironic_service_publicuri }}/v1/nodes/restnode/validate"
         method: GET
         HEADER_X-OpenStack-Ironic-API-Version: "1.9"
+        HEADER_X-Auth-Token: "{{ keystone_token }}"
         status_code: 200
         return_content: yes
       register: validate_node
@@ -123,6 +143,7 @@
           - "validate_node.json.raid.result == true"
     - name: update a node
       uri:
+        HEADER_X-Auth-Token: "{{ keystone_token }}"
         url: "{{ ironic_service_publicuri }}/v1/nodes/restnode"
         body: " [{\"path\": \"/name\", \"value\": \"renamednode\", \"op\": \"replace\"}]"
         method: PATCH
@@ -139,6 +160,7 @@
         method: DELETE
         HEADER_Content-Type: "application/json"
         HEADER_X-OpenStack-Ironic-API-Version: "1.9"
+        HEADER_X-Auth-Token: "{{ keystone_token }}"
         status_code: 204
         return_content: yes
   vars_files:
