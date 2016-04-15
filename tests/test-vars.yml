@@ -24,8 +24,8 @@ memcached_servers: 127.0.0.1
 memcached_encryption_key: "secrete"
 keystone_venv_tag: "testing"
 keystone_developer_mode: true
-keystone_git_install_branch: stable/mitaka
-keystone_requirements_git_install_branch: stable/mitaka
+keystone_git_install_branch: master
+keystone_requirements_git_install_branch: master
 keystone_service_password: "secrete"
 keystone_galera_address: 10.100.100.101
 keystone_galera_database: keystone
@@ -54,8 +54,8 @@ openrc_os_password: "{{ keystone_auth_admin_password }}"
 openrc_os_domain_name: "Default"
 ironic_venv_tag: "testing"
 ironic_developer_mode: true
-ironic_git_install_branch: stable/mitaka
-ironic_requirements_git_install_branch: stable/mitaka
+ironic_git_install_branch: master
+ironic_requirements_git_install_branch: master
 ironic_service_publicuri: "http://10.100.100.102:6385"
 ironic_service_adminuri: "{{ ironic_service_publicuri }}"
 ironic_service_internaluri: "{{ ironic_service_publicuri }}"
