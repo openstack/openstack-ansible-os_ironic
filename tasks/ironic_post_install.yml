@@ -55,8 +55,8 @@
 
 - name: Post swift tempURL secret key
   shell: |
-    . ~/openrc
-    {{ ironic_bin }}/swift \
+    OS_ENDPOINT_TYPE=internalURL \
+        {{ ironic_bin }}/swift {{ keystone_service_adminuri_insecure | bool | ternary('--insecure','') }} \
         --os-username "service:{{ glance_service_user_name }}" \
         --os-password {{ glance_service_password }} \
         --os-auth-url {{ keystone_service_internalurl }} \
@@ -71,8 +71,8 @@
 
 - name: Get swift account
   shell: |
-    . ~/openrc
-    {{ ironic_bin }}/swift \
+    OS_ENDPOINT_TYPE=internalURL \
+        {{ ironic_bin }}/swift {{ keystone_service_adminuri_insecure | bool | ternary('--insecure','') }} \
         --os-username "service:{{ glance_service_user_name }}" \
         --os-password {{ glance_service_password }} \
         --os-auth-url {{ keystone_service_internalurl }} \
