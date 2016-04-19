@@ -21,7 +21,7 @@
   until: install_packages|success
   retries: 5
   delay: 2
-  with_items: ironic_api_apt_packages
+  with_items: "{{ ironic_api_apt_packages }}"
   tags:
     - ironic-install
     - ironic-api
