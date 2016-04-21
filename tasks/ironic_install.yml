@@ -66,7 +66,7 @@
   until: install_packages|success
   retries: 5
   delay: 2
-  with_items: ironic_requires_pip_packages
+  with_items: "{{ ironic_requires_pip_packages }}"
   tags:
     - ironic-install
     - ironic-pip-packages
@@ -183,7 +183,7 @@
   until: install_packages|success
   retries: 5
   delay: 2
-  with_items: ironic_pip_packages
+  with_items: "{{ ironic_pip_packages }}"
   when:
     - ironic_venv_enabled | bool
     - ironic_get_venv | failed or ironic_developer_mode | bool
@@ -201,7 +201,7 @@
   until: install_packages|success
   retries: 5
   delay: 2
-  with_items: ironic_pip_packages
+  with_items: "{{ ironic_pip_packages }}"
   when:
     - not ironic_venv_enabled | bool
     - not ironic_developer_mode | bool

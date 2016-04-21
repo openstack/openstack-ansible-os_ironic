@@ -18,7 +18,7 @@
     name: "{{ item }}"
     state: restarted
     pattern: "{{ item }}"
-  with_items: ironic_service_names
+  with_items: "{{ ironic_service_names }}"
   failed_when: false
 
 - name: Restart tftpd-hpa
