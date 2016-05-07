@@ -6,10 +6,6 @@
   src: https://git.openstack.org/openstack/openstack-ansible-pip_install
   scm: git
   version: master
-- name: pip_lock_down
-  src: https://git.openstack.org/openstack/openstack-ansible-pip_lock_down
-  scm: git
-  version: master
 - name: memcached_server
   src: https://git.openstack.org/openstack/openstack-ansible-memcached_server
   scm: git

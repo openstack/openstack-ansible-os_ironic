@@ -28,12 +28,7 @@ galaxy_info:
   - baremetal
   - system
 dependencies:
-  - role: pip_lock_down
-    when:
-      - not ironic_developer_mode | bool
-  - role: pip_install
-    when:
-      - ironic_developer_mode | bool
+  - pip_install
   - role: apt_package_pinning
     when:
       - ansible_pkg_mgr == 'apt'
