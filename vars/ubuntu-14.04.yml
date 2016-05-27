@@ -1,5 +1,5 @@
 ---
-# Copyright 2015, Rackspace US, Inc.
+# Copyright 2016, Rackspace US, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,12 +13,30 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- include: ironic_install_apt.yml
-  when:
-    - ansible_pkg_mgr == 'apt'
-  vars:
-    apt_pkgs: "{{ ironic_api_apt_packages }}"
-  tags:
-    - ironic-install
-    - ironic-api
-    - ironic-apt-packages
+cache_timeout: 600
+
+ironic_developer_apt_packages:
+  - git-core
+
+ironic_api_apt_packages:
+  - apache2
+  - apache2-utils
+  - libapache2-mod-wsgi
+
+ironic_conductor_apt_packages:
+  - libxml2-dev
+  - syslinux
+  - syslinux-common
+  - libxslt1-dev
+  - qemu-utils
+  - libpq-dev
+  - python-yaml
+  - open-iscsi
+  - ipmitool
+  - tftpd-hpa
+
+ironic_conductor_standalone_apt_packages:
+  - isc-dhcp-server
+
+ironic_pxelinux_path: "/usr/lib/syslinux/pxelinux.0"
+ironic_chainc32_path: "/usr/lib/syslinux/chain.c32"
