@@ -13,7 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ansible_ssh_host: "{{ ansible_host }}"
 container_name: "{{ inventory_hostname }}"
 container_networks:
   management_address:

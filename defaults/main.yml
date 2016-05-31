@@ -147,6 +147,8 @@ ironic_pip_packages:
   - ironic
   - python-ironicclient
   - python-swiftclient
+  - pycrypto
+  - python-memcached
 
 ironic_api_apt_packages:
   - apache2

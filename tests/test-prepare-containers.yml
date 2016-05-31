@@ -15,7 +15,6 @@
 
 - name: Playbook for creating containers
   hosts: all_containers
-  connection: local
   gather_facts: false
   roles:
     - role: "lxc_container_create"
