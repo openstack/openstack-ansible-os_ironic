@@ -13,30 +13,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Install ironic-conductor specific apt packages
-  apt:
-    pkg: "{{ item }}"
-    state: latest
-  register: install_packages
-  until: install_packages|success
-  retries: 5
-  delay: 2
-  with_items: "{{ ironic_conductor_apt_packages }}"
+- include: ironic_install_apt.yml
+  when:
+    - ansible_pkg_mgr == 'apt'
+  vars:
+    apt_pkgs: "{{ ironic_conductor_apt_packages }}"
   tags:
     - ironic-install
     - ironic-conductor
     - ironic-apt-packages
 
-- name: Install ironic-conductor standalone apt packages
-  apt:
-    pkg: "{{ item }}"
-    state: latest
-  register: install_packages
-  until: install_packages|success
-  retries: 5
-  delay: 2
-  with_items: "{{ ironic_conductor_standalone_apt_packages }}"
-  when: ironic_standalone
+- include: ironic_install_apt.yml
+  when:
+    - ansible_pkg_mgr == 'apt'
+    - ironic_standalone
+  vars:
+    apt_pkgs: "{{ ironic_conductor_standalone_apt_packages }}"
   tags:
     - ironic-install
     - ironic-conductor

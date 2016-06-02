@@ -22,6 +22,7 @@ galaxy_info:
   - name: Ubuntu
     versions:
     - trusty
+    - xenial
   categories:
   - cloud
   - baremetal
@@ -33,6 +34,8 @@ dependencies:
   - role: pip_install
     when:
       - ironic_developer_mode | bool
-  - apt_package_pinning
+  - role: apt_package_pinning
+    when:
+      - ansible_pkg_mgr == 'apt'
   - galera_client
   - openstack_openrc

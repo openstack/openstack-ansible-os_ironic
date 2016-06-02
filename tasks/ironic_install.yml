@@ -26,6 +26,17 @@
     - ironic-install
     - ironic-pip-packages
 
+- include: ironic_install_apt.yml
+  when:
+    - ansible_pkg_mgr == 'apt'
+    - ironic_developer_mode | bool
+  vars:
+    apt_pkgs: "{{ ironic_developer_apt_packages }}"
+  tags:
+    - ironic-install
+    - ironic-apt
+    - ironic-apt-packages
+
 - name: Clone requirements git repository
   git:
     repo: "{{ ironic_requirements_git_repo }}"

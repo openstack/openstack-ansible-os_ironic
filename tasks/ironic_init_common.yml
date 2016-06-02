@@ -1,5 +1,5 @@
 ---
-# Copyright 2014, Rackspace US, Inc.
+# Copyright 2016, Rackspace US, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,11 +13,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- include: ironic_upstart_common_init.yml
-  vars:
-    program_name: "{{ ironic_conductor_program_name }}"
-    service_name: "{{ ironic_service_name }}"
-    system_user: "{{ ironic_system_user_name }}"
-    system_group: "{{ ironic_system_group_name }}"
-    service_home: "{{ ironic_system_home_folder }}"
-  when: inventory_hostname in groups['ironic_conductor']
+- include: ironic_init_upstart.yml
+  when: pid1_name == "init"
+  tags:
+    - ironic-init
+
+- include: ironic_init_systemd.yml
+  when: pid1_name == "systemd"
+  tags:
+    - ironic-init
+
+- name: Load service
+  service:
+   name: "{{ program_name }}"
+   enabled: "yes"
+  notify:
+    - Restart ironic services

@@ -1,0 +1,4 @@
+# {{ ansible_managed }}
+
+D /var/lock/{{ program_name }} 2755 {{ system_user }} {{ system_group }}
+D /var/run/{{ program_name }} 2755 {{ system_user }} {{ system_group }}

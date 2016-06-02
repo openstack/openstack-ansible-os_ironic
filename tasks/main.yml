@@ -13,33 +13,56 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-  - include: ironic_pre_install.yml
-  - include: ironic_install.yml
+- name: Check init system
+  command: cat /proc/1/comm
+  register: _pid1_name
+  tags:
+    - always
 
-  - include: ironic_api_install.yml
-    when: >
-      inventory_hostname in groups['ironic_api']
+- name: Set the name of pid1
+  set_fact:
+    pid1_name: "{{ _pid1_name.stdout }}"
+  tags:
+    - always
 
-  - include: ironic_conductor_install.yml
-    when: >
-      inventory_hostname in groups['ironic_conductor']
+- name: Gather variables for each operating system
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution | lower }}-{{ ansible_distribution_version | lower }}.yml"
+    - "{{ ansible_distribution | lower }}-{{ ansible_distribution_major_version | lower }}.yml"
+    - "{{ ansible_os_family | lower }}-{{ ansible_distribution_major_version | lower }}.yml"
+    - "{{ ansible_distribution | lower }}.yml"
+    - "{{ ansible_os_family | lower }}.yml"
+  tags:
+    - always
 
-  - include: ironic_post_install.yml
+- include: ironic_pre_install.yml
+- include: ironic_install.yml
 
-  - include: ironic_api_post_install.yml
-    when: >
-      inventory_hostname in groups['ironic_api']
+- include: ironic_api_install.yml
+  when: >
+    inventory_hostname in groups['ironic_api']
 
-  - include: ironic_conductor_post_install.yml
-    when: >
-      inventory_hostname in groups['ironic_conductor']
+- include: ironic_conductor_install.yml
+  when: >
+    inventory_hostname in groups['ironic_conductor']
 
-  - include: ironic_db_setup.yml
-    when: >
-      inventory_hostname == groups['ironic_conductor'][0]
+- include: ironic_post_install.yml
 
-  - include: ironic_upstart_init.yml
+- include: ironic_api_post_install.yml
+  when: >
+    inventory_hostname in groups['ironic_api']
 
-  - include: ironic_service_setup.yml
-    when: >
-      inventory_hostname == groups['ironic_api'][0]
+- include: ironic_conductor_post_install.yml
+  when: >
+    inventory_hostname in groups['ironic_conductor']
+
+- include: ironic_db_setup.yml
+  when: >
+    inventory_hostname == groups['ironic_conductor'][0]
+
+- include: ironic_init.yml
+
+- include: ironic_service_setup.yml
+  when: >
+    inventory_hostname == groups['ironic_api'][0]

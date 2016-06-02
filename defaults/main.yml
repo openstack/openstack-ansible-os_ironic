@@ -150,26 +150,6 @@ ironic_pip_packages:
   - pycrypto
   - python-memcached
 
-ironic_api_apt_packages:
-  - apache2
-  - apache2-utils
-  - libapache2-mod-wsgi
-
-ironic_conductor_apt_packages:
-  - libxml2-dev
-  - syslinux
-  - syslinux-common
-  - libxslt1-dev
-  - qemu-utils
-  - libpq-dev
-  - python-yaml
-  - open-iscsi
-  - ipmitool
-  - tftpd-hpa
-
-ironic_conductor_standalone_apt_packages:
-  - isc-dhcp-server
-
 ## RabbitMQ info
 ironic_rabbitmq_userid: ironic
 ironic_rabbitmq_vhost: /ironic
