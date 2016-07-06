@@ -19,7 +19,7 @@
     state: directory
     owner: "{{ system_user }}"
     group: "{{ system_group }}"
-    mode: "2755"
+    mode: 02755
   with_items:
     - { path: "/var/run" }
     - { path: "/var/lock" }
