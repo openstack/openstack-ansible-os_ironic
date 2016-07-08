@@ -75,18 +75,6 @@
     - ironic-api
     - ironic-conductor
 
-- name: Create ironic venv dir
-  file:
-    path: "{{ item.path }}"
-    state: directory
-  with_items:
-    - { path: "/openstack/venvs" }
-    - { path: "{{ ironic_venv_bin }}" }
-  when: ironic_venv_enabled | bool
-  tags:
-    - ironic-api
-    - ironic-conductor
-
 - name: Test for log directory or link
   shell: |
     if [ -h "{{ ironic_system_log_folder }}"  ]; then

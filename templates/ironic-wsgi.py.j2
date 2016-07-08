@@ -18,10 +18,8 @@
 
 import os
 
-{% if ironic_venv_enabled | bool %}
-activate_this = os.path.expanduser("{{ ironic_venv_bin }}/activate_this.py")
+activate_this = os.path.expanduser("{{ ironic_bin }}/activate_this.py")
 execfile(activate_this, dict(__file__=activate_this))
-{% endif %}
 
 import logging
 import sys

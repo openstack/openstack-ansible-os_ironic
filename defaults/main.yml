@@ -31,10 +31,7 @@ ironic_developer_constraints:
 
 # Name of the virtual env to deploy into
 ironic_venv_tag: untagged
-ironic_venv_bin: "/openstack/venvs/ironic-{{ ironic_venv_tag }}/bin"
-
-# Set this to enable or disable installing in a venv
-ironic_venv_enabled: True
+ironic_bin: "/openstack/venvs/ironic-{{ ironic_venv_tag }}/bin"
 
 # System info
 ironic_system_user_name: ironic
@@ -129,8 +126,6 @@ ironic_node_name: ironic
 # var to True. Otherwise keys will be generated on the first run and not
 # regenerated each run.
 ironic_recreate_keys: False
-
-ironic_bin: "{{ ironic_venv_bin }}"
 
 ironic_venv_download_url: http://127.0.0.1/venvs/untagged/ubuntu/ironic.tgz
 
