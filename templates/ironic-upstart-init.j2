@@ -26,9 +26,7 @@ pre-start script
   mkdir -p "/var/lock/{{ program_name }}"
   chown {{ system_user }}:{{ system_group }} "/var/lock/{{ program_name }}"
 
-  {% if ironic_venv_enabled | bool -%}
-  . {{ ironic_venv_bin }}/activate
-  {%- endif %}
+  . {{ ironic_bin }}/activate
 
 end script
 

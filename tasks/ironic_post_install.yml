@@ -37,22 +37,6 @@
   tags:
     - always
 
-- name: Get ironic command path
-  command: which ironic
-  register: ironic_command_path
-  when:
-    - not ironic_venv_enabled | bool
-  tags:
-    - ironic-command-bin
-
-- name: Set ironic command path
-  set_fact:
-    ironic_bin: "{{ ironic_command_path.stdout | dirname }}"
-  when:
-    - not ironic_venv_enabled | bool
-  tags:
-    - ironic-command-bin
-
 - name: Post swift tempURL secret key
   shell: |
     OS_ENDPOINT_TYPE=internalURL \

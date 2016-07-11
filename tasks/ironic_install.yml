@@ -88,7 +88,6 @@
     get_md5: False
   when:
     - not ironic_developer_mode | bool
-    - ironic_venv_enabled | bool
   register: local_venv_stat
   tags:
     - ironic-install
@@ -100,7 +99,6 @@
     return_content: True
   when:
     - not ironic_developer_mode | bool
-    - ironic_venv_enabled | bool
   register: remote_venv_checksum
   tags:
     - ironic-install
@@ -120,7 +118,6 @@
   register: get_venv
   when:
     - not ironic_developer_mode | bool
-    - ironic_venv_enabled | bool
     - (local_venv_stat.stat.exists == False or
         {{ local_venv_stat.stat.checksum is defined and local_venv_stat.stat.checksum != remote_venv_checksum.content | trim }})
   tags:
@@ -130,17 +127,15 @@
 - name: Set ironic get_venv fact
   set_fact:
     ironic_get_venv: "{{ get_venv }}"
-  when: ironic_venv_enabled | bool
   tags:
     - ironic-install
     - ironic-pip-packages
 
 - name: Remove existing venv
   file:
-    path: "{{ ironic_venv_bin | dirname }}"
+    path: "{{ ironic_bin | dirname }}"
     state: absent
   when:
-    - ironic_venv_enabled | bool
     - ironic_get_venv | changed
   tags:
     - ironic-install
@@ -148,12 +143,9 @@
 
 - name: Create ironic venv dir
   file:
-    path: "{{ ironic_venv_bin | dirname }}"
+    path: "{{ ironic_bin | dirname }}"
     state: directory
-  when:
-    - not ironic_developer_mode | bool
-    - ironic_venv_enabled | bool
-    - ironic_get_venv | changed
+  register: ironic_venv_dir
   tags:
     - ironic-install
     - ironic-pip-packages
@@ -161,33 +153,21 @@
 - name: Unarchive pre-built venv
   unarchive:
     src: "/var/cache/{{ ironic_venv_download_url | basename }}"
-    dest: "{{ ironic_venv_bin | dirname }}"
+    dest: "{{ ironic_bin | dirname }}"
     copy: "no"
   when:
     - not ironic_developer_mode | bool
-    - ironic_venv_enabled | bool
-    - ironic_get_venv | changed
+    - ironic_get_venv | changed or ironic_venv_dir | changed
   notify: Restart ironic services
   tags:
     - ironic-install
     - ironic-pip-packages
 
-- name: Update virtualenv path
-  command: >
-    virtualenv-tools --update-path=auto {{ ironic_venv_bin | dirname }}
-  when:
-    - not ironic_developer_mode | bool
-    - ironic_venv_enabled | bool
-    - ironic_get_venv | success
-  tags:
-    - ironic-install
-    - ironic-pip-packages
-
-- name: Install pip packages (venv)
+- name: Install pip packages
   pip:
     name: "{{ item }}"
     state: latest
-    virtualenv: "{{ ironic_venv_bin | dirname }}"
+    virtualenv: "{{ ironic_bin | dirname }}"
     virtualenv_site_packages: "no"
     extra_args: "{{ pip_install_options_fact }}"
   register: install_packages
@@ -196,27 +176,18 @@
   delay: 2
   with_items: "{{ ironic_pip_packages }}"
   when:
-    - ironic_venv_enabled | bool
     - ironic_get_venv | failed or ironic_developer_mode | bool
   notify: Restart ironic services
   tags:
     - ironic-install
     - ironic-pip-packages
 
-- name: Install pip packages (no venv)
-  pip:
-    name: "{{ item }}"
-    state: latest
-    extra_args: "{{ pip_install_options_fact }}"
-  register: install_packages
-  until: install_packages|success
-  retries: 5
-  delay: 2
-  with_items: "{{ ironic_pip_packages }}"
+- name: Update virtualenv path
+  command: >
+    virtualenv-tools --update-path=auto {{ ironic_bin | dirname }}
   when:
-    - not ironic_venv_enabled | bool
     - not ironic_developer_mode | bool
-  notify: Restart ironic services
+    - ironic_get_venv | success
   tags:
     - ironic-install
     - ironic-pip-packages
