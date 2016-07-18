@@ -70,14 +70,13 @@
 
 - name: Install requires pip packages
   pip:
-    name: "{{ item }}"
+    name: "{{ ironic_requires_pip_packages | join(' ') }}"
     state: latest
     extra_args: "{{ pip_install_options_fact }}"
   register: install_packages
   until: install_packages|success
   retries: 5
   delay: 2
-  with_items: "{{ ironic_requires_pip_packages }}"
   tags:
     - ironic-install
     - ironic-pip-packages
@@ -165,7 +164,7 @@
 
 - name: Install pip packages
   pip:
-    name: "{{ item }}"
+    name: "{{ ironic_pip_packages | join(' ') }}"
     state: latest
     virtualenv: "{{ ironic_bin | dirname }}"
     virtualenv_site_packages: "no"
@@ -174,7 +173,6 @@
   until: install_packages|success
   retries: 5
   delay: 2
-  with_items: "{{ ironic_pip_packages }}"
   when:
     - ironic_get_venv | failed or ironic_developer_mode | bool
   notify: Restart ironic services
