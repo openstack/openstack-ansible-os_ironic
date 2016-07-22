@@ -49,6 +49,7 @@ keystone_rabbitmq_password: "secrete"
 keystone_rabbitmq_use_ssl: false
 keystone_rabbitmq_port: 5672
 keystone_rabbitmq_servers: 10.100.100.101
+keystone_service_region: RegionOne
 openrc_os_auth_url: "{{ keystone_service_internalurl }}"
 openrc_os_password: "{{ keystone_auth_admin_password }}"
 openrc_os_domain_name: "Default"
