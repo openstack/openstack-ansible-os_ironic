@@ -148,6 +148,9 @@ ironic_pip_packages:
 ## RabbitMQ info
 ironic_rabbitmq_userid: ironic
 ironic_rabbitmq_vhost: /ironic
+ironic_rabbitmq_servers: 127.0.0.1
+ironic_rabbitmq_use_ssl: False
+ironic_rabbitmq_port: 5672
 
 # Auth
 ironic_service_user_name: "ironic"

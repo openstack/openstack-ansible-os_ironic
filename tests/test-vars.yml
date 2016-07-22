@@ -67,6 +67,9 @@ ironic_galera_password: "secrete"
 ironic_rabbitmq_password: "secrete"
 ironic_rabbitmq_userid: ironic
 ironic_rabbitmq_vhost: /ironic
+ironic_rabbitmq_servers: "{{ rabbitmq_servers }}"
+ironic_rabbitmq_use_ssl: "{{ rabbitmq_use_ssl }}"
+ironic_rabbitmq_port: "{{ rabbitmq_port }}"
 ironic_standalone: True
 ironic_swift_endpoint: "http://localhost:8080"
 ironic_swift_auth_account: "AUTH_1234567890"
