@@ -1,7 +1,8 @@
 Ironic Role for OpenStack-Ansible
 #################################
 
-This is a role for the deployment of Ironic in an `OpenStack-Ansible`_ environment.
+This is a role for the deployment of Ironic in an `OpenStack-Ansible`_
+environment.
 
 Please see the `role-ironic spec`_ for more details.
 
