@@ -13,16 +13,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Create ironic TEMP dirs
+- name: Create TEMP run dir
   file:
-    path: "{{ item.path }}/{{ program_name }}"
+    path: "/var/run/{{ program_name }}"
     state: directory
     owner: "{{ system_user }}"
     group: "{{ system_group }}"
-    mode: 02755
-  with_items:
-    - { path: "/var/run" }
-    - { path: "/var/lock" }
+    mode: "02755"
+
+- name: Create TEMP lock dir
+  file:
+    path: "/var/lock/{{ program_name }}"
+    state: directory
+    owner: "{{ system_user }}"
+    group: "{{ system_group }}"
+    mode: "02755"
 
 - name: Create tempfile.d entry
   template:
