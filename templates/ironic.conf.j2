@@ -1,6 +1,8 @@
 # {{ ansible_managed }}
 
 [DEFAULT]
+# Disable stderr logging
+use_stderr = False
 debug = {{ debug }}
 
 auth_strategy = {{ ironic_openstack_auth_strategy }}
