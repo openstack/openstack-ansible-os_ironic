@@ -13,19 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Playbook for establishing ssh keys
-  hosts: 127.0.0.1
-  connection: local
-  become: false
-  pre_tasks:
-    - name: Create ssh key pair for root
-      user:
-        name: "{{ ansible_ssh_user }}"
-        generate_ssh_key: "yes"
-        ssh_key_bits: 2048
-        ssh_key_file: ".ssh/id_rsa"
-    - name: Get the calling user's key
-      command: cat ~/.ssh/id_rsa.pub
-      register: key_get
-    - set_fact:
-        lxc_container_ssh_key: "{{ key_get.stdout }}"
+bridges:
+  - "br-mgmt"
+
+ansible_python_interpreter: "/usr/bin/python2"

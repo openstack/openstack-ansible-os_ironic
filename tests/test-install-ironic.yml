@@ -57,6 +57,7 @@
       delegate_to: "10.100.100.101"
       run_once: true
   roles:
-    - role: "{{ rolename | basename }}"
+    - role: "os_ironic"
   vars_files:
+    - playbooks/test-vars.yml
     - test-vars.yml
