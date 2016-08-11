@@ -20,8 +20,6 @@
   when: ironic_standalone
   notify:
     - Restart isc-dhcp-server
-  tags:
-    - isc-dhcp-server
 
 - name: Create /tftpboot
   file:
@@ -30,8 +28,6 @@
     owner: "{{ ironic_system_user_name }}"
     group: "{{ ironic_system_group_name }}"
     mode: "0755"
-  tags:
-    - tftpd-hpa
 
 - name: Copy in tftpd-hpa config file
   template:
@@ -39,8 +35,6 @@
     dest: /etc/default/tftpd-hpa
   notify:
     - Restart tftpd-hpa
-  tags:
-    - tftpd-hpa
 
 - name: Copy in tftpd-hpa map file
   copy:
@@ -48,8 +42,6 @@
     dest: /tftpboot/map-file
   notify:
     - Restart tftpd-hpa
-  tags:
-    - tftpd-hpa
 
 ## TODO(odyssey4me): Switch this to the copy module and make use of
 ## remote_src: True once we move to Ansible 2.x. For Ansible 1.9x
@@ -57,8 +49,6 @@
 ## which is a wasted effort.
 - name: Copy syslinux pxlinux.0
   command: "cp {{ ironic_pxelinux_path }} /tftpboot/pxelinux.0"
-  tags:
-    - tftpd-hpa
 
 ## TODO(odyssey4me): Switch this to the copy module and make use of
 ## remote_src: True once we move to Ansible 2.x. For Ansible 1.9x
@@ -66,5 +56,3 @@
 ## which is a wasted effort.
 - name: Copy syslinux chain.c32
   command: "cp {{ ironic_chainc32_path }} /tftpboot/chain.c32"
-  tags:
-    - tftpd-hpa

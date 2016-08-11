@@ -24,8 +24,6 @@
     - { src: "ironic-httpd.conf.j2", dest: "/etc/apache2/sites-available/ironic-httpd.conf" }
   notify:
     - Restart ironic services
-  tags:
-    - ironic-httpd
 
 - name: Disable default apache site
   file:
@@ -34,8 +32,6 @@
   when: not ironic_standalone
   notify:
     - Restart ironic services
-  tags:
-    - ironic-httpd
 
 - name: Enable default apache site vhost
   file:
@@ -47,8 +43,6 @@
   when: ironic_standalone
   notify:
     - Restart ironic services
-  tags:
-    - ironic-httpd
 
 - name: Enable ironic vhost
   file:
@@ -59,8 +53,6 @@
     - { src: "/etc/apache2/sites-available/ironic-httpd.conf", dest: "/etc/apache2/sites-enabled/ironic-httpd.conf", state: "link" }
   notify:
     - Restart ironic services
-  tags:
-    - ironic-httpd
 
 - name: Setup Ironic WSGI Configs
   template:
@@ -71,5 +63,3 @@
     mode: "0755"
   notify:
     - Restart ironic services
-  tags:
-    - ironic-config
