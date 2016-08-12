@@ -15,13 +15,9 @@
 
 - include: ironic_init_upstart.yml
   when: pid1_name == "init"
-  tags:
-    - ironic-init
 
 - include: ironic_init_systemd.yml
   when: pid1_name == "systemd"
-  tags:
-    - ironic-init
 
 - name: Load service
   service:

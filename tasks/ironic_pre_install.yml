@@ -18,9 +18,6 @@
     name: "{{ ironic_system_group_name }}"
     state: "present"
     system: "yes"
-  tags:
-    - ironic-api
-    - ironic-conductor
 
 - name: Remove old key file(s) if found
   file:
@@ -31,9 +28,6 @@
     - "{{ ironic_system_home_folder }}/.ssh/id_rsa"
     - "{{ ironic_system_home_folder }}/.ssh/id_rsa.pub"
   when: ironic_recreate_keys | bool
-  tags:
-    - ironic-api
-    - ironic-conductor
 
 - name: Create the ironic system user
   user:
@@ -45,9 +39,6 @@
     createhome: "yes"
     home: "{{ ironic_system_home_folder }}"
     generate_ssh_key: "yes"
-  tags:
-    - ironic-api
-    - ironic-conductor
 
 - name: Create ironic dir
   file:
@@ -71,9 +62,6 @@
     - { path: "/var/run/ironic" }
     - { path: "/var/www/cgi-bin", owner: root, group: root }
     - { path: "/var/www/cgi-bin/ironic" }
-  tags:
-    - ironic-api
-    - ironic-conductor
 
 - name: Test for log directory or link
   shell: |
@@ -86,9 +74,6 @@
   register: log_dir
   failed_when: false
   changed_when: log_dir.rc != 0
-  tags:
-    - ironic-api
-    - ironic-conductor
 
 - name: Create ironic log dir
   file:
@@ -100,6 +85,3 @@
   with_items:
     - { path: "{{ ironic_system_log_folder }}" }
   when: log_dir.rc != 0
-  tags:
-    - ironic-api
-    - ironic-conductor

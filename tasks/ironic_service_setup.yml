@@ -29,10 +29,6 @@
   until: add_service|success
   retries: 5
   delay: 2
-  tags:
-    - ironic-api-setup
-    - ironic-service-add
-    - ironic-setup
 
 # Create an admin user
 - name: Ensure ironic user
@@ -51,10 +47,6 @@
   until: add_service|success
   retries: 5
   delay: 10
-  tags:
-    - ironic-api-setup
-    - ironic-service-add
-    - ironic-setup
 
 # Add a role to the user
 - name: Ensure ironic user to admin role
@@ -73,10 +65,6 @@
   until: add_service|success
   retries: 5
   delay: 10
-  tags:
-    - ironic-api-setup
-    - ironic-service-add
-    - ironic-setup
 
 # Create an endpoint
 - name: Ensure ironic endpoint
@@ -101,7 +89,3 @@
   until: add_service|success
   retries: 5
   delay: 10
-  tags:
-    - ironic-api-setup
-    - ironic-service-add
-    - ironic-setup

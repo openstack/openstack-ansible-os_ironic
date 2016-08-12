@@ -19,6 +19,3 @@
   become_user: "{{ ironic_system_user_name }}"
   notify:
     - Restart ironic services
-  tags:
-    - ironic-db-setup
-    - ironic-conductor

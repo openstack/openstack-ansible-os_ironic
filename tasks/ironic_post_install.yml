@@ -50,7 +50,6 @@
     - inventory_hostname == groups['ironic_all'][0]
     - not ironic_standalone | bool
   tags:
-    - ironic-swift-auth
     - always
 
 - name: Get swift account
@@ -67,7 +66,6 @@
     - (ironic_swift_auth_account is undefined) or (ironic_swift_endpoint is undefined)
     - not ironic_standalone | bool
   tags:
-    - ironic-swift-auth
     - always
 
 - name: Validate swift output
@@ -82,7 +80,6 @@
     - not ironic_standalone | bool
     - not swift_storage_url.stdout
   tags:
-    - ironic-swift-auth
     - always
 
 - name: Set the swift auth facts
@@ -128,9 +125,6 @@
       config_overrides: "{{ ironic_policy_overrides }}"
       config_type: "json"
   notify: Restart ironic services
-  tags:
-    - ironic-config
-    - ironic-post-install
 
 - name: Copy ironic rootwrap filter config
   copy:
@@ -143,9 +137,6 @@
     - { src: "rootwrap.d/ironic-lib.filters", dest: "/etc/ironic/rootwrap.d/ironic-lib.filters" }
     - { src: "rootwrap.d/ironic-utils.filters", dest: "/etc/ironic/rootwrap.d/ironic-utils.filters" }
   notify: Restart ironic services
-  tags:
-    - ironic-config
-    - ironic-post-install
 
 - name: Include sudoers file
   template:
@@ -154,6 +145,3 @@
     mode: "0440"
     owner: "root"
     group: "root"
-  tags:
-    - ironic-api
-    - ironic-conductor
