@@ -1,22 +1,12 @@
-=================================
-Ironic Role for OpenStack-Ansible
-=================================
+======================================================
+OpenStack-Ansible role for Bare Metal (ironic) service
+======================================================
 
-
-This is a role for the deployment of Ironic in an `OpenStack-Ansible`_
-environment.
-
-Please see the `role-ironic spec`_ for more details.
-
-.. _OpenStack-Ansible: https://github.com/openstack/openstack-ansible
-.. _role-ironic spec: https://github.com/openstack/openstack-ansible-specs/blob/master/specs/mitaka/role-ironic.rst
-
-Tags
-====
-
-This role supports two tags: ``ironic-install`` and ``ironic-config``
-
-The ``ironic-install`` tag can be used to install and upgrade.
-
-The ``ironic-config`` tag can be used to maintain configuration of the
+This is an OpenStack-Ansible role to deploy the Bare Metal (ironic)
 service.
+
+Documentation for the project can be found at:
+  http://docs.openstack.org/developer/openstack-ansible-os_ironic
+
+The project home is at:
+  http://launchpad.net/openstack-ansible

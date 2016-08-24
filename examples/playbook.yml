@@ -1,5 +1,5 @@
-    - name: Playbook for role testing
-      hosts: localhost
-      remote_user: root
-      roles:
-        - role: openstack-ansible-ironic
+- name: Playbook for role testing
+  hosts: localhost
+  remote_user: root
+  roles:
+    - role: openstack-ansible-os_ironic
