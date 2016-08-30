@@ -17,11 +17,11 @@
   when:
     - ansible_pkg_mgr == 'apt'
   vars:
-    apt_pkgs: "{{ ironic_conductor_apt_packages }}"
+    apt_pkgs: "{{ ironic_conductor_distro_packages }}"
 
 - include: ironic_install_apt.yml
   when:
     - ansible_pkg_mgr == 'apt'
     - ironic_standalone
   vars:
-    apt_pkgs: "{{ ironic_conductor_standalone_apt_packages }}"
+    apt_pkgs: "{{ ironic_conductor_standalone_distro_packages }}"

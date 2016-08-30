@@ -28,7 +28,7 @@
     - ansible_pkg_mgr == 'apt'
     - ironic_developer_mode | bool
   vars:
-    apt_pkgs: "{{ ironic_developer_apt_packages }}"
+    apt_pkgs: "{{ ironic_developer_mode_distro_packages }}"
 
 - name: Clone requirements git repository
   git:

@@ -15,16 +15,16 @@
 
 cache_timeout: 600
 
-ironic_developer_apt_packages:
+ironic_developer_mode_distro_packages:
   - git-core
   - libffi-dev
 
-ironic_api_apt_packages:
+ironic_api_distro_packages:
   - apache2
   - apache2-utils
   - libapache2-mod-wsgi
 
-ironic_conductor_apt_packages:
+ironic_conductor_distro_packages:
   - libxml2-dev
   - syslinux
   - syslinux-common
@@ -37,7 +37,7 @@ ironic_conductor_apt_packages:
   - ipmitool
   - tftpd-hpa
 
-ironic_conductor_standalone_apt_packages:
+ironic_conductor_standalone_distro_packages:
   - isc-dhcp-server
 
 ironic_pxelinux_path: "/usr/lib/PXELINUX/pxelinux.0"

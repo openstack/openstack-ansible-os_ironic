@@ -17,4 +17,4 @@
   when:
     - ansible_pkg_mgr == 'apt'
   vars:
-    apt_pkgs: "{{ ironic_api_apt_packages }}"
+    apt_pkgs: "{{ ironic_api_distro_packages }}"
