@@ -108,7 +108,7 @@ ironic_openstack_auth_strategy: keystone
 ironic_openstack_api_url: ''  # Not required when we have keystone
 ironic_openstack_dhcp_provider: neutron
 ironic_openstack_sync_power_state_interval: 60
-ironic_openstack_db_connection_string: "mysql+pymysql://{{ ironic_galera_user }}:{{ ironic_galera_password }}@{{ ironic_galera_address }}/ironic"
+ironic_openstack_db_connection_string: "mysql+pymysql://{{ ironic_galera_user }}:{{ ironic_container_mysql_password }}@{{ ironic_galera_address }}/ironic"
 
 # Standalone Ironic configuration
 ironic_standalone_driver_list: agent_ipmitool
@@ -116,7 +116,7 @@ ironic_standalone_auth_strategy: noauth
 ironic_standalone_api_url: "api_url={{ ironic_service_internaluri }}/"
 ironic_standalone_dhcp_provider: none
 ironic_standalone_sync_power_state_interval: -1
-ironic_standalone_db_connection_string: "mysql+pymysql://{{ ironic_galera_user }}:{{ ironic_galera_password }}@{{ ironic_galera_address }}/ironic"
+ironic_standalone_db_connection_string: "mysql+pymysql://{{ ironic_galera_user }}:{{ ironic_container_mysql_password }}@{{ ironic_galera_address }}/ironic"
 
 # Ironic db tuning
 ironic_db_max_overflow: 10

@@ -47,7 +47,7 @@
         login_password: "{{ galera_root_password }}"
         login_host: "localhost"
         name: "{{ ironic_galera_user }}"
-        password: "{{ ironic_galera_password }}"
+        password: "{{ ironic_container_mysql_password }}"
         host: "{{ item }}"
         state: "present"
         priv: "{{ ironic_galera_database }}.*:ALL"

@@ -24,7 +24,7 @@ ironic_service_password: "secrete"
 ironic_galera_address: 10.100.100.101
 ironic_galera_database: ironic
 ironic_galera_user: ironic
-ironic_galera_password: "secrete"
+ironic_container_mysql_password: "secrete"
 ironic_rabbitmq_password: "secrete"
 ironic_rabbitmq_userid: ironic
 ironic_rabbitmq_vhost: /ironic
