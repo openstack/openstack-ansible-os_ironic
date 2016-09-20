@@ -148,16 +148,14 @@
     - ironic-config
     - ironic-post-install
 
-- name: Copy ironic rootwrap filter config
+- name: Copy rootwrap filters
   copy:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
+    src: "{{ item }}"
+    dest: "/etc/ironic/rootwrap.d/"
     owner: "root"
     group: "root"
-  with_items:
-    - { src: "rootwrap.d/ironic-images.filters", dest: "/etc/ironic/rootwrap.d/ironic-images.filters" }
-    - { src: "rootwrap.d/ironic-lib.filters", dest: "/etc/ironic/rootwrap.d/ironic-lib.filters" }
-    - { src: "rootwrap.d/ironic-utils.filters", dest: "/etc/ironic/rootwrap.d/ironic-utils.filters" }
+  with_fileglob:
+    - rootwrap.d/*
   notify: Restart ironic services
   tags:
     - ironic-config
