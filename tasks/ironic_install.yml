@@ -24,6 +24,7 @@
     - ironic_developer_mode | bool
 
 - include: ironic_install_apt.yml
+  static: no
   when:
     - ansible_pkg_mgr == 'apt'
     - ironic_developer_mode | bool

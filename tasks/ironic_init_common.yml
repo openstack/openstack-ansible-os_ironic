@@ -14,9 +14,11 @@
 # limitations under the License.
 
 - include: ironic_init_upstart.yml
+  static: no
   when: pid1_name == "init"
 
 - include: ironic_init_systemd.yml
+  static: no
   when: pid1_name == "systemd"
 
 - name: Load service
