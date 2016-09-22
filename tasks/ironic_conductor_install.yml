@@ -14,12 +14,14 @@
 # limitations under the License.
 
 - include: ironic_install_apt.yml
+  static: no
   when:
     - ansible_pkg_mgr == 'apt'
   vars:
     apt_pkgs: "{{ ironic_conductor_distro_packages }}"
 
 - include: ironic_install_apt.yml
+  static: no
   when:
     - ansible_pkg_mgr == 'apt'
     - ironic_standalone
