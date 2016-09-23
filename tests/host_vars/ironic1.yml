@@ -13,18 +13,31 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+ansible_host: 10.1.1.104
+ansible_become: True
+ansible_user: root
+tunnel_address: 10.1.2.104
+neutron_local_ip: 10.1.2.104
 neutron_provider_networks:
   network_types: "vxlan,flat"
   network_mappings: "flat:eth12"
   network_vxlan_ranges: "1:1000"
-ansible_become: True
-neutron_local_ip:  10.1.2.1
-ansible_python_interpreter: "/usr/bin/python2"
-bridges:
-  - name: "br-mgmt"
-    ip_addr: "10.1.1.1"
-  - name: "br-vxlan"
-    ip_addr: "10.1.2.1"
-  - name: "br-vlan"
-    ip_addr: "10.1.3.1"
-    veth_peer: "eth12"
+container_name: "{{ inventory_hostname }}"
+container_networks:
+  management_address:
+    address: "{{ ansible_host }}"
+    bridge: "br-mgmt"
+    interface: "eth1"
+    netmask: "255.255.255.0"
+    type: "veth"
+  tunnel_address:
+    address: "{{ tunnel_address }}"
+    bridge: "br-vxlan"
+    interface: "eth2"
+    netmask: "255.255.255.0"
+    type: "veth"
+  vlan_address:
+    bridge: "br-vlan"
+    interface: "eth12"
+    netmask: null
+    type: "veth"

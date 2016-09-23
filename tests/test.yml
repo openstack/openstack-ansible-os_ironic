@@ -22,12 +22,24 @@
 # Install Keystone
 - include: common/test-install-keystone.yml
 
+# Install Swift
+- include: common/test-install-swift.yml
+
+# Install Glance
+- include: common/test-install-glance.yml
+
+# Install Neutron
+- include: common/test-install-neutron.yml
+
+# Install Nova
+- include: common/test-install-nova.yml
+
 # Install Ironic
-- include: test-install-ironic.yml
+- include: common/test-install-ironic.yml
 
 # Test REST API
 - include: test-rest-api.yml
 
 # Test the ironicclient CLI
 # Omitted for now, unclear purpose
-# - include: test-ironic-cli.yml
+- include: test-ironic-cli.yml
