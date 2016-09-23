@@ -2,7 +2,7 @@
 - name: Playbook for functional testing ironic via its REST API
   hosts: localhost
   user: root
-  gather_facts: false
+  gather_facts: true
   roles:
     - role: "openstack_openrc"
   post_tasks:
@@ -169,4 +169,3 @@
     #     return_content: yes
   vars_files:
     - common/test-vars.yml
-    - test-vars.yml

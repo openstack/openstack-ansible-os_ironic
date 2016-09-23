@@ -13,18 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-neutron_provider_networks:
-  network_types: "vxlan,flat"
-  network_mappings: "flat:eth12"
-  network_vxlan_ranges: "1:1000"
-ansible_become: True
-neutron_local_ip:  10.1.2.1
-ansible_python_interpreter: "/usr/bin/python2"
-bridges:
-  - name: "br-mgmt"
-    ip_addr: "10.1.1.1"
-  - name: "br-vxlan"
-    ip_addr: "10.1.2.1"
-  - name: "br-vlan"
-    ip_addr: "10.1.3.1"
-    veth_peer: "eth12"
+test_swift_repl_network: "eth2"
+nova_virt_type: ironic
+glance_file_store: swift
+test_swift_repl_number: 2
