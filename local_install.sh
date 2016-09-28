@@ -20,6 +20,6 @@ ROLE_NAME=$(basename $(pwd))
 export ANSIBLE_HOST_KEY_CHECKING=False
 
 pushd tests
-  ansible-playbook -i inventory local_install.yml -e rolename=${ROLE_NAME}
+  ansible-playbook -i inventory local_install.yml
 popd
 
