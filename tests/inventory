@@ -1,13 +1,29 @@
 [all]
-localhost ansible_become=True
-infra1 ansible_host=10.100.100.101 ansible_become=True ansible_user=root
-ironic1 ansible_host=10.100.100.102 ansible_become=True ansible_user=root
+localhost
+infra1
+openstack1
+swift-storage1
+ironic1
 
-# Note(mrda): 'ironicinstallhost' will need to externally resolve to where
-# you want to do an 'allinone' install, and the root account will need to have
-# your ssh public_key in it's /root/.ssh/authorized_keys file
-[installhost]
-installhost ansible_user=root ansible_port=22 ansible_host=ironicinstallhost
+[all_containers]
+infra1
+openstack1
+swift-storage1
+ironic1
+
+[rabbitmq_all]
+infra1
+
+[galera_all]
+infra1
+
+[memcached_all]
+infra1
+
+[service_all:children]
+rabbitmq_all
+galera_all
+memcached_all
 
 [ironic_all:children]
 ironic_api
@@ -23,29 +39,109 @@ ironic1
 [ironic_server]
 ironic1
 
-[hosts]
+[keystone_all]
+openstack1
+
+[glance_api]
+openstack1
+
+[glance_registry]
+openstack1
+
+[glance_all:children]
+glance_api
+glance_registry
+
+[neutron_agent]
+openstack1
+
+[neutron_dhcp_agent]
+openstack1
+
+[neutron_linuxbridge_agent]
+openstack1
 localhost
 
-[all_containers]
-infra1
-ironic1
+[neutron_openvswitch_agent]
 
-[keystone_all]
-infra1
+[neutron_metering_agent]
+openstack1
 
-[service_all:children]
-rabbitmq_all
-galera_all
-memcached_all
+[neutron_l3_agent]
+openstack1
 
-[rabbitmq_all]
-infra1
+[neutron_lbaas_agent]
+openstack1
 
-[galera_all]
-infra1
+[neutron_metadata_agent]
+openstack1
 
-[memcached_all]
-infra1
+[neutron_server]
+openstack1
+
+[neutron_all:children]
+neutron_agent
+neutron_dhcp_agent
+neutron_linuxbridge_agent
+neutron_openvswitch_agent
+neutron_metering_agent
+neutron_l3_agent
+neutron_lbaas_agent
+neutron_metadata_agent
+neutron_server
+
+[nova_api_metadata]
+openstack1
+
+[nova_api_os_compute]
+openstack1
+
+[nova_cert]
+openstack1
+
+[nova_compute]
+localhost
+
+[nova_conductor]
+openstack1
+
+[nova_console]
+openstack1
+
+[nova_scheduler]
+openstack1
+
+[nova_all:children]
+nova_api_metadata
+nova_api_os_compute
+nova_cert
+nova_compute
+nova_conductor
+nova_console
+nova_scheduler
+
+[swift_hosts]
+swift-storage1
+
+[swift_proxy]
+openstack1
+
+[swift_acc]
+swift-storage1
+
+[swift_cont]
+swift-storage1
+
+[swift_obj]
+swift-storage1
+
+[swift_all:children]
+swift_acc
+swift_proxy
+swift_cont
+swift_obj
+
+[swift_remote_all]
 
 [utility_all]
-localhost
+infra1
