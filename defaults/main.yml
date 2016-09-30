@@ -183,3 +183,6 @@ ironic_role_project_group: ironic_all
 ironic_ironic_conf_overrides: {}
 ironic_rootwrap_conf_overrides: {}
 ironic_policy_overrides: {}
+
+# pxe boot
+ironic_pxe_append_params: "ipa-debug=1 systemd.journald.forward_to_console=yes"
