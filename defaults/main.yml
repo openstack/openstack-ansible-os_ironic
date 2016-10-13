@@ -69,8 +69,6 @@ ironic_service_internalurl: "{{ ironic_service_internaluri }}"
 ironic_program_name: ironic-api
 ironic_service_region: RegionOne
 ironic_service_project_name: "service"
-ironic_service_project_domain_id: default
-ironic_service_user_domain_id: default
 ironic_service_role_name: "admin"
 ironic_service_in_ldap: False
 
@@ -97,9 +95,6 @@ ironic_automated_clean: false
 # Database
 ironic_galera_user: ironic
 ironic_galera_database: ironic
-
-## Keystone authentication middleware
-ironic_keystone_auth_plugin: password
 
 # Integrated Openstack configuration
 ironic_openstack_driver_list: agent_ipmitool
