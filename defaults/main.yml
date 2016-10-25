@@ -133,7 +133,7 @@ ironic_recreate_keys: False
 
 ironic_venv_download_url: http://127.0.0.1/venvs/untagged/ubuntu/ironic.tgz
 
-ironic_tftp_server_address: "{{ ansible_ssh_host }}"
+ironic_tftp_server_address: "{{ ansible_host }}"
 
 ironic_requires_pip_packages:
   - virtualenv
