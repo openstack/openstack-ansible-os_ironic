@@ -10,7 +10,7 @@ OpenStack-Ansible role for Bare Metal (ironic) service
 This is an OpenStack-Ansible role to deploy the Bare Metal (ironic)
 service. See the `role-ironic spec`_ for more information.
 
-.. _role-ironic spec: https://github.com/openstack/openstack-ansible-specs/blob/master/specs/mitaka/role-ironic.rst
+.. _role-ironic spec: http://specs.openstack.org/openstack/openstack-ansible-specs/specs/mitaka/role-ironic.html
 
 
 Default variables
