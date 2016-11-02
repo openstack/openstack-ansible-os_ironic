@@ -28,8 +28,6 @@ ironic_pip_package_state: "latest"
 # of an OpenStack-Ansible repo_server.
 ironic_git_repo: https://git.openstack.org/openstack/ironic
 ironic_git_install_branch: master
-ironic_requirements_git_repo: https://git.openstack.org/openstack/requirements
-ironic_requirements_git_install_branch: master
 ironic_developer_mode: false
 ironic_developer_constraints:
   - "git+{{ ironic_git_repo }}@{{ ironic_git_install_branch }}#egg=ironic"

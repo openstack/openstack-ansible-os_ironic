@@ -20,8 +20,7 @@
       {% for item in ironic_developer_constraints %}
       {{ item }}
       {% endfor %}
-  when:
-    - ironic_developer_mode | bool
+  when: ironic_developer_mode | bool
 
 - include: ironic_install_apt.yml
   static: no
@@ -31,33 +30,13 @@
   vars:
     apt_pkgs: "{{ ironic_developer_mode_distro_packages }}"
 
-- name: Clone requirements git repository
-  git:
-    repo: "{{ ironic_requirements_git_repo }}"
-    dest: "/opt/requirements"
-    clone: yes
-    update: yes
-    version: "{{ ironic_requirements_git_install_branch }}"
-  when:
-    - ironic_developer_mode | bool
-
-- name: Add constraints to pip_install_options fact for developer mode
-  set_fact:
-    pip_install_options_fact: "{{ pip_install_options|default('') }} --constraint /opt/developer-pip-constraints.txt --constraint /opt/requirements/upper-constraints.txt"
-  when:
-    - ironic_developer_mode | bool
-
-- name: Set pip_install_options_fact when not in developer mode
-  set_fact:
-    pip_install_options_fact: "{{ pip_install_options|default('') }}"
-  when:
-    - not ironic_developer_mode | bool
-
 - name: Install requires pip packages
   pip:
     name: "{{ ironic_requires_pip_packages | join(' ') }}"
     state: "{{ ironic_pip_package_state }}"
-    extra_args: "{{ pip_install_options_fact }}"
+    extra_args: >-
+      {{ (pip_install_upper_constraints is defined) | ternary('--constraint ' + pip_install_upper_constraints | default(''),'') }}
+      {{ pip_install_options | default('') }}
   register: install_packages
   until: install_packages|success
   retries: 5
@@ -129,7 +108,10 @@
     state: "{{ ironic_pip_package_state }}"
     virtualenv: "{{ ironic_bin | dirname }}"
     virtualenv_site_packages: "no"
-    extra_args: "{{ pip_install_options_fact }}"
+    extra_args: >-
+      {{ ironic_developer_mode | ternary('--constraint /opt/developer-pip-constraints.txt', '') }}
+      {{ (pip_install_upper_constraints is defined) | ternary('--constraint ' + pip_install_upper_constraints | default(''),'') }}
+      {{ pip_install_options | default('') }}
   register: install_packages
   until: install_packages|success
   retries: 5
