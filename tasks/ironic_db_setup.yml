@@ -17,5 +17,6 @@
   command: "{{ ironic_bin }}/ironic-dbsync upgrade"
   become: yes
   become_user: "{{ ironic_system_user_name }}"
+  changed_when: false
   notify:
     - Restart ironic services

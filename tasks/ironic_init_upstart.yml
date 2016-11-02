@@ -25,8 +25,7 @@
     - Restart ironic services
 
 - name: Reload init scripts
-  shell: |
-    initctl reload-configuration
+  command: initctl reload-configuration
   when: upstart_init | changed
   notify:
     - Restart ironic services

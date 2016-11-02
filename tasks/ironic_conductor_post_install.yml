@@ -49,6 +49,7 @@
 ## which is a wasted effort.
 - name: Copy syslinux pxlinux.0
   command: "cp {{ ironic_pxelinux_path }} /tftpboot/pxelinux.0"
+  changed_when: false
 
 ## TODO(odyssey4me): Switch this to the copy module and make use of
 ## remote_src: True once we move to Ansible 2.x. For Ansible 1.9x
@@ -56,3 +57,4 @@
 ## which is a wasted effort.
 - name: Copy syslinux chain.c32
   command: "cp {{ ironic_chainc32_path }} /tftpboot/chain.c32"
+  changed_when: false

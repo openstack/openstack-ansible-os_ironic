@@ -18,9 +18,10 @@
 # Verbosity Options
 debug: False
 
-# Set the package install state for distribution packages
+# Set the package install state for distribution and pip packages
 # Options are 'present' and 'latest'
 ironic_package_state: "latest"
+ironic_pip_package_state: "latest"
 
 # These variables are used in 'developer mode' in order to allow the role
 # to build an environment directly from a git source without the presence
