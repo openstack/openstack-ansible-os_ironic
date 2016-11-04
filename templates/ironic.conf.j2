@@ -118,7 +118,7 @@ insecure = {{ keystone_service_adminuri_insecure | bool }}
 [oneview]
 
 [oslo_concurrency]
-lock_path = /var/lock/ironic
+lock_path = {{ ironic_lock_path }}
 
 [oslo_messaging_amqp]
 

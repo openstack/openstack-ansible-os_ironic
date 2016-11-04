@@ -29,10 +29,10 @@
     group: "{{ system_group }}"
     mode: "02755"
 
-- name: Create tempfile.d entry
+- name: Create tmpfiles.d entry
   template:
-    src: "ironic-systemd-tempfiles.j2"
-    dest: "/etc/tmpfiles.d/ironic.conf"
+    src: "ironic-systemd-tmpfiles.j2"
+    dest: "/etc/tmpfiles.d/{{ program_name }}.conf"
     mode: "0644"
     owner: "root"
     group: "root"
