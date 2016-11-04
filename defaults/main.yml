@@ -42,6 +42,7 @@ ironic_system_shell: /bin/bash
 ironic_system_comment: ironic system user
 ironic_system_home_folder: "/var/lib/{{ ironic_system_user_name }}"
 ironic_system_log_folder: "/var/log/{{ ironic_system_user_name }}"
+ironic_lock_path: /var/lock/ironic
 
 # Ironic Program and Service names
 ironic_api_program_name: apache2
