@@ -42,49 +42,19 @@
   retries: 5
   delay: 2
 
-- name: Get local venv checksum
-  stat:
-    path: "/var/cache/{{ ironic_venv_download_url | basename }}"
-    get_md5: False
-  when:
-    - not ironic_developer_mode | bool
-  register: local_venv_stat
-
-- name: Get remote venv checksum
-  uri:
-    url: "{{ ironic_venv_download_url | replace('tgz', 'checksum') }}"
-    return_content: True
-  when:
-    - not ironic_developer_mode | bool
-  register: remote_venv_checksum
-
-# TODO: When project moves to ansible 2 we can pass this a sha256sum which will:
-#       a) allow us to remove force: yes
-#       b) allow the module to calculate the checksum of dest file which would
-#          result in file being downloaded only if provided and dest sha256sum
-#          checksums differ
 - name: Attempt venv download
   get_url:
     url: "{{ ironic_venv_download_url }}"
     dest: "/var/cache/{{ ironic_venv_download_url | basename }}"
-    force: yes
-  failed_when: false
-  register: get_venv
-  when:
-    - not ironic_developer_mode | bool
-    - (local_venv_stat.stat.exists == False or
-        {{ local_venv_stat.stat.checksum is defined and local_venv_stat.stat.checksum != remote_venv_checksum.content | trim }})
-
-- name: Set ironic get_venv fact
-  set_fact:
-    ironic_get_venv: "{{ get_venv }}"
+    checksum: "sha1:{{ lookup('url', ironic_venv_download_url | replace('tgz', 'checksum')) }}"
+  register: ironic_get_venv
+  when: not ironic_developer_mode | bool
 
 - name: Remove existing venv
   file:
     path: "{{ ironic_bin | dirname }}"
     state: absent
-  when:
-    - ironic_get_venv | changed
+  when: ironic_get_venv | changed
 
 - name: Create ironic venv dir
   file:
@@ -116,8 +86,7 @@
   until: install_packages|success
   retries: 5
   delay: 2
-  when:
-    - ironic_get_venv | failed or ironic_developer_mode | bool
+  when: ironic_developer_mode | bool
   notify: Restart ironic services
 
 - name: Update virtualenv path
@@ -125,4 +94,4 @@
     virtualenv-tools --update-path=auto {{ ironic_bin | dirname }}
   when:
     - not ironic_developer_mode | bool
-    - ironic_get_venv | success
+    - ironic_get_venv | changed or ironic_venv_dir | changed
