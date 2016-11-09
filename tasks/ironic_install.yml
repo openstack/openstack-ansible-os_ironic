@@ -32,7 +32,7 @@
 
 - name: Install requires pip packages
   pip:
-    name: "{{ ironic_requires_pip_packages | join(' ') }}"
+    name: "{{ ironic_requires_pip_packages }}"
     state: "{{ ironic_pip_package_state }}"
     extra_args: >-
       {{ (pip_install_upper_constraints is defined) | ternary('--constraint ' + pip_install_upper_constraints | default(''),'') }}
@@ -74,7 +74,7 @@
 
 - name: Install pip packages
   pip:
-    name: "{{ ironic_pip_packages | join(' ') }}"
+    name: "{{ ironic_pip_packages }}"
     state: "{{ ironic_pip_package_state }}"
     virtualenv: "{{ ironic_bin | dirname }}"
     virtualenv_site_packages: "no"
