@@ -15,11 +15,13 @@
 
 - include: ironic_init_upstart.yml
   static: no
-  when: pid1_name == "init"
+  when:
+    - ansible_service_mgr == 'upstart'
 
 - include: ironic_init_systemd.yml
   static: no
-  when: pid1_name == "systemd"
+  when:
+    - ansible_service_mgr == 'systemd'
 
 - name: Load service
   service:
