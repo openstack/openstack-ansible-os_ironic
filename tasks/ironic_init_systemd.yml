@@ -29,10 +29,18 @@
     group: "{{ system_group }}"
     mode: "02755"
 
+# TODO(mgariepy):
+# Remove this in Pike as it only needed to handle upgrades
+# from Newton->Newton and Newton->Ocata
+- name: Cleanup old tmpfiles.d entry
+  file:
+    path: "/etc/tmpfiles.d/{{ program_name }}.conf"
+    state: absent
+
 - name: Create tmpfiles.d entry
   template:
     src: "ironic-systemd-tmpfiles.j2"
-    dest: "/etc/tmpfiles.d/{{ program_name }}.conf"
+    dest: "/etc/tmpfiles.d/openstack-{{ program_name }}.conf"
     mode: "0644"
     owner: "root"
     group: "root"
