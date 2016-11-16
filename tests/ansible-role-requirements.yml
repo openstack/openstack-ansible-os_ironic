@@ -62,4 +62,7 @@
   scm: git
   src: https://github.com/logan2211/ansible-etcd
   version: master
-
+- name: rsyslog_client
+  src: https://git.openstack.org/openstack/openstack-ansible-rsyslog_client
+  scm: git
+  version: master
