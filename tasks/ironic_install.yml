@@ -91,7 +91,7 @@
 
 - name: Update virtualenv path
   command: >
-    virtualenv-tools --update-path=auto {{ ironic_bin | dirname }}
+    virtualenv-tools --update-path=auto --reinitialize {{ ironic_bin | dirname }}
   when:
     - not ironic_developer_mode | bool
     - ironic_get_venv | changed or ironic_venv_dir | changed
