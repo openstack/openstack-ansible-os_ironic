@@ -48,6 +48,7 @@ ironic_lock_path: /var/lock/ironic
 # Ironic Program and Service names
 ironic_api_program_name: apache2
 ironic_conductor_program_name: ironic-conductor
+ironic_oneviewd_program_name: ironic-oneviewd
 python_ironic_client_program_name: ironic
 ironic_service_names:
     - "{{ ironic_api_program_name }}"
@@ -94,6 +95,44 @@ ironic_standalone: False
 # that are performed on the node to ensure it is in a baseline
 # state and ready to be deployed to.
 ironic_automated_clean: false
+# Set to 0 to disable erase devices on cleaning
+ironic_erase_devices_priority: 10
+
+## ironic-oneview
+ironic_oneview_enabled: "{% if 'agent_pxe_oneview' in ironic_openstack_driver_list or
+                               'agent_pxe_oneview' in ironic_standalone_driver_list or
+                               'iscsi_pxe_oneview' in ironic_openstack_driver_list or
+                               'iscsi_pxe_oneview' in ironic_standalone_driver_list %}True{% else %}False{% endif %}"
+ironic_oneview_manager_url: ""
+ironic_oneview_username: ""
+ironic_oneview_password: ""
+ironic_oneview_allow_insecure_connections: False
+ironic_oneview_tls_cacert_file: "None"
+ironic_oneview_max_polling_attempts: 12
+
+# ironic-oneviewd
+# Polling interval in seconds for daemon to manage the nodes
+ironic_oneviewd_retry_interval: 15
+# Size the of the RPC thread pool
+ironic_oneviewd_rpc_thread_pool_size: 20
+# (Optional) Whether to enable the periodic tasks for OneView
+# driver be aware when OneView hardware resources are taken
+# and released by Ironic or OneView users and proactively
+# manage nodes in clean fail state according to Dynamic
+# Allocation model of hardware resources allocation in
+# OneView
+ironic_oneviewd_enable_periodic_tasks: True
+# Period (in seconds) for periodic tasks to be executed when
+# enable_periodic_tasks is True
+ironic_oneviewd_periodic_check_interval: "{{ ironic_oneviewd_retry_interval }}"
+# (Optional) Enable auditing of OneView API requests
+ironic_oneviewd_audit_enabled: False
+# Path to map file for OneView audit cases. Used only when
+# OneView API audit is enabled
+ironic_oneviewd_audit_map_file: "None"
+# Path to OneView audit log file. Created only when Oneview
+# API audit is enabled.
+ironic_oneviewd_audit_output_file: "None"
 
 # Database
 ironic_galera_user: ironic
@@ -112,10 +151,12 @@ ironic_keystone_auth_plugin: password
 # ironic_neutron_cleaning_network_name: "Name of cleaning network in neutron"
 
 # Integrated Openstack configuration
-ironic_openstack_driver_list: "pxe_ipmitool, agent_ipmitool"
 ironic_enabled_network_interfaces_list: "flat,noop{{ (ironic_neutron_provisioning_network_uuid is defined) | ternary(',neutron','') }}"
 ironic_default_network_interface: "{{ (ironic_neutron_provisioning_network_uuid is defined) | ternary('neutron','flat') }}"
-ironic_openstack_driver_list: agent_ipmitool
+ironic_openstack_driver_list:
+  - agent_ipmitool
+  - pxe_ipmitool
+ironic_openstack_driver_loaded_list: "{% for driver in ironic_openstack_driver_list %}{{ driver }}{% if not loop.last %},{% endif %}{% endfor %}"
 ironic_openstack_auth_strategy: keystone
 ironic_openstack_api_url: ''  # Not required when we have keystone
 ironic_openstack_dhcp_provider: neutron
@@ -123,7 +164,9 @@ ironic_openstack_sync_power_state_interval: 60
 ironic_openstack_db_connection_string: "mysql+pymysql://{{ ironic_galera_user }}:{{ ironic_container_mysql_password }}@{{ ironic_galera_address }}/ironic"
 
 # Standalone Ironic configuration
-ironic_standalone_driver_list: agent_ipmitool
+ironic_standalone_driver_list:
+  - agent_ipmitool
+ironic_standalone_driver_loaded_list: "{% for driver in ironic_standalone_driver_list %}{{ driver }}{% if not loop.last %},{% endif %}{% endfor %}"
 ironic_standalone_auth_strategy: noauth
 ironic_standalone_api_url: "api_url={{ ironic_service_internaluri }}/"
 ironic_standalone_dhcp_provider: none
@@ -152,6 +195,10 @@ ironic_requires_pip_packages:
   - virtualenv-tools
   - python-keystoneclient # Keystoneclient needed for the OSA keystone lib
   - httplib2 # for Ansible's uri module
+
+ironic_oneview_optional_pip_packages:
+  - ironic-oneview-cli
+  - ironic-oneviewd
 
 ironic_pip_packages:
   - PyMySQL
@@ -193,6 +240,7 @@ ironic_role_project_group: ironic_all
 
 ### Config Overrides
 ironic_ironic_conf_overrides: {}
+ironic_ironic_oneviewd_conf_overrides: {}
 ironic_rootwrap_conf_overrides: {}
 ironic_policy_overrides: {}
 

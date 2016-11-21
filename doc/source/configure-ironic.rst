@@ -218,3 +218,184 @@ Now boot a node:
 
    nova boot --flavor ${FLAVOR_NAME} --image ${IMAGE_NAME} --key-name admin ${NODE_NAME}
 
+Setup OpenStack-Ansible with ironic-OneView drivers
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+HP OneView is a single integrated platform, packaged as an appliance that
+implements a software-defined approach to managing physical infrastructure.
+The appliance supports scenarios such as deploying bare metal servers with
+ironic (Bare Metal service). In this context, the HP OneView driver enables
+the users of OneView to use ironic as a bare metal provider to their managed
+physical hardware.
+
+Currently there are two ironic-OneView drivers:
+
+#. ``iscsi_pxe_oneview``
+#. ``agent_pxe_oneview``
+
+.. important::
+
+   When using the ``iscsi_pxe_oneview`` drivers, install ironic-conductor
+   on metal. Add ``is_metal: true`` to the properties of the
+   ``ironic_conductor_container`` section in ``/opt/openstack-ansible/
+   playbooks/inventory/env.d/ironic.yml`` before running the
+   ironic installation playbook.
+
+
+Considering that the ironic images and network are already in place.
+Configuring OpenStack-Ansible to set up ironic with the OneView drivers
+requires the following variables to be defined in
+``/etc/openstack_deploy/user_variables``:
+
+.. code-block:: yaml
+
+   ## Ironic
+   ironic_openstack_driver_list:
+      - pxe_ipmitool
+      - agent_ipmitool
+      - agent_pxe_oneview
+      - iscsi_pxe_oneview
+   ironic_automated_clean: True
+
+   ## Nova
+   nova_reserved_host_disk_mb: 0
+   nova_reserved_host_memory_mb: 0
+   nova_scheduler_host_subset_size: 99999999
+
+   ## ironic-oneviewd
+   ironic_oneview_manager_url: "<oneview_url>"
+   ironic_oneview_username: "<oneview_username>"
+   ironic_oneview_password: "<oneview_password>"
+
+Replace ``<oneview_*>`` with the respective OneView resources.
+
+Run the os-ironic-install.yml playbook:
+
+.. code-block:: bash
+
+   cd /opt/openstack-ansible/playbooks
+   openstack-ansible os-ironic-install.yml
+
+Adding bare metal nodes
+-----------------------
+
+Ironic-OneView CLI is a command line interface tool for the OneView Drivers
+for ironic. It allows the user to easily create and configure ironic nodes,
+compatible with OneView Server Hardware objects, and create nova flavors to
+match available Ironic nodes that use OneView drivers. It also offers the
+option to migrate Ironic nodes using pre-allocation model to the dynamic
+allocation model.
+
+#. Install ``ironic-oneview-cli`` on the utility container:
+
+   .. code-block:: bash
+
+      pip install ironic-oneview-cli
+
+#. Add the following variables to the openrc file:
+
+   .. code-block:: bash
+
+      export OV_AUTH_URL=<oneview_url>
+      export OV_USERNAME=<oneview_username>
+      export OV_PASSWORD=<oneview_password>
+      export OS_IRONIC_NODE_DRIVER=<ironic_driver>
+      export OS_IRONIC_DEPLOY_KERNEL_UUID=<kernel_deploy_image_id>
+      export OS_IRONIC_DEPLOY_RAMDISK_UUID=<ramdisk_deploy_image_id>
+
+   Replace ``<*_id>`` with the ID of the respective resource. Also replace
+   ``<oneview_*>`` with the respective OneView resources and
+   ``<ironic_driver>`` with the driver being used to manage the node.
+
+   .. note::
+
+      Optionally we can use ``ironic-oneview-cli`` to generate a configuration
+      file by running the following command:
+
+      .. code-block:: bash
+
+         ironic-oneview genrc
+
+#. Create Ironic nodes, based on available HPE OneView Server Hardware objects,
+   by running the following command:
+
+   .. code-block:: bash
+
+      . openrc
+      ironic-oneview node-create
+
+   The tool will ask you to choose a valid Server Profile Template from those retrieved
+   from HPE OneView appliance:
+
+   .. code-block:: bash
+
+      Retrieving Server Profile Templates from OneView...
+      +----+------------------------+----------------------+---------------------------+
+      | Id | Name                   | Enclosure Group Name | Server Hardware Type Name |
+      +----+------------------------+----------------------+---------------------------+
+      | 1  | template-dcs-virt-enc3 | virt-enclosure-group | BL460c Gen8 3             |
+      | 2  | template-dcs-virt-enc4 | virt-enclosure-group | BL660c Gen9 1             |
+      +----+------------------------+----------------------+---------------------------+
+
+   Once a valid Server Profile Template has been chosen, the tool lists the available Server
+   Hardware that match the chosen Server Profile Template. Choose a Server Hardware to be
+   used as base to the Ironic node:
+
+   .. code-block:: bash
+
+      Listing compatible Server Hardware objects...
+      +----+-----------------+------+-----------+----------+----------------------+---------------------------+
+      | Id | Name            | CPUs | Memory MB | Local GB | Enclosure Group Name | Server Hardware Type Name |
+      +----+-----------------+------+-----------+----------+----------------------+---------------------------+
+      | 1  | VIRT-enl, bay 5 | 8    | 32768     | 120      | virt-enclosure-group | BL460c Gen8 3             |
+      | 2  | VIRT-enl, bay 8 | 8    | 32768     | 120      | virt-enclosure-group | BL460c Gen8 3             |
+      +----+-----------------+------+-----------+----------+----------------------+---------------------------+
+
+   .. note::
+
+      Multiple Ironic nodes can be created at once by typing multiple Server Hardware IDs
+      separated by blank spaces.
+
+   The created Ironic nodes will be in the *enroll* provisioning state, going to the
+   *manageable* state then *cleaning*. After a susccesfull cleaning the node
+   should be on the *available* state. This means that the node is ready to be
+   provisioned.
+
+Creating flavors
+----------------
+
+Run the following command to create Nova flavors compatible with available
+Ironic nodes:
+
+.. code-block:: bash
+
+   . openrc
+   ironic-oneview flavor-create
+
+The tool will now prompt you to choose a valid flavor configuration, according
+to available Ironic nodes:
+
+.. code-block:: bash
+
+   +----+------+---------+-----------+-------------------------------------+----------------------+-------------------------+
+   | Id | CPUs | Disk GB | Memory MB | Server Profile Template             | Server Hardware Type | Enclosure Group Name    |
+   +----+------+---------+-----------+-------------------------------------+----------------------+-------------------------+
+   | 1  | 8    | 120     | 8192      | second-virt-server-profile-template | BL460c Gen8 3        | virt-enclosure-group    |
+   +----+------+---------+-----------+-------------------------------------+----------------------+-------------------------+
+
+After choosing a valid configuration ID, you will be prompted to name the new
+flavor. Leaving the field blank, a default name will be used.
+
+Deploying a bare metal node
+---------------------------
+
+Boot the node with the previously created flavor:
+
+.. code-block:: bash
+
+   nova boot --flavor <flavor_name> --image <image_name> --key-name <key>
+
+Replace ``<flavor_name>`` with the name of the flavor created using
+ironic-oneview, also replace ``<image_name>`` with the name of the
+image to be used to provision the node (user image) and ``<key_name>``
+with the key.
