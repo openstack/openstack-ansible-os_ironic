@@ -15,8 +15,8 @@
 
 - name: Copy in sample dhcpd.conf file
   copy:
-    src: dhcpd.conf
-    dest: /etc/dhcp/
+    src: "dhcpd.conf"
+    dest: "/etc/dhcp/"
   when: ironic_standalone
   notify:
     - Restart isc-dhcp-server
@@ -31,30 +31,21 @@
 
 - name: Copy in tftpd-hpa config file
   template:
-    src: tftpd-hpa.j2
-    dest: /etc/default/tftpd-hpa
+    src: "tftpd-hpa.j2"
+    dest: "/etc/default/tftpd-hpa"
   notify:
     - Restart tftpd-hpa
 
 - name: Copy in tftpd-hpa map file
   copy:
-    src: map-file
-    dest: /tftpboot/map-file
+    src: "map-file"
+    dest: "/tftpboot/map-file"
   notify:
     - Restart tftpd-hpa
 
-## TODO(odyssey4me): Switch this to the copy module and make use of
-## remote_src: True once we move to Ansible 2.x. For Ansible 1.9x
-## there is no idempotent way of doing this without several tasks
-## which is a wasted effort.
-- name: Copy syslinux pxlinux.0
-  command: "cp {{ ironic_pxelinux_path }} /tftpboot/pxelinux.0"
-  changed_when: false
-
-## TODO(odyssey4me): Switch this to the copy module and make use of
-## remote_src: True once we move to Ansible 2.x. For Ansible 1.9x
-## there is no idempotent way of doing this without several tasks
-## which is a wasted effort.
-- name: Copy syslinux chain.c32
-  command: "cp {{ ironic_chainc32_path }} /tftpboot/chain.c32"
-  changed_when: false
+- name: Copy library modules into /tftpboot
+  copy:
+    src: "{{ item }}"
+    dest: "/tftpboot/"
+    remote_src: True
+  with_items: "{{ ironic_library_modules_paths }}"
