@@ -41,7 +41,7 @@
   command: >
         {{ ironic_bin }}/swift {{ keystone_service_adminuri_insecure | bool | ternary('--insecure','') }}
         --os-username "service:{{ glance_service_user_name }}"
-        --os-password {{ glance_service_password }}
+        --os-password "{{ glance_service_password }}"
         --os-auth-url {{ keystone_service_internalurl }}
         --os-identity-api-version {{ keystone_service_internalurl.split('/v')[-1] }}
         post -m temp-url-key:{{ ironic_swift_temp_url_secret_key }}
@@ -57,7 +57,7 @@
   shell: >
         {{ ironic_bin }}/swift {{ keystone_service_adminuri_insecure | bool | ternary('--insecure','') }}
         --os-username "service:{{ glance_service_user_name }}"
-        --os-password {{ glance_service_password }}
+        --os-password "{{ glance_service_password }}"
         --os-auth-url {{ keystone_service_internalurl }}
         --os-identity-api-version {{ keystone_service_internalurl.split('/v')[-1] }}
         stat -v | awk '/StorageURL\:/ {print $2}'
