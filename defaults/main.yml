@@ -101,7 +101,19 @@ ironic_galera_database: ironic
 ## Keystone authentication middleware
 ironic_keystone_auth_plugin: password
 
+# Neutron network - Set these in a playbook/task - can be set manually.
+# Only "name" or "uuid" is needed, uuid will take preference if both are specified.
+# The cleaning network is not required to be set - it will default to the same as
+# the provisioning network if not specified.
+# ironic_neutron_provisioning_network_uuid: "UUID for provisioning network in neutron"
+# ironic_neutron_cleaning_network_uuid: "UUID for cleaning network in neutron"
+# ironic_neutron_provisioning_network_name: "Name of provisioning network in neutron"
+# ironic_neutron_cleaning_network_name: "Name of cleaning network in neutron"
+
 # Integrated Openstack configuration
+ironic_openstack_driver_list: "pxe_ipmitool, agent_ipmitool"
+ironic_enabled_network_interfaces_list: "flat,noop{{ (ironic_neutron_provisioning_network_uuid is defined) | ternary(',neutron','') }}"
+ironic_default_network_interface: "{{ (ironic_neutron_provisioning_network_uuid is defined) | ternary('neutron','flat') }}"
 ironic_openstack_driver_list: agent_ipmitool
 ironic_openstack_auth_strategy: keystone
 ironic_openstack_api_url: ''  # Not required when we have keystone

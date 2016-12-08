@@ -34,6 +34,9 @@
 # Install Nova
 - include: common/test-install-nova.yml
 
+# Configure Ironic
+- include: test-configure-ironic.yml
+
 # Install Ironic
 - include: common/test-install-ironic.yml
 

@@ -10,6 +10,8 @@ enabled_drivers = {{ ironic_driver_list }}
 host = {{ inventory_hostname }}
 
 memcached_servers = {{ memcached_servers }}
+enabled_network_interfaces = {{ ironic_enabled_network_interfaces_list }}
+default_network_interface = {{ ironic_default_network_interface }}
 
 [agent]
 
@@ -114,6 +116,10 @@ project_domain_name = {{ neutron_service_domain_name |default("Default") }}
 # Keystone client plugin authentication URL option
 auth_url = {{ keystone_service_adminurl }}
 insecure = {{ keystone_service_adminuri_insecure | bool }}
+{% if ironic_neutron_provisioning_network_name is defined %}
+provisioning_network_uuid = {{ ironic_neutron_provisioning_network_uuid | default('') }}
+cleaning_network_uuid = {{ ironic_neutron_cleaning_network_uuid | default(ironic_neutron_provisioning_network_uuid | default('')) }}
+{% endif %}
 
 [oneview]
 

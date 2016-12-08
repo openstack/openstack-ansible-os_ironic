@@ -13,7 +13,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-test_swift_repl_network: "eth2"
+test_swift_storage_network: "eth3"
+test_swift_repl_network: "eth3"
 nova_virt_type: ironic
 glance_file_store: swift
 test_swift_repl_number: 2
+nova_console_type: novnc
+
+neutron_provider_networks:
+  network_types: "vxlan,flat"
+  network_vxlan_ranges: "1:1000"
+  network_flat_networks: "flat,prov"
+  network_mappings: "flat:eth12,prov:eth11"
+
+# Must be set to a normal MTU
+neutron_network_device_mtu: 1500
+neutron_l2_population: True
+neutron_dhcp_config:
+  dhcp-option-force: "26,1500"
+  log-facility: "/var/log/neutron/neutron-dnsmasq.log"
+ironic_neutron_provisioning_network_name: "ironic-prov"
+neutron_l3: True
+neutron_metadata: True
+ironic_pip_package_state: latest
+ironic_service_user_name: "ironic"

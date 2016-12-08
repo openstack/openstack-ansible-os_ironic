@@ -100,7 +100,7 @@ openstack1
 openstack1
 
 [nova_compute]
-localhost
+openstack1
 
 [nova_conductor]
 openstack1
