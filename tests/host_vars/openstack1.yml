@@ -18,10 +18,7 @@ ansible_become: True
 ansible_user: root
 tunnel_address: 10.1.2.102
 neutron_local_ip: 10.1.2.102
-neutron_provider_networks:
-  network_types: "vxlan,flat"
-  network_mappings: "flat:eth12"
-  network_vxlan_ranges: "1:1000"
+storage_address: 10.1.5.102
 container_name: "{{ inventory_hostname }}"
 container_networks:
   management_address:
@@ -36,8 +33,19 @@ container_networks:
     interface: "eth2"
     netmask: "255.255.255.0"
     type: "veth"
-  vlan_address:
-    bridge: "br-vlan"
-    interface: "eth12"
+  storage_address:
+    address: "{{ storage_address }}"
+    bridge: "br-storage"
+    interface: "eth3"
+    netmask: "255.255.255.0"
+    type: "veth"
+  prov_address:
+    bridge: "br-prov"
+    interface: "eth11"
     netmask: null
     type: "veth"
+  flat_address:
+    bridge: "br-flat"
+    interface: "eth12"
+    netmask: null
+    type: veth

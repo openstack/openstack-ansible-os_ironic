@@ -14,7 +14,7 @@
 # limitations under the License.
 
 ansible_host: 10.1.1.103
-storage_address: 10.1.2.103
+storage_address: 10.1.5.103
 ansible_user: root
 ansible_become: True
 container_networks:
@@ -26,7 +26,7 @@ container_networks:
     type: "veth"
   storage_address:
     address: "{{ storage_address }}"
-    bridge: "br-vxlan"
-    interface: "eth2"
+    bridge: "br-storage"
+    interface: "eth3"
     netmask: "255.255.255.0"
     type: "veth"
