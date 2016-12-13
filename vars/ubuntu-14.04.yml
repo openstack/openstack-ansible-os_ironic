@@ -38,5 +38,6 @@ ironic_conductor_distro_packages:
 ironic_conductor_standalone_distro_packages:
   - isc-dhcp-server
 
-ironic_pxelinux_path: "/usr/lib/syslinux/pxelinux.0"
-ironic_chainc32_path: "/usr/lib/syslinux/chain.c32"
+ironic_library_modules_paths:
+  - "/usr/lib/syslinux/pxelinux.0"
+  - "/usr/lib/syslinux/chain.c32"
