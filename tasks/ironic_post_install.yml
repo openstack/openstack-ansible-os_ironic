@@ -29,7 +29,7 @@
   set_fact:
     ironic_driver_list: "{{ ironic_openstack_driver_list }}"
     ironic_auth_strategy: "{{ ironic_openstack_auth_strategy }}"
-    ironic_api_url: "{{ ironic_openstack_api_url }}"
+    ironic_api_url: "{{ ironic_openstack_api_url | default(omit) }}"
     ironic_dhcp_provider: "{{ ironic_openstack_dhcp_provider }}"
     ironic_sync_power_state_interval: "{{ ironic_openstack_sync_power_state_interval }}"
     ironic_db_connection_string: "{{ ironic_openstack_db_connection_string }}"

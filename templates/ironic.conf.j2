@@ -24,7 +24,9 @@ default_network_interface = {{ ironic_default_network_interface }}
 [cisco_ucs]
 
 [conductor]
+{% if ironic_api_url is defined %}
 api_url = {{ ironic_api_url }}
+{% endif %}
 sync_power_state_interval = {{ ironic_sync_power_state_interval }}
 automated_clean = {{ ironic_automated_clean }}
 
