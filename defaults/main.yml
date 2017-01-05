@@ -112,7 +112,6 @@ ironic_keystone_auth_plugin: password
 # ironic_neutron_cleaning_network_name: "Name of cleaning network in neutron"
 
 # Integrated Openstack configuration
-ironic_openstack_driver_list: "pxe_ipmitool, agent_ipmitool"
 ironic_enabled_network_interfaces_list: "flat,noop{{ (ironic_neutron_provisioning_network_uuid is defined) | ternary(',neutron','') }}"
 ironic_default_network_interface: "{{ (ironic_neutron_provisioning_network_uuid is defined) | ternary('neutron','flat') }}"
 ironic_openstack_driver_list: agent_ipmitool
