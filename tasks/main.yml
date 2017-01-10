@@ -44,7 +44,6 @@
 
 - include: ironic_post_install.yml
   tags:
-    - ironic-install
     - ironic-config
 
 - include: ironic_api_post_install.yml
@@ -60,13 +59,13 @@
 - include: ironic_db_setup.yml
   when: inventory_hostname == groups['ironic_conductor'][0]
   tags:
-    - ironic-install
+    - ironic-config
 
 - include: ironic_init.yml
   tags:
-    - ironic-install
+    - ironic-config
 
 - include: ironic_service_setup.yml
   when: inventory_hostname == groups['ironic_api'][0]
   tags:
-    - ironic-install
+    - ironic-config
