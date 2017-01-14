@@ -48,7 +48,7 @@
     dest: "/var/cache/{{ ironic_venv_download_url | basename }}"
     checksum: "sha1:{{ lookup('url', ironic_venv_download_url | replace('tgz', 'checksum')) }}"
   register: ironic_get_venv
-  when: not ironic_developer_mode | bool
+  when: ironic_venv_download | bool
 
 - name: Remove existing venv
   file:
@@ -61,15 +61,14 @@
     path: "{{ ironic_bin | dirname }}"
     state: directory
   register: ironic_venv_dir
+  when: ironic_get_venv | changed
 
 - name: Unarchive pre-built venv
   unarchive:
     src: "/var/cache/{{ ironic_venv_download_url | basename }}"
     dest: "{{ ironic_bin | dirname }}"
     copy: "no"
-  when:
-    - not ironic_developer_mode | bool
-    - ironic_get_venv | changed or ironic_venv_dir | changed
+  when: ironic_get_venv | changed
   notify: Restart ironic services
 
 - name: Install pip packages
@@ -86,7 +85,7 @@
   until: install_packages|success
   retries: 5
   delay: 2
-  when: ironic_developer_mode | bool
+  when: ironic_get_venv | failed or ironic_get_venv | skipped
   notify: Restart ironic services
 
 - name: CentOS remove python from path first
@@ -95,12 +94,9 @@
     state: "absent"
   when:
     - ansible_pkg_mgr == 'yum'
-    - not ironic_developer_mode | bool
-    - ironic_get_venv | changed or ironic_venv_dir | changed
+    - ironic_get_venv | changed
 
 - name: Update virtualenv path
   command: >
     virtualenv-tools --update-path=auto --reinitialize {{ ironic_bin | dirname }}
-  when:
-    - not ironic_developer_mode | bool
-    - ironic_get_venv | changed or ironic_venv_dir | changed
+  when: ironic_get_venv | changed
