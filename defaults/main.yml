@@ -142,6 +142,9 @@ ironic_node_name: ironic
 # regenerated each run.
 ironic_recreate_keys: False
 
+# venv_download, even when true, will use the fallback method of building the
+# venv from scratch if the venv download fails.
+ironic_venv_download: "{{ not ironic_developer_mode | bool }}"
 ironic_venv_download_url: http://127.0.0.1/venvs/untagged/ubuntu/ironic.tgz
 
 ironic_tftp_server_address: "{{ ansible_host }}"
