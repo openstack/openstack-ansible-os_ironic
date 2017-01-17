@@ -60,6 +60,7 @@
   file:
     path: "{{ ironic_bin | dirname }}"
     state: directory
+    mode: "0755"
   register: ironic_venv_dir
 
 - name: Unarchive pre-built venv
