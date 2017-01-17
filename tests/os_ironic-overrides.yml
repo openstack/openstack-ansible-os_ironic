@@ -36,3 +36,4 @@ ironic_neutron_provisioning_network_name: "ironic-prov"
 neutron_l3: True
 neutron_metadata: True
 ironic_pip_package_state: latest
+ironic_service_user_name: "ironic"

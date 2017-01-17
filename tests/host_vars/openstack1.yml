@@ -45,7 +45,7 @@ container_networks:
     netmask: null
     type: "veth"
   flat_address:
-    bridge: "br-flat"
+    bridge: "br-vlan"
     interface: "eth12"
     netmask: null
     type: veth
