@@ -112,6 +112,20 @@ ironic_service_role_name: "admin"
 ironic_service_in_ldap: False
 
 # Ironic image store information
+#
+### Hosted Web Server
+#
+# Set this to True to use http web server to host floppy
+# images and generated boot ISO. This requires http_root and
+# http_url to be configured in the [deploy] section of the
+# config file. If this is set to False, then Ironic will use
+# Swift to host the floppy images and generated boot_iso.
+ironic_enable_web_server_for_images: False
+ironic_http_url: null
+ironic_http_root: null
+#
+### Swift Config
+#
 ironic_swift_image_container: glance_images
 ironic_swift_api_version: v1
 ironic_swift_url_endpoint_type: swift

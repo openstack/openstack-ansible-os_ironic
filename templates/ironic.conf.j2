@@ -58,6 +58,10 @@ erase_devices_priority = {{ ironic_erase_devices_priority }}
 {% if not ironic_standalone | bool %}
 object_store_endpoint_type = {{ ironic_swift_url_endpoint_type }}
 {% endif %}
+{% if ironic_enable_web_server_for_images | bool %}
+http_root ={{ ironic_http_root }}
+http_url = {{ ironic_http_url }}
+{% endif %}
 
 [dhcp]
 dhcp_provider = {{ ironic_dhcp_provider }}
@@ -77,7 +81,7 @@ username = {{ ironic_glance_service_user_name }}
 user_domain_id = {{ ironic_glance_service_user_domain_id }}
 password = {{ glance_service_password }}
 glance_api_servers = {{ ironic_glance_api_servers }}
-{% if not ironic_standalone | bool %}
+{% if not ironic_standalone | bool and not ironic_enable_web_server_for_images | bool %}
 swift_temp_url_key = {{ ironic_swift_temp_url_secret_key }}
 swift_container = {{ ironic_swift_image_container }}
 swift_endpoint_url = {{ ironic_swift_endpoint }}
@@ -88,6 +92,9 @@ swift_api_version = {{ ironic_swift_api_version }}
 [iboot]
 
 [ilo]
+{% if ironic_enable_web_server_for_images | bool %}
+use_web_server_for_images = True
+{% endif %}
 
 [inspector]
 
