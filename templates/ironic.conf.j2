@@ -43,6 +43,7 @@ max_pool_size = {{ ironic_db_max_pool_size }}
 pool_timeout = {{ ironic_db_pool_timeout }}
 
 [deploy]
+erase_devices_priority = {{ ironic_erase_devices_priority }}
 
 [dhcp]
 dhcp_provider = {{ ironic_dhcp_provider }}
@@ -119,6 +120,14 @@ cleaning_network_uuid = {{ ironic_neutron_cleaning_network_uuid | default(ironic
 {% endif %}
 
 [oneview]
+{% if ironic_oneview_enabled %}
+manager_url = {{ ironic_oneview_manager_url }}
+username = {{ ironic_oneview_username }}
+password = {{ ironic_oneview_password }}
+allow_insecure_connections = {{ ironic_oneview_allow_insecure_connections }}
+tls_cacert_file = {{ ironic_oneview_tls_cacert_file }}
+max_polling_attempts = {{ ironic_oneview_max_polling_attempts }}
+{% endif %}
 
 [oslo_concurrency]
 lock_path = {{ ironic_lock_path }}

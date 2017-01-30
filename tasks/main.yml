@@ -42,6 +42,11 @@
   tags:
     - ironic-install
 
+- include: ironic_oneview_setup.yml
+  when:
+    - ironic_oneview_enabled | bool
+    - inventory_hostname in groups['ironic_conductor']
+
 - include: ironic_post_install.yml
   tags:
     - ironic-config

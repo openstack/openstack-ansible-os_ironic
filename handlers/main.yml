@@ -20,6 +20,13 @@
   with_items: "{{ ironic_service_names }}"
   failed_when: false
 
+- name: Restart ironic-oneviewd
+  service:
+    name: "ironic-oneviewd"
+    state: restarted
+    pattern: "ironic-oneviewd"
+  failed_when: false
+
 - name: Restart tftpd-hpa
   service:
     name: "tftpd-hpa"
