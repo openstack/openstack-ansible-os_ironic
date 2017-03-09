@@ -102,14 +102,6 @@
   tags:
     - always
 
-# Get the cleaning/provisioning network UUIDs
-- include: ironic_get_neutron_uuids.yml
-  when:
-    - ironic_neutron_provisioning_network_uuid is not defined
-    - ironic_neutron_provisioning_network_name is defined
-  tags:
-    - always
-
 - name: Generate ironic config
   config_template:
     src: "{{ item.src }}"

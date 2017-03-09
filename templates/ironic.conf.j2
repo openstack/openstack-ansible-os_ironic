@@ -115,8 +115,8 @@ project_domain_name = {{ neutron_service_domain_name |default("Default") }}
 auth_url = {{ keystone_service_adminurl }}
 insecure = {{ keystone_service_adminuri_insecure | bool }}
 {% if ironic_neutron_provisioning_network_name is defined %}
-provisioning_network_uuid = {{ ironic_neutron_provisioning_network_uuid | default('') }}
-cleaning_network_uuid = {{ ironic_neutron_cleaning_network_uuid | default(ironic_neutron_provisioning_network_uuid | default('')) }}
+provisioning_network = {{ ironic_neutron_provisioning_network_uuid | default(ironic_neutron_provisioning_network_name) | default('') }}
+cleaning_network = {{ ironic_neutron_cleaning_network_uuid | default(ironic_neutron_cleaning_network_name) | default(ironic_neutron_provisioning_network_uuid) | default(ironic_neutron_provisioning_network_name) | default('') }}
 {% endif %}
 
 [oneview]
