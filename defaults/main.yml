@@ -79,6 +79,7 @@ ironic_service_in_ldap: False
 # Ironic image store information
 ironic_swift_image_container: glance_images
 ironic_swift_api_version: v1
+ironic_swift_url_endpoint_type: swift
 # The ironic swift auth account and swift endpoints will be generated using the
 #  known swift data as provided by swift stat. If you wish to set either of these
 #  items to something else define these variables.
