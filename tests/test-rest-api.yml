@@ -2,6 +2,7 @@
 - name: Playbook for functional testing ironic via its REST API
   hosts: localhost
   user: root
+  become: true
   gather_facts: true
   roles:
     - role: "openstack_openrc"

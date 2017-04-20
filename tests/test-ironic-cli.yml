@@ -16,6 +16,7 @@
 - name: Test the ironic CLI
   hosts: hosts
   user: root
+  become: true
   gather_facts: false
   tasks:
     - name: Run the ironic chassis-list command

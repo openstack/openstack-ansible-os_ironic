@@ -13,7 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ansible_become: True
 neutron_local_ip:  10.1.2.1
 ansible_python_interpreter: "/usr/bin/python2"
 bridges:
