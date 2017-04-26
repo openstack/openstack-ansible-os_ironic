@@ -11,6 +11,8 @@ stop on runlevel [016]
 respawn
 respawn limit 10 5
 
+kill timout 120
+
 # Set the RUNBIN environment variable
 env RUNBIN="{{ ironic_bin }}/{{ program_name }}"
 env RUNOPTS="-v -d --config-file /etc/ironic/ironic.conf"
@@ -31,8 +33,10 @@ pre-start script
 end script
 
 # Post stop actions
+# Sleep configured number of seconds between restarts
 post-stop script
   rm "/var/run/{{ program_name }}/{{ program_name }}.pid"
+  sleep 2
 end script
 
 # Run the start up job
