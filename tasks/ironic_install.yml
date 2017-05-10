@@ -45,11 +45,18 @@
   retries: 5
   delay: 2
 
+- name: Retrieve checksum for venv download
+  uri:
+    url: "{{ ironic_venv_download_url | replace('tgz', 'checksum') }}"
+    return_content: yes
+  register: ironic_venv_checksum
+  when: ironic_venv_download | bool
+
 - name: Attempt venv download
   get_url:
     url: "{{ ironic_venv_download_url }}"
     dest: "/var/cache/{{ ironic_venv_download_url | basename }}"
-    checksum: "sha1:{{ lookup('url', ironic_venv_download_url | replace('tgz', 'checksum')) }}"
+    checksum: "sha1:{{ ironic_venv_checksum.content | trim }}"
   register: ironic_get_venv
   when: ironic_venv_download | bool
 
