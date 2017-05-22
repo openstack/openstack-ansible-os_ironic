@@ -95,3 +95,10 @@
   when:
     - not ironic_developer_mode | bool
     - ironic_get_venv | changed or ironic_venv_dir | changed
+
+- name: Record the venv tag deployed
+  ini_file:
+    dest: "/etc/ansible/facts.d/openstack_ansible.fact"
+    section: ironic
+    option: venv_tag
+    value: "{{ ironic_venv_tag }}"
