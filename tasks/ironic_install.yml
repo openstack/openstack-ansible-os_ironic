@@ -111,3 +111,10 @@
   command: >
     virtualenv-tools --update-path=auto --reinitialize {{ ironic_bin | dirname }}
   when: ironic_get_venv | changed
+
+- name: Record the venv tag deployed
+  ini_file:
+    dest: "/etc/ansible/facts.d/openstack_ansible.fact"
+    section: ironic
+    option: venv_tag
+    value: "{{ ironic_venv_tag }}"
