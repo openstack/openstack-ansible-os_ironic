@@ -205,12 +205,12 @@ ironic_oneview_optional_pip_packages:
   - ironic-oneviewd
 
 ironic_pip_packages:
-  - PyMySQL
+  - cryptography
   - ironic
+  - PyMySQL
   - python-ironicclient
-  - python-swiftclient
-  - pycrypto
   - python-memcached
+  - python-swiftclient
 
 ## RabbitMQ info
 ironic_rabbitmq_userid: ironic
