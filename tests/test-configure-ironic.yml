@@ -20,28 +20,31 @@
   tasks:
     - name: Install pip requirements
       pip:
-        name: "python-neutronclient"
+        name: "{{ item }}"
         state: "{{ ironic_pip_package_state }}"
+      with_items:
+        - python-neutronclient
+        - shade
       register: install_packages
       until: install_packages|success
       retries: 5
       delay: 2
     - name: Create br-prov network
-      neutron:
-        command: create_network
-        openrc_path: /root/openrc
-        net_name: "{{ ironic_neutron_provisioning_network_name }}"
+      os_network:
+        cloud: default
+        endpoint_type: internal
+        validate_certs: "{{ not keystone_service_internaluri_insecure | bool }}"
+        name: "{{ ironic_neutron_provisioning_network_name }}"
         provider_network_type: flat
         provider_physical_network: prov
-        insecure: "{{ keystone_service_internaluri_insecure }}"
     - name: Ensure public subnet exists
-      neutron:
-        command: create_subnet
-        openrc_path: /root/openrc
-        net_name: "{{ ironic_neutron_provisioning_network_name }}"
-        subnet_name: "ironic-prov-subnet"
+      os_subnet:
+        state: present
+        cloud: default
+        endpoint_type: internal
+        validate_certs: "{{ not keystone_service_internaluri_insecure | bool }}"
+        network_name: "{{ ironic_neutron_provisioning_network_name }}"
+        name: "ironic-prov-subnet"
         cidr: "10.1.6.0/24"
-        insecure: "{{ keystone_service_internaluri_insecure }}"
-        allocation_pools: ""
   vars_files:
     - common/test-vars.yml
