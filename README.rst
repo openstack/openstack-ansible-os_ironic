@@ -15,7 +15,7 @@ This is an OpenStack-Ansible role to deploy the Bare Metal (ironic)
 service.
 
 Documentation for the project can be found at:
-  http://docs.openstack.org/developer/openstack-ansible-os_ironic
+  https://docs.openstack.org/openstack-ansible-os_ironic/latest
 
 The project home is at:
   http://launchpad.net/openstack-ansible
