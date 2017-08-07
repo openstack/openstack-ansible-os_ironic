@@ -1,0 +1,19 @@
+[uwsgi]
+uid = {{ ironic_system_user_name }}
+gid = {{ ironic_system_group_name }}
+
+virtualenv = /openstack/venvs/ironic-{{ ironic_venv_tag }}
+wsgi-file = {{ ironic_bin }}/{{ item.wsgi_name }}.wsgi
+http-socket = {{ item.uwsgi_bind_address }}:{{ item.uwsgi_port }}
+
+master = true
+enable-threads = true
+processes = {{ ironic_wsgi_processes }}
+threads = {{ ironic_wsgi_threads }}
+exit-on-reload = true
+die-on-term = true
+lazy-apps = true
+add-header = Connection: close
+buffer-size = {{ ironic_wsgi_buffer_size }}
+thunder-lock = true
+logfile-chmod = 644

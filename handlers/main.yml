@@ -15,17 +15,11 @@
 
 - name: Restart ironic services
   service:
-    name: "{{ item }}"
+    name: "{{ item.service_name }}"
     state: restarted
-  with_items: "{{ ironic_service_names }}"
-  failed_when: false
-
-- name: Restart ironic-oneviewd
-  service:
-    name: "ironic-oneviewd"
-    state: restarted
-    pattern: "ironic-oneviewd"
-  failed_when: false
+    enabled: yes
+    daemon_reload: yes
+  with_list: "{{ filtered_ironic_services }}"
 
 - name: Restart tftpd-hpa
   service:

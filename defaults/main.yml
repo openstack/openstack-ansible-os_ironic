@@ -46,13 +46,29 @@ ironic_system_log_folder: "/var/log/{{ ironic_system_user_name }}"
 ironic_lock_path: /var/lock/ironic
 
 # Ironic Program and Service names
-ironic_api_program_name: apache2
-ironic_conductor_program_name: ironic-conductor
-ironic_oneviewd_program_name: ironic-oneviewd
 python_ironic_client_program_name: ironic
-ironic_service_names:
-    - "{{ ironic_api_program_name }}"
-    - "{{ ironic_conductor_program_name }}"
+ironic_services:
+  ironic-api:
+    group: ironic_api
+    service_name: ironic-api
+    init_config_overrides: "{{ ironic_api_init_config_overrides }}"
+    wsgi_overrides: "{{ ironic_api_uwsgi_ini_overrides }}"
+    wsgi_app: True
+    log_string: "--logto "
+    wsgi_name: ironic-api-wsgi
+    uwsgi_port: "{{ ironic_service_port }}"
+    uwsgi_bind_address: "{{ ironic_uwsgi_bind_address }}"
+    program_override: "{{ ironic_bin }}/uwsgi --ini /etc/uwsgi/ironic-api.ini"
+  ironic-conductor:
+    group: ironic_conductor
+    service_name: ironic-conductor
+    init_config_overrides: "{{ ironic_conductor_init_config_overrides }}"
+  ironic-oneviewd:
+    group: ironic_conductor
+    service_name: ironic-oneviewd
+    service_en: "{{ ironic_oneview_enabled | bool }}"
+    init_config_overrides: "{{ ironic_oneviewd_init_config_overrides }}"
+
 
 ironic_service_name: ironic
 ironic_service_type: baremetal
@@ -211,6 +227,7 @@ ironic_pip_packages:
   - python-ironicclient
   - python-memcached
   - python-swiftclient
+  - uwsgi
 
 ## RabbitMQ info
 ironic_rabbitmq_userid: ironic
@@ -222,10 +239,12 @@ ironic_rabbitmq_port: 5672
 # Auth
 ironic_service_user_name: "ironic"
 
-# Apache settings
+# WSGI settings
 ironic_wsgi_threads: 1
 ironic_wsgi_processes_max: 16
 ironic_wsgi_processes: "{{ [[ansible_processor_vcpus|default(4) // 4, 1] | max, ironic_wsgi_processes_max] | min }}"
+ironic_wsgi_buffer_size: 65535
+ironic_uwsgi_bind_address: 0.0.0.0
 
 ### OpenStack Services to integrate with
 
@@ -247,9 +266,11 @@ ironic_ironic_conf_overrides: {}
 ironic_ironic_oneviewd_conf_overrides: {}
 ironic_rootwrap_conf_overrides: {}
 ironic_policy_overrides: {}
+ironic_api_uwsgi_ini_overrides: {}
 
 # pxe boot
 ironic_pxe_append_params: "ipa-debug=1 systemd.journald.forward_to_console=yes"
 
+ironic_api_init_config_overrides: {}
 ironic_conductor_init_config_overrides: {}
 ironic_oneviewd_init_config_overrides: {}

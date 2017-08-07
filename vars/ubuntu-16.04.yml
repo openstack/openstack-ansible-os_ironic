@@ -19,10 +19,7 @@ ironic_developer_mode_distro_packages:
   - git-core
   - libffi-dev
 
-ironic_api_distro_packages:
-  - apache2
-  - apache2-utils
-  - libapache2-mod-wsgi
+ironic_api_distro_packages: []
 
 ironic_conductor_distro_packages:
   - libxml2-dev

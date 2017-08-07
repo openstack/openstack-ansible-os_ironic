@@ -15,49 +15,42 @@
 
 - name: Create TEMP run dir
   file:
-    path: "/var/run/{{ program_name }}"
+    path: "/var/run/{{ item.service_name }}"
     state: directory
-    owner: "{{ system_user }}"
-    group: "{{ system_group }}"
+    owner: "{{ ironic_system_user_name }}"
+    group: "{{ ironic_system_group_name }}"
     mode: "02755"
+  with_items: "{{ filtered_ironic_services }}"
 
 - name: Create TEMP lock dir
   file:
-    path: "/var/lock/{{ program_name }}"
+    path: "/var/lock/{{ item.service_name }}"
     state: directory
-    owner: "{{ system_user }}"
-    group: "{{ system_group }}"
+    owner: "{{ ironic_system_user_name }}"
+    group: "{{ ironic_system_group_name }}"
     mode: "02755"
-
-# TODO(mgariepy):
-# Remove this in Pike as it only needed to handle upgrades
-# from Newton->Newton and Newton->Ocata
-- name: Cleanup old tmpfiles.d entry
-  file:
-    path: "/etc/tmpfiles.d/{{ program_name }}.conf"
-    state: absent
+  with_items: "{{ filtered_ironic_services }}"
 
 - name: Create tmpfiles.d entry
   template:
     src: "ironic-systemd-tmpfiles.j2"
-    dest: "/etc/tmpfiles.d/openstack-{{ program_name }}.conf"
+    dest: "/etc/tmpfiles.d/openstack-{{ item.service_name }}.conf"
     mode: "0644"
     owner: "root"
     group: "root"
+  with_items: "{{ filtered_ironic_services }}"
+  notify:
+    - Restart ironic services
 
 - name: Place the systemd init script
   config_template:
     src: "ironic-systemd-init.j2"
-    dest: "/etc/systemd/system/{{ program_name }}.service"
+    dest: "/etc/systemd/system/{{ item.service_name }}.service"
     mode: "0644"
     owner: "root"
     group: "root"
-    config_overrides: "{{ init_config_overrides }}"
+    config_overrides: "{{ item.init_config_overrides }}"
     config_type: "ini"
-  register: systemd_init
-
-- name: Reload the systemd daemon
-  command: "systemctl daemon-reload"
-  when: systemd_init | changed
+  with_items: "{{ filtered_ironic_services }}"
   notify:
     - Restart ironic services
