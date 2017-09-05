@@ -19,7 +19,8 @@ ironic_developer_mode_distro_packages:
   - git-core
   - libffi-dev
 
-ironic_api_distro_packages: []
+ironic_api_distro_packages:
+  - libxml2-dev
 
 ironic_conductor_distro_packages:
   - libxml2-dev
