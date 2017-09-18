@@ -11,7 +11,7 @@ stop on runlevel [016]
 respawn
 respawn limit 10 5
 
-kill timout 120
+kill timeout 120
 
 # Set the RUNBIN environment variable
 env RUNBIN="{{ ironic_bin }}/{{ program_name }}"
