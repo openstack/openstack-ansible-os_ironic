@@ -56,7 +56,7 @@ For this process, use one of the physical hosts within the environment.
 
    .. code-block:: bash
 
-      apt-get install -y qemu uuid-runtime curl
+      apt-get install qemu uuid-runtime curl
 
 #. Install the ``disk-imagebuilder`` package:
 
