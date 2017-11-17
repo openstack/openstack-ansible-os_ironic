@@ -44,7 +44,7 @@
     - ironic-config
 
 - include: ironic_conductor_post_install.yml
-  when: inventory_hostname in groups['ironic_conductor']
+  when: "ironic_services['ironic-conductor']['group'] in group_names"
   tags:
     - ironic-config
 

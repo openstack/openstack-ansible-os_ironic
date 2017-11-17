@@ -20,10 +20,10 @@ ironic_packages_list: >
   {%- if ironic_developer_mode | bool %}
   {%-   set package_list = package_list + ironic_developer_mode_distro_packages %}
   {%- endif %}
-  {%- if inventory_hostname in groups['ironic_api'] %}
+  {%- if ironic_services['ironic-api']['group'] in group_names %}
   {%-   set package_list = package_list + ironic_api_distro_packages %}
   {%- endif %}
-  {%- if inventory_hostname in groups['ironic_conductor'] %}
+  {%- if ironic_services['ironic-conductor']['group'] in group_names %}
   {%-   set package_list = package_list + ironic_conductor_distro_packages %}
   {%-   if ironic_standalone | bool %}
   {%-     set package_list = package_list + ironic_conductor_standalone_distro_packages %}
