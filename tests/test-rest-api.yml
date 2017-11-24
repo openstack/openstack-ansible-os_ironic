@@ -14,18 +14,24 @@
       with_items:
         - httplib2
         - python-openstackclient
+
     - name: Get auth token
       shell: >
         . /root/openrc && openstack token issue --format yaml | awk '/^id\:/ {print $2}'
       register: get_keystone_token
+      tags:
+       - skip_ansible_lint
+
     - name: set token
       set_fact:
         keystone_token: "{{ get_keystone_token.stdout }}"
+
     - name: Check the ironic-api
       uri:
         url: "{{ ironic_service_publicuri }}"
         HEADER_X-Auth-Token: "{{ keystone_token }}"
         status_code: 200
+
     - name: list chassis
       uri:
         url: "{{ ironic_service_publicuri }}/v1/chassis"
@@ -33,8 +39,10 @@
         status_code: 200
         return_content: yes
       register: chassis_list
+
     - name: test chassis list
       assert: that="chassis_list.json.chassis == []"
+
     - name: list drivers
       uri:
         HEADER_X-Auth-Token: "{{ keystone_token }}"
@@ -45,6 +53,7 @@
     # Returning an empty driver list currently as of 20/09/2016
     # - name: test drivers
     #   assert: that="driver_list.json.drivers[0].name == 'agent_ipmitool'"
+
     - name: list nodes
       uri:
         url: "{{ ironic_service_publicuri }}/v1/nodes"
@@ -52,6 +61,7 @@
         status_code: 200
         return_content: yes
       register: node_list
+
     - name: test nodes list is empty
       assert: that="node_list.json.nodes == []"
     # Failing with an HTTP 400 as of 20/09/2016

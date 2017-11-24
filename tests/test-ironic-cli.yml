@@ -23,6 +23,9 @@
       shell: >
         . /root/openrc && ironic chassis-list
       register: chassis_table
+      tags:
+        - skip_ansible_lint
+
     - name: Check that the chassis-list command succeeded
       assert:
         that:
@@ -32,6 +35,9 @@
       shell: >
         . /root/openrc && ironic node-list
       register: node_table
+      tags:
+        - skip_ansible_lint
+
     - name: Check that the node-list command succeeded
       assert:
         that:
@@ -41,6 +47,9 @@
       shell: >
         . /root/openrc && ironic driver-list
       register: driver_table
+      tags:
+        - skip_ansible_lint
+
     - name: Check that the driver-list command succeeded
       assert:
         that:
@@ -56,6 +65,9 @@
         -i deploy_kernel="http://example.com/kernel.tgz"
         -n happynode
       register: node_created
+      tags:
+        - skip_ansible_lint
+
     - name: Check that the node was created
       assert:
         that:
@@ -70,6 +82,9 @@
       shell: >
         . /root/openrc && ironic node-validate happynode
       register: node_validated
+      tags:
+        - skip_ansible_lint
+
     - name: Check that node-validate returned something sensible
       assert:
         that:
@@ -79,6 +94,9 @@
       shell: >
         . /root/openrc && ironic port-create -n $(ironic node-list | grep 'happynode' | cut -f 2 -d "|") -a de:ad:be:ef:de:ad
       register: port_created
+      tags:
+        - skip_ansible_lint
+
     - name: Check that the port was created
       assert:
         that:
@@ -88,6 +106,9 @@
       shell: >
         . /root/openrc && ironic node-update happynode replace name=cheerynode
       register: name_changed
+      tags:
+        - skip_ansible_lint
+
     - name: Check that the name was changed
       assert:
         that:
@@ -97,6 +118,9 @@
       shell: >
         . /root/openrc && ironic node-delete cheerynode
       register: node_deleted
+      tags:
+        - skip_ansible_lint
+
     - name: Check that a node was deleted
       assert:
         that:
