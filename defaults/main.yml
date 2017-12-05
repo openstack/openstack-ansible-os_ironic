@@ -249,7 +249,6 @@ ironic_uwsgi_bind_address: 0.0.0.0
 ### OpenStack Services to integrate with
 
 # Glance
-# ironic_glance_host: x.x.x.x
 ironic_glance_auth_strategy: "{{ ironic_openstack_auth_strategy }}"
 
 # Neutron
