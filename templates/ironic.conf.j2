@@ -44,6 +44,9 @@ pool_timeout = {{ ironic_db_pool_timeout }}
 
 [deploy]
 erase_devices_priority = {{ ironic_erase_devices_priority }}
+{% if not ironic_standalone | bool %}
+object_store_endpoint_type = {{ ironic_swift_url_endpoint_type }}
+{% endif %}
 
 [dhcp]
 dhcp_provider = {{ ironic_dhcp_provider }}
@@ -53,6 +56,8 @@ dhcp_provider = {{ ironic_dhcp_provider }}
 [disk_utils]
 
 [glance]
+# TODO(evrardjp): Remove this in the future to use the service catalog
+# and reduce the amount of variables.
 glance_api_servers = {{ glance_api_servers }}
 {% if not ironic_standalone | bool %}
 swift_temp_url_key = {{ ironic_swift_temp_url_secret_key }}
@@ -60,7 +65,6 @@ swift_container = {{ ironic_swift_image_container }}
 swift_endpoint_url = {{ ironic_swift_endpoint }}
 swift_account = {{ ironic_swift_auth_account }}
 swift_api_version = {{ ironic_swift_api_version }}
-temp_url_endpoint_type = {{ ironic_swift_url_endpoint_type }}
 {% endif %}
 
 [iboot]
