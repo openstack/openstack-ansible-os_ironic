@@ -23,12 +23,10 @@ Default variables
    :language: yaml
    :start-after: under the License.
 
+Dependencies
+~~~~~~~~~~~~
 
-Required variables
-~~~~~~~~~~~~~~~~~~
-
-None.
-
+This role needs pip >= 7.1 installed on the target host.
 
 Example playbook
 ~~~~~~~~~~~~~~~~
@@ -36,9 +34,8 @@ Example playbook
 .. literalinclude:: ../../examples/playbook.yml
    :language: yaml
 
-
 Tags
-====
+~~~~
 
 This role supports the ``ironic-install`` and ``ironic-config`` tags.
 Use the ``ironic-install`` tag to install and upgrade. Use the
