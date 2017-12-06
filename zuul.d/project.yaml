@@ -19,6 +19,9 @@
       jobs:
         - openstack-ansible-linters
         - openstack-ansible-functional-ubuntu-xenial
+    experimental:
+      jobs:
+        - openstack-ansible-integrated-deploy-aio
     gate:
       jobs:
         - openstack-ansible-linters
