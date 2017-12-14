@@ -13,18 +13,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- project:
-    name: openstack/openstack-ansible-os_ironic
-    check:
-      jobs:
-        - openstack-ansible-linters
-        - openstack-ansible-functional-ubuntu-xenial
-        - openstack-ansible-ironic-ssl-nv
-    experimental:
-      jobs:
-        - openstack-ansible-integrated-deploy-aio
-    gate:
-      jobs:
-        - openstack-ansible-linters
-        - openstack-ansible-functional-ubuntu-xenial
-        - openstack-ansible-ironic-ssl-nv
+- job:
+    name: openstack-ansible-ironic-ssl-nv
+    parent: openstack-ansible-functional-ubuntu-xenial
+    voting: false
+    vars:
+      tox_env: ssl
