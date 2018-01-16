@@ -214,7 +214,6 @@ ironic_tftp_server_address: "{{ ansible_host }}"
 
 ironic_requires_pip_packages:
   - virtualenv
-  - virtualenv-tools
   - python-keystoneclient # Keystoneclient needed for the OSA keystone lib
   - httplib2 # for Ansible's uri module
 

@@ -109,9 +109,12 @@
     - ironic_get_venv | changed
 
 - name: Update virtualenv path
-  command: >
-    virtualenv-tools --update-path=auto --reinitialize {{ ironic_bin | dirname }}
+  shell: |
+    find {{ ironic_bin }} -name \*.pyc -delete
+    sed -si '1s/^.*python.*$/#!{{ ironic_bin | replace ('/','\/') }}\/python/' {{ ironic_bin }}/*
   when: ironic_get_venv | changed
+  tags:
+    - skip_ansible_lint
 
 - name: Record the venv tag deployed
   ini_file:
