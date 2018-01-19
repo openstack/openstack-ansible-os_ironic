@@ -112,6 +112,7 @@
   shell: |
     find {{ ironic_bin }} -name \*.pyc -delete
     sed -si '1s/^.*python.*$/#!{{ ironic_bin | replace ('/','\/') }}\/python/' {{ ironic_bin }}/*
+    virtualenv {{ ironic_bin | dirname }}
   when: ironic_get_venv | changed
   tags:
     - skip_ansible_lint
