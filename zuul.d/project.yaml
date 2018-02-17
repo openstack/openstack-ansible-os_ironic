@@ -25,4 +25,3 @@
       jobs:
         - openstack-ansible-linters
         - openstack-ansible-functional-ubuntu-xenial
-        - openstack-ansible-ironic-ssl-nv
