@@ -135,7 +135,7 @@ Creating an ironic flavor
 
    Ensure the flavor and nodes match when enrolling into ironic.
    See the documentation on flavors for more information:
-   http://docs.openstack.org/openstack-ops/content/flavors.html
+   https://docs.openstack.org/nova/queens/admin/flavors.html
 
 After successfully deploying the ironic node on subsequent boots, the instance
 boots from your local disk as first preference. This speeds up the deployed
