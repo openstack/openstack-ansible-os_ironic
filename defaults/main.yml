@@ -18,6 +18,9 @@
 # Verbosity Options
 debug: False
 
+# Comma separated list of Glance API servers
+ironic_glance_api_servers: "{{ (glance_service_internalurl | default('http://localhost')) | netorigin }}"
+
 # Set the package install state for distribution and pip packages
 # Options are 'present' and 'latest'
 ironic_package_state: "latest"
