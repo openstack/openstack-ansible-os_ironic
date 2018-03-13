@@ -74,3 +74,7 @@
   scm: git
   src: https://github.com/opendaylight/integration-packaging-ansible-opendaylight
   version: master
+- name: systemd_service
+  src: https://github.com/cloudnull/ansible-systemd_service
+  scm: git
+  version: master
