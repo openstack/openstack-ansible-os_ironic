@@ -15,7 +15,7 @@
 
 cache_timeout: 600
 
-ironic_developer_mode_distro_packages:
+ironic_devel_distro_packages:
   - git-core
   - libffi-dev
 

@@ -40,8 +40,19 @@ ironic_developer_mode: false
 ironic_developer_constraints:
   - "git+{{ ironic_git_repo }}@{{ ironic_git_install_branch }}#egg=ironic"
 
+# TODO(odyssey4me):
+# This can be simplified once all the roles are using
+# python_venv_build. We can then switch to using a
+# set of constraints in pip.conf inside the venv,
+# perhaps prepared by giving a giving a list of
+# constraints to the role.
+ironic_pip_install_args: >-
+  {{ ironic_developer_mode | ternary(pip_install_developer_constraints | default('--constraint /opt/developer-pip-constraints.txt'), '') }}
+  {{ (pip_install_upper_constraints is defined) | ternary('--constraint ' + pip_install_upper_constraints | default(''), '') }}
+  {{ pip_install_options | default('') }}
+
 # Name of the virtual env to deploy into
-ironic_venv_tag: untagged
+ironic_venv_tag: "{{ venv_tag | default('untagged') }}"
 ironic_bin: "/openstack/venvs/ironic-{{ ironic_venv_tag }}/bin"
 
 # System info

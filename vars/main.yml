@@ -154,7 +154,7 @@ ironic_driver_types:
 ironic_packages_list: >
   {%- set package_list = [] %}
   {%- if ironic_developer_mode | bool %}
-  {%-   set package_list = package_list + ironic_developer_mode_distro_packages %}
+  {%-   set package_list = package_list + ironic_devel_distro_packages %}
   {%- endif %}
   {%- if ironic_services['ironic-api']['group'] in group_names %}
   {%-   set package_list = package_list + ironic_api_distro_packages %}

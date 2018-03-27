@@ -13,17 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Install distro packages
-  package:
-    name: "{{ ironic_packages_list }}"
-    state: "{{ ironic_package_state }}"
-    update_cache: "{{ (ansible_pkg_mgr == 'apt') | ternary('yes', omit) }}"
-    cache_valid_time: "{{ (ansible_pkg_mgr == 'apt') | ternary(cache_timeout, omit) }}"
-  register: install_packages
-  until: install_packages is success
-  retries: 5
-  delay: 2
-
+# TODO(odyssey4me):
+# This can be simplified once all the roles are using
+# python_venv_build. We can then switch to using a
+# set of constraints in pip.conf inside the venv,
+# perhaps prepared by giving a giving a list of
+# constraints to the role.
 - name: Create developer mode constraint file
   copy:
     dest: "/opt/developer-pip-constraints.txt"
@@ -33,104 +28,23 @@
       {% endfor %}
   when: ironic_developer_mode | bool
 
-- name: Retrieve checksum for venv download
-  uri:
-    url: "{{ ironic_venv_download_url | replace('tgz', 'checksum') }}"
-    return_content: yes
-  register: ironic_venv_checksum
-  when: ironic_venv_download | bool
-
-- name: Attempt venv download
-  get_url:
-    url: "{{ ironic_venv_download_url }}"
-    dest: "/var/cache/{{ ironic_venv_download_url | basename }}"
-    checksum: "sha1:{{ ironic_venv_checksum.content | trim }}"
-  register: ironic_get_venv
-  when: ironic_venv_download | bool
-
-- name: Remove existing venv
-  file:
-    path: "{{ ironic_bin | dirname }}"
-    state: absent
-  when: ironic_get_venv  is changed
-
-- name: Create ironic venv dir
-  file:
-    path: "{{ ironic_bin | dirname }}"
-    state: directory
-    mode: "0755"
-  register: ironic_venv_dir
-  when: ironic_get_venv  is changed
-
-- name: Unarchive pre-built venv
-  unarchive:
-    src: "/var/cache/{{ ironic_venv_download_url | basename }}"
-    dest: "{{ ironic_bin | dirname }}"
-    copy: "no"
-  when: ironic_get_venv  is changed
-  notify: Restart ironic services
-
-- name: Install pip packages
-  pip:
-    name: "{{ ironic_pip_packages }}"
-    state: "{{ ironic_pip_package_state }}"
-    virtualenv: "{{ ironic_bin | dirname }}"
-    virtualenv_site_packages: "no"
-    extra_args: >-
-      {{ ironic_developer_mode | ternary(pip_install_developer_constraints | default('--constraint /opt/developer-pip-constraints.txt'), '') }}
-      {{ (pip_install_upper_constraints is defined) | ternary('--constraint ' + pip_install_upper_constraints | default(''),'') }}
-      {{ pip_install_options | default('') }}
-  register: install_packages
-  until: install_packages is success
-  retries: 5
-  delay: 2
-  when: ironic_get_venv | failed or ironic_get_venv | skipped
-  notify: Restart ironic services
-
-- name: Remove python from path first (CentOS, openSUSE)
-  file:
-    path:  "{{ ironic_bin | dirname }}/bin/python2.7"
-    state: "absent"
+- name: Ensure remote wheel building is disabled in developer mode
+  set_fact:
+    venv_build_host: "{{ ansible_hostname }}"
   when:
-    - ansible_pkg_mgr in ['yum', 'zypper']
-    - ironic_get_venv  is changed
+    - ironic_developer_mode | bool
 
-# NOTE(odyssey4me):
-# We reinitialize the venv to ensure that the right
-# version of python is in the venv, but we do not
-# want virtualenv to also replace pip, setuptools
-# and wheel so we tell it not to.
-# We do not use --always-copy for CentOS/SuSE due
-# to https://github.com/pypa/virtualenv/issues/565
-- name: Update virtualenv path
-  shell: |
-    find {{ ironic_bin }} -name \*.pyc -delete
-    sed -si '1s/^.*python.*$/#!{{ ironic_bin | replace ('/','\/') }}\/python/' {{ ironic_bin }}/*
-    virtualenv {{ ironic_bin | dirname }} \
-        {{ (ansible_pkg_mgr == 'apt') | ternary('--always-copy', '') }} \
-        --no-pip \
-        --no-setuptools \
-        --no-wheel
-  when: ironic_get_venv  is changed
-  tags:
-    - skip_ansible_lint
-
-- name: Install optional pip packages
-  pip:
-    name: "{{ ironic_optional_oslomsg_amqp1_pip_packages }}"
-    state: "{{ ironic_pip_package_state }}"
-    virtualenv: "{{ ironic_bin | dirname }}"
-    virtualenv_site_packages: "no"
-  when: ironic_oslomsg_amqp1_enabled
-  register: install_optional_packages
-  until: install_optional_packages is success
-  retries: 5
-  delay: 2
-  notify: Restart ironic services
-
-- name: Record the venv tag deployed
-  ini_file:
-    dest: "/etc/ansible/facts.d/openstack_ansible.fact"
-    section: ironic
-    option: venv_tag
-    value: "{{ ironic_venv_tag }}"
+- name: Install the python venv
+  include_role:
+    name: "python_venv_build"
+    private: yes
+  vars:
+    venv_build_distro_package_list: "{{ ironic_devel_distro_packages }}"
+    venv_install_destination_path: "{{ ironic_bin | dirname }}"
+    venv_install_distro_package_list: "{{ ironic_packages_list }}"
+    venv_pip_install_args: "{{ ironic_pip_install_args }}"
+    venv_pip_packages: "{{ (ironic_oslomsg_amqp1_enabled | bool) | ternary(ironic_pip_packages + ironic_optional_oslomsg_amqp1_pip_packages, ironic_pip_packages) }}"
+    venv_facts_when_changed:
+      - section: "ironic"
+        option: "venv_tag"
+        value: "{{ ironic_venv_tag }}"
