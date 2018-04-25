@@ -230,12 +230,22 @@ ironic_pip_packages:
   - python-swiftclient
   - uwsgi
 
-## RabbitMQ info
-ironic_rabbitmq_userid: ironic
-ironic_rabbitmq_vhost: /ironic
-ironic_rabbitmq_servers: 127.0.0.1
-ironic_rabbitmq_use_ssl: False
-ironic_rabbitmq_port: 5672
+## Oslo Messaging Info
+# RPC
+ironic_oslomsg_rpc_transport: rabbit
+ironic_oslomsg_rpc_servers: 127.0.0.1
+ironic_oslomsg_rpc_port: 5672
+ironic_oslomsg_rpc_use_ssl: False
+ironic_oslomsg_rpc_userid: ironic
+ironic_oslomsg_rpc_vhost: /ironic
+
+# Notify
+ironic_oslomsg_notify_transport: rabbit
+ironic_oslomsg_notify_servers: 127.0.0.1
+ironic_oslomsg_notify_port: 5672
+ironic_oslomsg_notify_use_ssl: False
+ironic_oslomsg_notify_userid: ironic
+ironic_oslomsg_notify_vhost: /ironic
 
 # Auth
 ironic_service_user_name: "ironic"
