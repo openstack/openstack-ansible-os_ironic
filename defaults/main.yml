@@ -155,8 +155,12 @@ ironic_oneviewd_audit_map_file: "None"
 ironic_oneviewd_audit_output_file: "None"
 
 # Database
+ironic_db_setup_host: "{{ ('galera_all' in groups) | ternary(groups['galera_all'][0], 'localhost') }}"
+ironic_galera_address: "{{ galera_address | default('127.0.0.1') }}"
 ironic_galera_user: ironic
 ironic_galera_database: ironic
+ironic_galera_use_ssl: "{{ galera_use_ssl | default(False) }}"
+ironic_galera_ssl_ca_cert: "{{ galera_ssl_ca_cert | default('/etc/ssl/certs/galera-ca.pem') }}"
 
 ## Keystone authentication middleware
 ironic_keystone_auth_plugin: password
@@ -181,8 +185,6 @@ ironic_openstack_auth_strategy: keystone
 #ironic_openstack_api_url: ''  # Not required when we have keystone
 ironic_openstack_dhcp_provider: neutron
 ironic_openstack_sync_power_state_interval: 60
-ironic_galera_use_ssl: "{{ galera_use_ssl | default(False) }}"
-ironic_galera_ssl_ca_cert: "{{ galera_ssl_ca_cert | default('/etc/ssl/certs/galera-ca.pem') }}"
 ironic_openstack_db_connection_string: "mysql+pymysql://{{ ironic_galera_user }}:{{ ironic_container_mysql_password }}@{{ ironic_galera_address }}/ironic{% if ironic_galera_use_ssl | bool %}&ssl_ca={{ ironic_galera_ssl_ca_cert }}{% endif %}"
 
 # Standalone Ironic configuration
