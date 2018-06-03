@@ -11,6 +11,12 @@ openstack1
 swift-storage1
 ironic1
 
+[oslomsg_rpc_all]
+infra1
+
+[oslomsg_notify_all]
+infra1
+
 [rabbitmq_all]
 infra1
 

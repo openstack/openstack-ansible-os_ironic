@@ -13,6 +13,9 @@ memcached_servers = {{ memcached_servers }}
 enabled_network_interfaces = {{ ironic_enabled_network_interfaces_list }}
 default_network_interface = {{ ironic_default_network_interface }}
 
+## RPC Backend
+transport_url = {{ ironic_oslomsg_rpc_transport }}://{% for host in ironic_oslomsg_rpc_servers.split(',') %}{{ ironic_oslomsg_rpc_userid }}:{{ ironic_oslomsg_rpc_password }}@{{ host }}:{{ ironic_oslomsg_rpc_port }}{% if not loop.last %},{% else %}/{{ ironic_oslomsg_rpc_vhost }}{% if ironic_oslomsg_rpc_use_ssl | bool %}?ssl=1{% else %}?ssl=0{% endif %}{% endif %}{% endfor %}
+
 [agent]
 
 [amt]
@@ -139,14 +142,9 @@ lock_path = {{ ironic_lock_path }}
 [oslo_messaging_amqp]
 
 [oslo_messaging_notifications]
+transport_url = {{ ironic_oslomsg_notify_transport }}://{% for host in ironic_oslomsg_notify_servers.split(',') %}{{ ironic_oslomsg_notify_userid }}:{{ ironic_oslomsg_notify_password }}@{{ host }}:{{ ironic_oslomsg_notify_port }}{% if not loop.last %},{% else %}/{{ ironic_oslomsg_notify_vhost }}{% if ironic_oslomsg_notify_use_ssl | bool %}?ssl=1{% else %}?ssl=0{% endif %}{% endif %}{% endfor %}
 
 [oslo_messaging_rabbit]
-rabbit_port = {{ ironic_rabbitmq_port }}
-rabbit_userid = {{ ironic_rabbitmq_userid }}
-rabbit_password = {{ ironic_rabbitmq_password }}
-rabbit_virtual_host = {{ ironic_rabbitmq_vhost }}
-rabbit_hosts = {{ ironic_rabbitmq_servers }}
-ssl = {{ ironic_rabbitmq_use_ssl }}
 pool_max_size = {{ ironic_wsgi_processes }}
 
 
