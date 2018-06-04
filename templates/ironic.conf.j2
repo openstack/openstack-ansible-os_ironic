@@ -145,6 +145,7 @@ lock_path = {{ ironic_lock_path }}
 transport_url = {{ ironic_oslomsg_notify_transport }}://{% for host in ironic_oslomsg_notify_servers.split(',') %}{{ ironic_oslomsg_notify_userid }}:{{ ironic_oslomsg_notify_password }}@{{ host }}:{{ ironic_oslomsg_notify_port }}{% if not loop.last %},{% else %}/{{ ironic_oslomsg_notify_vhost }}{% if ironic_oslomsg_notify_use_ssl | bool %}?ssl=1{% else %}?ssl=0{% endif %}{% endif %}{% endfor %}
 
 [oslo_messaging_rabbit]
+ssl = {{ ironic_oslomsg_rpc_use_ssl }}
 pool_max_size = {{ ironic_wsgi_processes }}
 
 
