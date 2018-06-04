@@ -2,4 +2,9 @@
   hosts: localhost
   remote_user: root
   roles:
-    - role: openstack-ansible-os_ironic
+    - role: "os_ironic"
+  vars:
+    galera_root_user: root
+  vars_prompt:
+    - name: "galera_root_password"
+      prompt: "What is galera_root_password?"
