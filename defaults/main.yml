@@ -229,6 +229,7 @@ ironic_oneview_optional_pip_packages:
 ironic_pip_packages:
   - cryptography
   - ironic
+  - osprofiler
   - PyMySQL
   - python-ironicclient
   - python-memcached
