@@ -15,6 +15,142 @@
 
 # This special list brings together all of the package installations into one
 # task to save time.
+
+ironic_driver_types:
+  agent_ilo:
+    hardware_type: ilo
+    boot: ilo-virtual-media
+    deploy: direct
+    inspect: ilo
+    management: ilo
+    power: ilo
+  agent_ipmitool:
+    hardware_type: ipmi
+    boot: pxe
+    deploy: direct
+    inspect: inspector
+    management: ipmitool
+    power: ipmitool
+  agent_ipmitool_socat:
+    hardware_type: ipmi
+    boot: pxe
+    deploy: direct
+    inspect: inspector
+    management: ipmitool
+    power: ipmitool
+  agent_irmc:
+    hardware_type: irmc
+    boot: irmc-virtual-media
+    deploy: direct
+    inspect: irmc
+    management: irmc
+    power: irmc
+  agent_pxe_oneview:
+    hardware_type: oneview
+    boot: pxe
+    deploy: oneview-direct
+    inspect: oneview
+    management: oneview
+    power: oneview
+  agent_ucs:
+    hardware_type: cisco-ucs-managed
+    boot: pxe
+    deploy: direct
+    inspect: inspector
+    management: ucsm
+    power: ucsm
+  iscsi_ilo:
+    hardware_type: ilo
+    boot: ilo-virtual-media
+    deploy: iscsi
+    inspect: ilo
+    management: ilo
+    power: ilo
+  iscsi_irmc:
+    hardware_type: irmc
+    boot: irmc-virtual-media
+    deploy: iscsi
+    inspect: irmc
+    management: irmc
+    power: irmc
+  iscsi_pxe_oneview:
+    hardware_type: oneview
+    boot: pxe
+    deploy: oneview-iscsi
+    inspect: oneview
+    management: oneview
+    power: oneview
+  pxe_agent_cimc:
+    hardware_type: cisco-ucs-standalone
+    boot: pxe
+    deploy: direct
+    inspect: inspector
+    management: cimc
+    power: cimc
+  pxe_drac:
+    hardware_type: idrac
+    boot: pxe
+    deploy: iscsi
+    inspect: idrac
+    management: idrac
+    power: idrac
+  pxe_drac_inspector:
+    hardware_type: idrac
+    boot: pxe
+    deploy: iscsi
+    inspect: inspector
+    management: idrac
+    power: idrac
+  pxe_ilo:
+    hardware_type: ilo
+    boot: ilo-pxe
+    deploy: iscsi
+    inspect: ilo
+    management: ilo
+    power: ilo
+  pxe_ipmitool:
+    hardware_type: ipmi
+    boot: pxe
+    deploy: iscsi
+    inspect: inspector
+    management: ipmitool
+    power: ipmitool
+  pxe_ipmitool_socat:
+    hardware_type: ipmi
+    boot: pxe
+    deploy: iscsi
+    inspect: inspector
+    management: ipmitool
+    power: ipmitool
+  pxe_iscsi_cimc:
+    hardware_type: cisco-ucs-standalone
+    boot: pxe
+    deploy: iscsi
+    inspect: inspector
+    management: cimc
+    power: cimc
+  pxe_irmc:
+    hardware_type: irmc
+    boot: irmc-pxe
+    deploy: iscsi
+    inspect: irmc
+    management: irmc
+    power: irmc
+  pxe_snmp:
+    hardware_type: snmp
+    boot: pxe
+    deploy: iscsi
+    inspect: no-inspect
+    management: fake
+    power: snmp
+  pxe_ucs:
+    hardware_type: cisco-ucs-managed
+    boot: pxe
+    deploy: iscsi
+    inspect: inspector
+    management: ucsm
+    power: ucsm
+
 ironic_packages_list: >
   {%- set package_list = [] %}
   {%- if ironic_developer_mode | bool %}
@@ -42,3 +178,12 @@ filtered_ironic_services: |-
   {%   endif %}
   {% endfor %}
   {{ services }}
+
+filtered_ironic_drivers: |-
+  {% set concat_drivers = {} %}
+  {% for driver in ironic_drivers_enabled %}
+  {%   if driver in ironic_driver_types.keys() %}
+  {%     set _ = concat_drivers.update(ironic_driver_types[driver]) %}
+  {%   endif %}
+  {% endfor %}
+  {{ concat_drivers }}

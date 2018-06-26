@@ -66,7 +66,7 @@ ironic_services:
   ironic-oneviewd:
     group: ironic_conductor
     service_name: ironic-oneviewd
-    service_en: "{{ ironic_oneview_enabled | bool }}"
+    service_en: "{{ 'oneview' in filtered_ironic_drivers.hardware_type }}"
     init_config_overrides: "{{ ironic_oneviewd_init_config_overrides }}"
 
 
@@ -116,10 +116,6 @@ ironic_automated_clean: false
 ironic_erase_devices_priority: 10
 
 ## ironic-oneview
-ironic_oneview_enabled: "{% if 'agent_pxe_oneview' in ironic_openstack_driver_list or
-                               'agent_pxe_oneview' in ironic_standalone_driver_list or
-                               'iscsi_pxe_oneview' in ironic_openstack_driver_list or
-                               'iscsi_pxe_oneview' in ironic_standalone_driver_list %}True{% else %}False{% endif %}"
 ironic_oneview_manager_url: ""
 ironic_oneview_username: ""
 ironic_oneview_password: ""
@@ -154,6 +150,8 @@ ironic_oneviewd_audit_output_file: "None"
 # Database
 ironic_galera_user: ironic
 ironic_galera_database: ironic
+ironic_galera_use_ssl: "{{ galera_use_ssl | default(False) }}"
+ironic_galera_ssl_ca_cert: "{{ galera_ssl_ca_cert | default('/etc/ssl/certs/galera-ca.pem') }}"
 
 ## Keystone authentication middleware
 ironic_keystone_auth_plugin: password
@@ -170,27 +168,13 @@ ironic_keystone_auth_plugin: password
 # Integrated Openstack configuration
 ironic_enabled_network_interfaces_list: "flat,noop{{ (ironic_neutron_provisioning_network_uuid is defined) | ternary(',neutron','') }}"
 ironic_default_network_interface: "{{ (ironic_neutron_provisioning_network_uuid is defined) | ternary('neutron','flat') }}"
-ironic_openstack_driver_list:
-  - agent_ipmitool
-  - pxe_ipmitool
-ironic_openstack_driver_loaded_list: "{% for driver in ironic_openstack_driver_list %}{{ driver }}{% if not loop.last %},{% endif %}{% endfor %}"
-ironic_openstack_auth_strategy: keystone
-#ironic_openstack_api_url: ''  # Not required when we have keystone
-ironic_openstack_dhcp_provider: neutron
-ironic_openstack_sync_power_state_interval: 60
-ironic_galera_use_ssl: "{{ galera_use_ssl | default(False) }}"
-ironic_galera_ssl_ca_cert: "{{ galera_ssl_ca_cert | default('/etc/ssl/certs/galera-ca.pem') }}"
-ironic_openstack_db_connection_string: "mysql+pymysql://{{ ironic_galera_user }}:{{ ironic_container_mysql_password }}@{{ ironic_galera_address }}/ironic{% if ironic_galera_use_ssl | bool %}&ssl_ca={{ ironic_galera_ssl_ca_cert }}{% endif %}"
+ironic_auth_strategy: keystone
+ironic_dhcp_provider: "{{ (ironic_standalone | bool) | ternary('none', 'neutron') }}"
+ironic_sync_power_state_interval: "{{ (ironic_standalone | bool) | ternary('-1', '60') }}"
+ironic_db_connection_string: "mysql+pymysql://{{ ironic_galera_user }}:{{ ironic_container_mysql_password }}@{{ ironic_galera_address }}/ironic{% if ironic_galera_use_ssl | bool %}&ssl_ca={{ ironic_galera_ssl_ca_cert }}{% endif %}"
 
 # Standalone Ironic configuration
-ironic_standalone_driver_list:
-  - agent_ipmitool
-ironic_standalone_driver_loaded_list: "{% for driver in ironic_standalone_driver_list %}{{ driver }}{% if not loop.last %},{% endif %}{% endfor %}"
-ironic_standalone_auth_strategy: noauth
-ironic_standalone_api_url: "{{ ironic_service_internaluri }}/"
-ironic_standalone_dhcp_provider: none
-ironic_standalone_sync_power_state_interval: -1
-ironic_standalone_db_connection_string: "{{ ironic_openstack_db_connection_string }}"
+ironic_service_internaluri: "{{ ironic_service_internaluri_proto }}://{{ internal_lb_vip_address }}:{{ ironic_service_port }}"
 
 # Ironic db tuning
 ironic_db_max_overflow: 10
@@ -250,7 +234,7 @@ ironic_uwsgi_bind_address: 0.0.0.0
 ### OpenStack Services to integrate with
 
 # Glance
-ironic_glance_auth_strategy: "{{ ironic_openstack_auth_strategy }}"
+ironic_glance_auth_strategy: "{{ ironic_auth_strategy }}"
 ironic_glance_service_project_name: "{{ glance_service_project_name | default('service') }}"
 ironic_glance_service_project_domain_id: "{{ glance_service_project_domain_id | default('default') }}"
 ironic_glance_keystone_auth_plugin: "{{ glance_keystone_auth_plugin | default('password') }}"
@@ -259,7 +243,7 @@ ironic_glance_service_user_domain_id: "{{ glance_service_user_domain_id | defaul
 ironic_glance_keystone_auth_url: "{{ keystone_service_internalurl | default('http://localhost:5000/v3') }}"
 
 # Neutron
-ironic_neutron_auth_strategy: "{{ ironic_openstack_auth_strategy }}"
+ironic_neutron_auth_strategy: "{{ ironic_auth_strategy }}"
 
 # This variable is used by the repo_build process to determine
 # which host group to check for members of before building the
@@ -280,3 +264,8 @@ ironic_pxe_append_params: "ipa-debug=1 systemd.journald.forward_to_console=yes"
 ironic_api_init_config_overrides: {}
 ironic_conductor_init_config_overrides: {}
 ironic_oneviewd_init_config_overrides: {}
+
+# driver definitions
+ironic_drivers_enabled:
+  - agent_ipmitool
+  - pxe_ipmitool

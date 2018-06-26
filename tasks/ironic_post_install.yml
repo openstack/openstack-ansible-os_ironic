@@ -13,30 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Setup ironic for standalone usage
-  set_fact:
-    ironic_driver_list: "{{ ironic_standalone_driver_loaded_list }}"
-    ironic_auth_strategy: "{{ ironic_standalone_auth_strategy }}"
-    ironic_api_url: "{{ ironic_standalone_api_url }}"
-    ironic_dhcp_provider: "{{ ironic_standalone_dhcp_provider }}"
-    ironic_sync_power_state_interval: "{{ ironic_standalone_sync_power_state_interval }}"
-    ironic_db_connection_string: "{{ ironic_standalone_db_connection_string }}"
-  when: ironic_standalone | bool
-  tags:
-    - always
-
-- name: Setup ironic for integrated Openstack usage
-  set_fact:
-    ironic_driver_list: "{{ ironic_openstack_driver_loaded_list }}"
-    ironic_auth_strategy: "{{ ironic_openstack_auth_strategy }}"
-    ironic_api_url: "{{ ironic_openstack_api_url | default(omit) }}"
-    ironic_dhcp_provider: "{{ ironic_openstack_dhcp_provider }}"
-    ironic_sync_power_state_interval: "{{ ironic_openstack_sync_power_state_interval }}"
-    ironic_db_connection_string: "{{ ironic_openstack_db_connection_string }}"
-  when: not ironic_standalone | bool
-  tags:
-    - always
-
 - name: Post swift tempURL secret key
   command: >
         {{ ironic_bin }}/swift {{ keystone_service_adminuri_insecure | bool | ternary('--insecure','') }}
