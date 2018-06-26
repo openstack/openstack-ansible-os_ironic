@@ -5,8 +5,7 @@
 use_stderr = False
 debug = {{ debug }}
 
-auth_strategy = {{ ironic_openstack_auth_strategy }}
-enabled_drivers = {{ ironic_driver_list }}
+auth_strategy = {{ ironic_auth_strategy }}
 host = {{ inventory_hostname }}
 
 memcached_servers = {{ memcached_servers }}
@@ -15,6 +14,14 @@ default_network_interface = {{ ironic_default_network_interface }}
 
 ## RPC Backend
 transport_url = {{ ironic_oslomsg_rpc_transport }}://{% for host in ironic_oslomsg_rpc_servers.split(',') %}{{ ironic_oslomsg_rpc_userid }}:{{ ironic_oslomsg_rpc_password }}@{{ host }}:{{ ironic_oslomsg_rpc_port }}{% if not loop.last %},{% else %}/{{ ironic_oslomsg_rpc_vhost }}{% if ironic_oslomsg_rpc_use_ssl | bool %}?ssl=1{% else %}?ssl=0{% endif %}{% endif %}{% endfor %}
+
+# drivers
+enabled_hardware_types = {{ filtered_ironic_drivers.hardware_type | join(',') }}
+enabled_boot_interfaces = {{ filtered_ironic_drivers.boot | join(',') }}
+enabled_deploy_interfaces = {{ filtered_ironic_drivers.deploy | join(',') }}
+enabled_inspect_interfaces = {{ filtered_ironic_drivers.inspect | join(',') }}
+enabled_management_interfaces = {{ filtered_ironic_drivers.management | join(',') }}
+enabled_power_interfaces = {{ filtered_ironic_drivers.power | join(',') }}
 
 [agent]
 
@@ -27,8 +34,8 @@ transport_url = {{ ironic_oslomsg_rpc_transport }}://{% for host in ironic_oslom
 [cisco_ucs]
 
 [conductor]
-{% if ironic_api_url is defined %}
-api_url = {{ ironic_api_url }}
+{% if ironic_standalone | bool %}
+api_url = {{ ironic_service_internaluri }}/
 {% endif %}
 sync_power_state_interval = {{ ironic_sync_power_state_interval }}
 automated_clean = {{ ironic_automated_clean }}
@@ -134,14 +141,14 @@ cleaning_network = {{ ironic_neutron_cleaning_network_uuid | default(ironic_neut
 {% endif %}
 
 [oneview]
-{% if ironic_oneview_enabled %}
+{%- if 'oneview' in filtered_ironic_drivers.hardware_type -%}
 manager_url = {{ ironic_oneview_manager_url }}
 username = {{ ironic_oneview_username }}
 password = {{ ironic_oneview_password }}
 allow_insecure_connections = {{ ironic_oneview_allow_insecure_connections }}
 tls_cacert_file = {{ ironic_oneview_tls_cacert_file }}
 max_polling_attempts = {{ ironic_oneview_max_polling_attempts }}
-{% endif %}
+{%- endif -%}
 
 [oslo_concurrency]
 lock_path = {{ ironic_lock_path }}
