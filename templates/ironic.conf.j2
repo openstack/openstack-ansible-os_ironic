@@ -61,6 +61,13 @@ dhcp_provider = {{ ironic_dhcp_provider }}
 [glance]
 # TODO(evrardjp): Remove this in the future to use the service catalog
 # and reduce the amount of variables.
+auth_url = {{ ironic_glance_keystone_auth_url }}
+auth_type = {{ ironic_glance_keystone_auth_plugin }}
+project_name = {{ ironic_glance_service_project_name }}
+project_domain_id = {{ ironic_glance_service_project_domain_id }}
+username = {{ ironic_glance_service_user_name }}
+user_domain_id = {{ ironic_glance_service_user_domain_id }}
+password = {{ glance_service_password }}
 glance_api_servers = {{ ironic_glance_api_servers }}
 {% if not ironic_standalone | bool %}
 swift_temp_url_key = {{ ironic_swift_temp_url_secret_key }}

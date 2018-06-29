@@ -266,6 +266,12 @@ ironic_uwsgi_bind_address: 0.0.0.0
 
 # Glance
 ironic_glance_auth_strategy: "{{ ironic_openstack_auth_strategy }}"
+ironic_glance_service_project_name: "{{ glance_service_project_name | default('service') }}"
+ironic_glance_service_project_domain_id: "{{ glance_service_project_domain_id | default('default') }}"
+ironic_glance_keystone_auth_plugin: "{{ glance_keystone_auth_plugin | default('password') }}"
+ironic_glance_service_user_name: "{{ glance_service_user_name | default('glance') }}"
+ironic_glance_service_user_domain_id: "{{ glance_service_user_domain_id | default('default') }}"
+ironic_glance_keystone_auth_url: "{{ keystone_service_internalurl | default('http://localhost:5000/v3') }}"
 
 # Neutron
 ironic_neutron_auth_strategy: "{{ ironic_openstack_auth_strategy }}"
