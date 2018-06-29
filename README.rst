@@ -17,5 +17,8 @@ service.
 Documentation for the project can be found at:
   https://docs.openstack.org/openstack-ansible-os_ironic/latest
 
+Release notes for the project can be found at:
+  https://docs.openstack.org/releasenotes/openstack-ansible-os_ironic
+
 The project home is at:
   https://launchpad.net/openstack-ansible
