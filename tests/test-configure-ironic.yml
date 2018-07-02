@@ -15,20 +15,13 @@
 
 - name: Setup localhost requirements
   hosts: localhost
-  become: True
-  gather_facts: True
+  connection: local
+  gather_facts: false
+  vars_files:
+    - common/test-vars.yml
+  vars:
+    ansible_python_interpreter: "{{ ansible_playbook_python }}"
   tasks:
-    - name: Install pip requirements
-      pip:
-        name: "{{ item }}"
-        state: "{{ ironic_pip_package_state }}"
-      with_items:
-        - python-neutronclient
-        - shade
-      register: install_packages
-      until: install_packages|success
-      retries: 5
-      delay: 2
     - name: Create br-prov network
       os_network:
         cloud: default
@@ -37,6 +30,7 @@
         name: "{{ ironic_neutron_provisioning_network_name }}"
         provider_network_type: flat
         provider_physical_network: prov
+
     - name: Ensure public subnet exists
       os_subnet:
         state: present
@@ -46,5 +40,3 @@
         network_name: "{{ ironic_neutron_provisioning_network_name }}"
         name: "ironic-prov-subnet"
         cidr: "10.1.6.0/24"
-  vars_files:
-    - common/test-vars.yml
