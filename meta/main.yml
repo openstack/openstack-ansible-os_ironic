@@ -32,4 +32,3 @@ dependencies:
     when:
       - ansible_pkg_mgr == 'apt'
   - galera_client
-  - openstack_openrc

@@ -13,83 +13,81 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Create a service
-- name: Ensure ironic service
-  keystone:
-    command: "ensure_service"
-    login_user: "{{ keystone_admin_user_name }}"
-    login_password: "{{ keystone_auth_admin_password }}"
-    login_project_name: "{{ keystone_admin_tenant_name }}"
-    endpoint: "{{ keystone_service_adminurl }}"
-    service_name: "{{ ironic_service_name }}"
-    service_type: "{{ ironic_service_type }}"
-    description: "{{ ironic_service_description }}"
-    insecure: "{{ keystone_service_adminuri_insecure }}"
-  register: add_service
-  until: add_service|success
-  retries: 5
-  delay: 2
-  no_log: true
+# We set the python interpreter to the ansible runtime venv if
+# the delegation is to localhost so that we get access to the
+# appropriate python libraries in that venv. If the delegation
+# is to another host, we assume that it is accessible by the
+# system python instead.
+- name: Setup the service
+  delegate_to: "{{ ironic_service_setup_host }}"
+  vars:
+    ansible_python_interpreter: >-
+      {{ (ironic_service_setup_host == 'localhost') | ternary(ansible_playbook_python, ansible_python['executable']) }}
+  block:
+    - name: Add service to the keystone service catalog
+      os_keystone_service:
+        cloud: default
+        state: present
+        name: "{{ ironic_service_name }}"
+        service_type: "{{ ironic_service_type }}"
+        description: "{{ ironic_service_description }}"
+        endpoint_type: admin
+        verify: "{{ not keystone_service_adminuri_insecure }}"
+      register: add_service
+      until: add_service is success
+      retries: 5
+      delay: 10
 
-# Create an admin user
-- name: Ensure ironic user
-  keystone:
-    command: "ensure_user"
-    login_user: "{{ keystone_admin_user_name }}"
-    login_password: "{{ keystone_auth_admin_password }}"
-    login_project_name: "{{ keystone_admin_tenant_name }}"
-    endpoint: "{{ keystone_service_adminurl }}"
-    user_name: "{{ ironic_service_user_name }}"
-    project_name: "{{ ironic_service_project_name }}"
-    password: "{{ ironic_service_password }}"
-    insecure: "{{ keystone_service_adminuri_insecure }}"
-  register: add_service
-  when: not ironic_service_in_ldap | bool
-  until: add_service|success
-  retries: 5
-  delay: 10
-  no_log: true
+    - name: Add service user
+      os_user:
+        cloud: default
+        state: present
+        name: "{{ ironic_service_user_name }}"
+        password: "{{ ironic_service_password }}"
+        domain: default
+        default_project: "{{ ironic_service_project_name }}"
+        endpoint_type: admin
+        verify: "{{ not keystone_service_adminuri_insecure }}"
+      register: add_service
+      when: not ironic_service_in_ldap | bool
+      until: add_service is success
+      retries: 5
+      delay: 10
+      no_log: True
 
-# Add a role to the user
-- name: Ensure ironic user to admin role
-  keystone:
-    command: "ensure_user_role"
-    login_user: "{{ keystone_admin_user_name }}"
-    login_password: "{{ keystone_auth_admin_password }}"
-    login_project_name: "{{ keystone_admin_tenant_name }}"
-    endpoint: "{{ keystone_service_adminurl }}"
-    user_name: "{{ ironic_service_user_name }}"
-    project_name: "{{ ironic_service_project_name }}"
-    role_name: "{{ ironic_service_role_name }}"
-    insecure: "{{ keystone_service_adminuri_insecure }}"
-  register: add_service
-  when: not ironic_service_in_ldap | bool
-  until: add_service|success
-  retries: 5
-  delay: 10
-  no_log: true
+    - name: Add service user to admin role
+      os_user_role:
+        cloud: default
+        state: present
+        user: "{{ ironic_service_user_name }}"
+        role: "{{ ironic_service_role_name }}"
+        project: "{{ ironic_service_project_name }}"
+        endpoint_type: admin
+        verify: "{{ not keystone_service_adminuri_insecure }}"
+      register: add_service
+      when: not ironic_service_in_ldap | bool
+      until: add_service is success
+      retries: 5
+      delay: 10
 
-# Create an endpoint
-- name: Ensure ironic endpoint
-  keystone:
-    command: "ensure_endpoint"
-    login_user: "{{ keystone_admin_user_name }}"
-    login_password: "{{ keystone_auth_admin_password }}"
-    login_project_name: "{{ keystone_admin_tenant_name }}"
-    endpoint: "{{ keystone_service_adminurl }}"
-    region_name: "{{ ironic_service_region }}"
-    service_name: "{{ ironic_service_name }}"
-    service_type: "{{ ironic_service_type }}"
-    insecure: "{{ keystone_service_adminuri_insecure }}"
-    endpoint_list:
-      - url: "{{ ironic_service_publicurl }}"
-        interface: "public"
-      - url: "{{ ironic_service_internalurl }}"
-        interface: "internal"
-      - url: "{{ ironic_service_adminurl }}"
-        interface: "admin"
-  register: add_service
-  until: add_service|success
-  retries: 5
-  delay: 10
-  no_log: true
+    - name: Add endpoints to keystone endpoint catalog
+      os_keystone_endpoint:
+        cloud: default
+        state: present
+        service: "{{ ironic_service_name }}"
+        endpoint_interface: "{{ item.interface }}"
+        url: "{{ item.url }}"
+        region: "{{ ironic_service_region }}"
+        endpoint_type: admin
+        verify: "{{ not keystone_service_adminuri_insecure }}"
+      register: add_service
+      until: add_service is success
+      retries: 5
+      delay: 10
+      with_items:
+        - interface: "public"
+          url: "{{ ironic_service_publicurl }}"
+        - interface: "internal"
+          url: "{{ ironic_service_internalurl }}"
+        - interface: "admin"
+          url: "{{ ironic_service_adminurl }}"

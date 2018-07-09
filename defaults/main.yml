@@ -18,6 +18,11 @@
 # Verbosity Options
 debug: False
 
+# Set the host which will execute the shade modules
+# for the service setup. The host must already have
+# clouds.yaml properly configured.
+ironic_service_setup_host: "{{ openstack_service_setup_host | default('localhost') }}"
+
 # Comma separated list of Glance API servers
 ironic_glance_api_servers: "{{ (glance_service_internalurl | default('http://localhost')) | netorigin }}"
 
@@ -200,11 +205,6 @@ ironic_venv_download: "{{ not ironic_developer_mode | bool }}"
 ironic_venv_download_url: http://127.0.0.1/venvs/untagged/ubuntu/ironic.tgz
 
 ironic_tftp_server_address: "{{ ansible_host }}"
-
-ironic_requires_pip_packages:
-  - virtualenv
-  - python-keystoneclient # Keystoneclient needed for the OSA keystone lib
-  - httplib2 # for Ansible's uri module
 
 ironic_oneview_optional_pip_packages:
   - ironic-oneview-cli
