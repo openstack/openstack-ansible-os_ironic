@@ -222,18 +222,22 @@ ironic_pip_packages:
 
 ## Oslo Messaging Info
 # RPC
-ironic_oslomsg_rpc_transport: rabbit
-ironic_oslomsg_rpc_servers: 127.0.0.1
-ironic_oslomsg_rpc_port: 5672
-ironic_oslomsg_rpc_use_ssl: False
+ironic_oslomsg_rpc_host_group: "{{ oslomsg_rpc_host_group | default('rabbitmq_all') }}"
+ironic_oslomsg_rpc_setup_host: "{{ (ironic_oslomsg_rpc_host_group in groups) | ternary(groups[ironic_oslomsg_rpc_host_group][0], 'localhost') }}"
+ironic_oslomsg_rpc_transport: "{{ oslomsg_rpc_transport | default('rabbit') }}"
+ironic_oslomsg_rpc_servers: "{{ oslomsg_rpc_servers | default('127.0.0.1') }}"
+ironic_oslomsg_rpc_port: "{{ oslomsg_rpc_port | default('5672') }}"
+ironic_oslomsg_rpc_use_ssl: "{{ oslomsg_rpc_use_ssl | default(False) }}"
 ironic_oslomsg_rpc_userid: ironic
 ironic_oslomsg_rpc_vhost: /ironic
 
 # Notify
-ironic_oslomsg_notify_transport: rabbit
-ironic_oslomsg_notify_servers: 127.0.0.1
-ironic_oslomsg_notify_port: 5672
-ironic_oslomsg_notify_use_ssl: False
+ironic_oslomsg_notify_host_group: "{{ oslomsg_notify_host_group | default('rabbitmq_all') }}"
+ironic_oslomsg_notify_setup_host: "{{ (ironic_oslomsg_notify_host_group in groups) | ternary(groups[ironic_oslomsg_notify_host_group][0], 'localhost') }}"
+ironic_oslomsg_notify_transport: "{{ oslomsg_notify_transport | default('rabbit') }}"
+ironic_oslomsg_notify_servers: "{{ oslomsg_notify_servers | default('127.0.0.1') }}"
+ironic_oslomsg_notify_port: "{{ oslomsg_notify_port | default('5672') }}"
+ironic_oslomsg_notify_use_ssl: "{{ oslomsg_notify_use_ssl | default(False) }}"
 ironic_oslomsg_notify_userid: ironic
 ironic_oslomsg_notify_vhost: /ironic
 
