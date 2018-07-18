@@ -1,0 +1,45 @@
+---
+# Copyright 2018, Rackspace US, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# WARNING:
+# This file is maintained in the openstack-ansible-tests repository.
+# https://git.openstack.org/cgit/openstack/openstack-ansible-tests/tree/sync/mq_setup.yml
+# If you need to modify this file, update the one in the openstack-ansible-tests
+# repository. Once it merges there, the changes will automatically be proposed to
+# all the repositories which use it.
+
+- name: Setup MQ Service (RabbitMQ)
+  delegate_to: "{{ item.oslomsg_setup_host }}"
+  when:
+    - "item.oslomsg_transport == 'rabbit'"
+  block:
+    - name: Add RabbitMQ vhost
+      rabbitmq_vhost:
+        name: "{{ item.oslomsg_vhost }}"
+        state: "present"
+
+    - name: Add RabbitMQ user
+      rabbitmq_user:
+        user: "{{ item.oslomsg_userid }}"
+        password: "{{ item.oslomsg_password }}"
+        vhost: "{{ item.oslomsg_vhost }}"
+        configure_priv: ".*"
+        read_priv: ".*"
+        write_priv: ".*"
+        state: "present"
+        force: true
+      no_log: true
+
+# Note: Add the tasks for additional MQ servers here

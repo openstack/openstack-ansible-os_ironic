@@ -37,3 +37,6 @@ neutron_l3: True
 neutron_metadata: True
 ironic_pip_package_state: latest
 ironic_service_user_name: "ironic"
+
+ironic_oslomsg_rpc_password: "{{ oslomsg_rpc_password }}"
+ironic_oslomsg_notify_password: "{{ oslomsg_notify_password }}"
