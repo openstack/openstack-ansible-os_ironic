@@ -235,8 +235,9 @@ ironic_oslomsg_notify_transport: "{{ oslomsg_notify_transport | default('rabbit'
 ironic_oslomsg_notify_servers: "{{ oslomsg_notify_servers | default('127.0.0.1') }}"
 ironic_oslomsg_notify_port: "{{ oslomsg_notify_port | default('5672') }}"
 ironic_oslomsg_notify_use_ssl: "{{ oslomsg_notify_use_ssl | default(False) }}"
-ironic_oslomsg_notify_userid: ironic
-ironic_oslomsg_notify_vhost: /ironic
+ironic_oslomsg_notify_userid: "{{ ironic_oslomsg_rpc_userid }}"
+ironic_oslomsg_notify_password: "{{ ironic_oslomsg_rpc_password }}"
+ironic_oslomsg_notify_vhost: "{{ ironic_oslomsg_rpc_vhost }}"
 
 # Auth
 ironic_service_user_name: "ironic"
