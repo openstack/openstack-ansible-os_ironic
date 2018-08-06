@@ -1,3 +1,4 @@
+---
 - name: Playbook for role testing
   hosts: localhost
   remote_user: root
