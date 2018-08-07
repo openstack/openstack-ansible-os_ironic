@@ -15,26 +15,54 @@
 
 # WARNING:
 # This file is maintained in the openstack-ansible-tests repository.
-# https://git.openstack.org/cgit/openstack/openstack-ansible-tests/tree/sync/mq_setup.yml
+# https://git.openstack.org/cgit/openstack/openstack-ansible-tests/tree/sync/tasks/mq_setup.yml
 # If you need to modify this file, update the one in the openstack-ansible-tests
 # repository. Once it merges there, the changes will automatically be proposed to
 # all the repositories which use it.
 
-- name: Setup MQ Service (RabbitMQ)
-  delegate_to: "{{ item.oslomsg_setup_host }}"
+- name: Setup RPC MQ Service (RabbitMQ)
+  delegate_to: "{{ _oslomsg_rpc_setup_host }}"
   when:
-    - "item.oslomsg_transport == 'rabbit'"
+    - "(_oslomsg_configure_rpc | default(_oslomsg_rpc_transport is defined))"
+    - "(_oslomsg_rpc_transport is defined) and (_oslomsg_rpc_transport == 'rabbit')"
+  tags:
+    - common-rabbitmq
   block:
-    - name: Add RabbitMQ vhost
+    - name: Add RPC RabbitMQ vhost
       rabbitmq_vhost:
-        name: "{{ item.oslomsg_vhost }}"
+        name: "{{ _oslomsg_rpc_vhost }}"
         state: "present"
 
-    - name: Add RabbitMQ user
+    - name: Add RPC RabbitMQ user
       rabbitmq_user:
-        user: "{{ item.oslomsg_userid }}"
-        password: "{{ item.oslomsg_password }}"
-        vhost: "{{ item.oslomsg_vhost }}"
+        user: "{{ _oslomsg_rpc_userid }}"
+        password: "{{ _oslomsg_rpc_password }}"
+        vhost: "{{ _oslomsg_rpc_vhost }}"
+        configure_priv: ".*"
+        read_priv: ".*"
+        write_priv: ".*"
+        state: "present"
+        force: true
+      no_log: true
+
+- name: Setup Notify MQ Service (RabbitMQ)
+  delegate_to: "{{ _oslomsg_rpc_setup_host }}"
+  when:
+    - "(_oslomsg_configure_notify | default(_oslomsg_notify_transport is defined))"
+    - "(_oslomsg_notify_transport is defined) and (_oslomsg_notify_transport == 'rabbit')"
+  tags:
+    - common-rabbitmq
+  block:
+    - name: Add Notify RabbitMQ vhost
+      rabbitmq_vhost:
+        name: "{{ _oslomsg_notify_vhost }}"
+        state: "present"
+
+    - name: Add Notify RabbitMQ user
+      rabbitmq_user:
+        user: "{{ _oslomsg_notify_userid }}"
+        password: "{{ _oslomsg_notify_password }}"
+        vhost: "{{ _oslomsg_notify_vhost }}"
         configure_priv: ".*"
         read_priv: ".*"
         write_priv: ".*"
