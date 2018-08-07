@@ -13,12 +13,13 @@ enabled_network_interfaces = {{ ironic_enabled_network_interfaces_list }}
 default_network_interface = {{ ironic_default_network_interface }}
 
 # drivers
-enabled_hardware_types = {{ filtered_ironic_drivers.hardware_type | join(',') }}
-enabled_boot_interfaces = {{ filtered_ironic_drivers.boot | join(',') }}
-enabled_deploy_interfaces = {{ filtered_ironic_drivers.deploy | join(',') }}
-enabled_inspect_interfaces = {{ filtered_ironic_drivers.inspect | join(',') }}
-enabled_management_interfaces = {{ filtered_ironic_drivers.management | join(',') }}
-enabled_power_interfaces = {{ filtered_ironic_drivers.power | join(',') }}
+enabled_hardware_types = {{ filtered_ironic_drivers | json_query('[*].hardware_type') | unique | join(',') }}
+enabled_boot_interfaces = {{ filtered_ironic_drivers | json_query('[*].boot') | unique | join(',') }}
+enabled_deploy_interfaces = {{ filtered_ironic_drivers | json_query('[*].deploy') | unique | join(',') }}
+enabled_inspect_interfaces = {{ filtered_ironic_drivers | json_query('[*].inspect') | unique | join(',') }}
+enabled_management_interfaces = {{ filtered_ironic_drivers | json_query('[*].management') | unique | join(',') }}
+enabled_power_interfaces = {{ filtered_ironic_drivers | json_query('[*].power') | unique | join(',') }}
+
 
 [agent]
 
@@ -138,7 +139,7 @@ cleaning_network = {{ ironic_neutron_cleaning_network_uuid | default(ironic_neut
 {% endif %}
 
 [oneview]
-{%- if 'oneview' in filtered_ironic_drivers.hardware_type -%}
+{%- if 'oneview' in (filtered_ironic_drivers | json_query('[*].hardware_type') | unique) -%}
 manager_url = {{ ironic_oneview_manager_url }}
 username = {{ ironic_oneview_username }}
 password = {{ ironic_oneview_password }}

@@ -180,10 +180,10 @@ filtered_ironic_services: |-
   {{ services }}
 
 filtered_ironic_drivers: |-
-  {% set concat_drivers = {} %}
+  {% set concat_drivers = [] %}
   {% for driver in ironic_drivers_enabled %}
   {%   if driver in ironic_driver_types.keys() %}
-  {%     set _ = concat_drivers.update(ironic_driver_types[driver]) %}
+  {%     set _ = concat_drivers.append(ironic_driver_types[driver]) %}
   {%   endif %}
   {% endfor %}
   {{ concat_drivers }}
