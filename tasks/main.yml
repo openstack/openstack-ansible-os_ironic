@@ -48,23 +48,23 @@
   tags:
     - ironic-config
 
-- include_tasks: mq_setup.yml
+- import_tasks: mq_setup.yml
   when:
     - "ironic_services['ironic-api']['group'] in group_names"
     - "inventory_hostname == ((groups[ironic_services['ironic-api']['group']]| intersect(ansible_play_hosts)) | list)[0]"
-  with_items:
-    - oslomsg_setup_host: "{{ ironic_oslomsg_rpc_setup_host }}"
-      oslomsg_userid: "{{ ironic_oslomsg_rpc_userid }}"
-      oslomsg_password: "{{ ironic_oslomsg_rpc_password }}"
-      oslomsg_vhost: "{{ ironic_oslomsg_rpc_vhost }}"
-      oslomsg_transport: "{{ ironic_oslomsg_rpc_transport }}"
-    - oslomsg_setup_host: "{{ ironic_oslomsg_notify_setup_host }}"
-      oslomsg_userid: "{{ ironic_oslomsg_notify_userid }}"
-      oslomsg_password: "{{ ironic_oslomsg_notify_password }}"
-      oslomsg_vhost: "{{ ironic_oslomsg_notify_vhost }}"
-      oslomsg_transport: "{{ ironic_oslomsg_notify_transport }}"
-  no_log: true
+  vars:
+    _oslomsg_rpc_setup_host: "{{ ironic_oslomsg_rpc_setup_host }}"
+    _oslomsg_rpc_userid: "{{ ironic_oslomsg_rpc_userid }}"
+    _oslomsg_rpc_password: "{{ ironic_oslomsg_rpc_password }}"
+    _oslomsg_rpc_vhost: "{{ ironic_oslomsg_rpc_vhost }}"
+    _oslomsg_rpc_transport: "{{ ironic_oslomsg_rpc_transport }}"
+    _oslomsg_notify_setup_host: "{{ ironic_oslomsg_notify_setup_host }}"
+    _oslomsg_notify_userid: "{{ ironic_oslomsg_notify_userid }}"
+    _oslomsg_notify_password: "{{ ironic_oslomsg_notify_password }}"
+    _oslomsg_notify_vhost: "{{ ironic_oslomsg_notify_vhost }}"
+    _oslomsg_notify_transport: "{{ ironic_oslomsg_notify_transport }}"
   tags:
+    - common-mq
     - ironic-config
 
 - include: ironic_db_setup.yml
