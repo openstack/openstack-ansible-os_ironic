@@ -206,15 +206,27 @@ ironic_tftp_server_address: "{{ ansible_host }}"
 ironic_oneview_optional_pip_packages:
   - ironic-oneview-cli
   - ironic-oneviewd
+  - python-oneviewclient
+  - hpOneView
 
 ironic_pip_packages:
   - cryptography
+  - ImcSdk
   - ironic
   - osprofiler
+  - proliantutils
   - PyMySQL
+  - pysnmp
+  - python-dracclient
+  - python-ilorest-library
   - python-ironicclient
+  - python-ironic-inspector-client
   - python-memcached
+  - python-scciclient
   - python-swiftclient
+  - python-xclarityclient
+  - sushy
+  - UcsSdk
   - uwsgi
 
 ## Oslo Messaging Info
