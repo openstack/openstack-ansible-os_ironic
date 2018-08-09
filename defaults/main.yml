@@ -239,6 +239,13 @@ ironic_oslomsg_notify_userid: "{{ ironic_oslomsg_rpc_userid }}"
 ironic_oslomsg_notify_password: "{{ ironic_oslomsg_rpc_password }}"
 ironic_oslomsg_notify_vhost: "{{ ironic_oslomsg_rpc_vhost }}"
 
+## (Qdrouterd) integration
+# TODO(ansmith): Change structure when more backends will be supported
+ironic_oslomsg_amqp1_enabled: "{{ ironic_oslomsg_rpc_transport == 'amqp' }}"
+
+ironic_optional_oslomsg_amqp1_pip_packages:
+  - oslo.messaging[amqp1]
+
 # Auth
 ironic_service_user_name: "ironic"
 
