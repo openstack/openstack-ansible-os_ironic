@@ -15,6 +15,9 @@
 - project:
     templates:
       - openstack-ansible-role-jobs
+      - check-requirements
+      - publish-openstack-sphinx-docs
+      - release-notes-jobs
     check:
       jobs:
         - openstack-ansible-ironic-ssl-nv
@@ -37,4 +40,4 @@
             voting: false
         # TODO(jrosser) Revert this once opensuse-423 passes
         - openstack-ansible-functional-opensuse-423:
-             voting: false
+            voting: false
