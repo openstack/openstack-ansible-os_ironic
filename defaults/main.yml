@@ -35,7 +35,7 @@ ironic_pip_package_state: "latest"
 # to build an environment directly from a git source without the presence
 # of an OpenStack-Ansible repo_server.
 ironic_git_repo: https://git.openstack.org/openstack/ironic
-ironic_git_install_branch: master
+ironic_git_install_branch: 'stable/rocky'
 ironic_developer_mode: false
 ironic_developer_constraints:
   - "git+{{ ironic_git_repo }}@{{ ironic_git_install_branch }}#egg=ironic"

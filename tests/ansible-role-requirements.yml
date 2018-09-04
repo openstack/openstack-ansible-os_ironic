@@ -1,84 +1,84 @@
 - name: apt_package_pinning
   src: https://git.openstack.org/openstack/openstack-ansible-apt_package_pinning
   scm: git
-  version: master
+  version: stable/rocky
 - name: ceph_client
   src: https://git.openstack.org/openstack/openstack-ansible-ceph_client
   scm: git
-  version: master
+  version: stable/rocky
 - name: pip_install
   src: https://git.openstack.org/openstack/openstack-ansible-pip_install
   scm: git
-  version: master
+  version: stable/rocky
 - name: memcached_server
   src: https://git.openstack.org/openstack/openstack-ansible-memcached_server
   scm: git
-  version: master
+  version: stable/rocky
 - name: lxc_hosts
   src: https://git.openstack.org/openstack/openstack-ansible-lxc_hosts
   scm: git
-  version: master
+  version: stable/rocky
 - name: lxc_container_create
   src: https://git.openstack.org/openstack/openstack-ansible-lxc_container_create
   scm: git
-  version: master
+  version: stable/rocky
 - name: galera_client
   src: https://git.openstack.org/openstack/openstack-ansible-galera_client
   scm: git
-  version: master
+  version: stable/rocky
 - name: galera_server
   src: https://git.openstack.org/openstack/openstack-ansible-galera_server
   scm: git
-  version: master
+  version: stable/rocky
 - name: rabbitmq_server
   src: https://git.openstack.org/openstack/openstack-ansible-rabbitmq_server
   scm: git
-  version: master
+  version: stable/rocky
 - name: os_keystone
   src: https://git.openstack.org/openstack/openstack-ansible-os_keystone
   scm: git
-  version: master
+  version: stable/rocky
 - name: openstack_openrc
   src: https://git.openstack.org/openstack/openstack-ansible-openstack_openrc
   scm: git
-  version: master
+  version: stable/rocky
 - name: openstack_hosts
   src: https://git.openstack.org/openstack/openstack-ansible-openstack_hosts
   scm: git
-  version: master
+  version: stable/rocky
 - name: os_swift
   src: https://git.openstack.org/openstack/openstack-ansible-os_swift
   scm: git
-  version: master
+  version: stable/rocky
 - name: os_neutron
   src: https://git.openstack.org/openstack/openstack-ansible-os_neutron
   scm: git
-  version: master
+  version: stable/rocky
 - name: os_glance
   src: https://git.openstack.org/openstack/openstack-ansible-os_glance
   scm: git
-  version: master
+  version: stable/rocky
 - name: os_nova
   src: https://git.openstack.org/openstack/openstack-ansible-os_nova
   scm: git
-  version: master
+  version: stable/rocky
 - name: etcd # dependency of os_neutron role
   scm: git
   src: https://github.com/logan2211/ansible-etcd
-  version: master
+  version: 3933355dfe51477822db517d3c07ad561fb61318
 - name: rsyslog_client
   src: https://git.openstack.org/openstack/openstack-ansible-rsyslog_client
   scm: git
-  version: master
+  version: stable/rocky
 - name: opendaylight
   scm: git
   src: https://github.com/opendaylight/integration-packaging-ansible-opendaylight
-  version: master
+  version: 87ca3cb610235720f362c3b5c4ba4f394524c4c3
 - name: systemd_service
   src: https://git.openstack.org/openstack/ansible-role-systemd_service
   scm: git
-  version: master
+  version: stable/rocky
 - name: python_venv_build
   src: https://git.openstack.org/openstack/ansible-role-python_venv_build
   scm: git
-  version: master
+  version: stable/rocky
