@@ -14,30 +14,19 @@
 
 - project:
     templates:
-      - openstack-ansible-role-jobs
       - check-requirements
       - publish-openstack-docs-pti
       - release-notes-jobs-python3
     check:
       jobs:
-        - openstack-ansible-ironic-ssl-nv
-        # TODO(jrosser) Revert this once centos-7 passes
-        - openstack-ansible-functional-centos-7:
-            voting: false
-        # TODO(jrosser) Revert this once opensuse-150 passes
-        - openstack-ansible-functional-opensuse-150:
-            voting: false
-        # TODO(jrosser) Revert this once opensuse-423 passes
-        - openstack-ansible-functional-opensuse-423:
-            voting: false
+        - openstack-ansible-linters
+        - openstack-ansible-functional-ubuntu-xenial
+        - openstack-ansible-functional-ubuntu-bionic
+    experimental:
+      jobs:
+        - openstack-ansible-integrated-deploy-aio
     gate:
       jobs:
-        # TODO(jrosser) Revert this once centos-7 passes
-        - openstack-ansible-functional-centos-7:
-            voting: false
-        # TODO(jrosser) Revert this once opensuse-150 passes
-        - openstack-ansible-functional-opensuse-150:
-            voting: false
-        # TODO(jrosser) Revert this once opensuse-423 passes
-        - openstack-ansible-functional-opensuse-423:
-            voting: false
+        - openstack-ansible-linters
+        - openstack-ansible-functional-ubuntu-xenial
+        - openstack-ansible-functional-ubuntu-bionic
