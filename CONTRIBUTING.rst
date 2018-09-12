@@ -91,7 +91,7 @@ criteria are met:
     * Include historical information on how the problem was identified.
     * Any relevant logs are included.
     * If the issue is a bug that needs fixing in a branch other than
-      Master, add the ‘backport potential’ tag TO THE ISSUE (not the
+      Master, add the 'backport potential' tag TO THE ISSUE (not the
       PR).
     * The provided information should be totally self-contained.
       External access to web services/sites should not be needed.
