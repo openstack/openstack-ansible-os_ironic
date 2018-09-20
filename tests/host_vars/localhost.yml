@@ -14,7 +14,6 @@
 # limitations under the License.
 
 neutron_local_ip:  10.1.2.1
-ansible_python_interpreter: "/usr/bin/python2"
 bridges:
   - name: "br-mgmt"
     ip_addr: "10.1.1.1"
