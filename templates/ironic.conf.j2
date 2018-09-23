@@ -119,6 +119,19 @@ memcache_secret_key = {{ memcached_encryption_key }}
 
 [matchmaker_redis]
 
+[service_catalog]
+insecure = {{ keystone_service_internaluri_insecure | bool }}
+auth_type = {{ ironic_keystone_auth_plugin }}
+auth_url = {{ keystone_service_adminuri }}
+www_authenticate_uri = {{ keystone_service_internaluri }}
+project_domain_id = {{ ironic_service_project_domain_id }}
+user_domain_id = {{ ironic_service_user_domain_id }}
+project_name = {{ ironic_service_project_name }}
+username = {{ ironic_service_user_name }}
+password = {{ ironic_service_password }}
+region_name = {{ keystone_service_region }}
+
+
 [neutron]
 url = {{ neutron_service_adminurl }}
 region_name = {{ neutron_service_region }}
