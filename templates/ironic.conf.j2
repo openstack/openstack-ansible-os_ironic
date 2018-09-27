@@ -154,16 +154,6 @@ provisioning_network = {{ ironic_neutron_provisioning_network_uuid | default(iro
 cleaning_network = {{ ironic_neutron_cleaning_network_uuid | default(ironic_neutron_cleaning_network_name) | default(ironic_neutron_provisioning_network_uuid) | default(ironic_neutron_provisioning_network_name) | default('') }}
 {% endif %}
 
-[oneview]
-{%- if 'oneview' in (filtered_ironic_drivers | json_query('[*].hardware_type') | unique) -%}
-manager_url = {{ ironic_oneview_manager_url }}
-username = {{ ironic_oneview_username }}
-password = {{ ironic_oneview_password }}
-allow_insecure_connections = {{ ironic_oneview_allow_insecure_connections }}
-tls_cacert_file = {{ ironic_oneview_tls_cacert_file }}
-max_polling_attempts = {{ ironic_oneview_max_polling_attempts }}
-{%- endif -%}
-
 [oslo_concurrency]
 lock_path = {{ ironic_lock_path }}
 

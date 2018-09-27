@@ -45,13 +45,6 @@ ironic_driver_types:
     inspect: irmc
     management: irmc
     power: irmc
-  agent_pxe_oneview:
-    hardware_type: oneview
-    boot: pxe
-    deploy: oneview-direct
-    inspect: oneview
-    management: oneview
-    power: oneview
   agent_ucs:
     hardware_type: cisco-ucs-managed
     boot: pxe
@@ -73,13 +66,6 @@ ironic_driver_types:
     inspect: irmc
     management: irmc
     power: irmc
-  iscsi_pxe_oneview:
-    hardware_type: oneview
-    boot: pxe
-    deploy: oneview-iscsi
-    inspect: oneview
-    management: oneview
-    power: oneview
   pxe_agent_cimc:
     hardware_type: cisco-ucs-standalone
     boot: pxe
