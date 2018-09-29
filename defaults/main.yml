@@ -82,11 +82,6 @@ ironic_services:
     group: ironic_conductor
     service_name: ironic-conductor
     init_config_overrides: "{{ ironic_conductor_init_config_overrides }}"
-  ironic-oneviewd:
-    group: ironic_conductor
-    service_name: ironic-oneviewd
-    service_en: "{{ 'oneview' in (filtered_ironic_drivers | json_query('[*].hardware_type') | unique) }}"
-    init_config_overrides: "{{ ironic_oneviewd_init_config_overrides }}"
 
 
 ironic_service_name: ironic
@@ -148,38 +143,6 @@ ironic_automated_clean: false
 # Set to 0 to disable erase devices on cleaning
 ironic_erase_devices_priority: 10
 
-## ironic-oneview
-ironic_oneview_manager_url: ""
-ironic_oneview_username: ""
-ironic_oneview_password: ""
-ironic_oneview_allow_insecure_connections: False
-ironic_oneview_tls_cacert_file: "None"
-ironic_oneview_max_polling_attempts: 12
-
-# ironic-oneviewd
-# Polling interval in seconds for daemon to manage the nodes
-ironic_oneviewd_retry_interval: 15
-# Size the of the RPC thread pool
-ironic_oneviewd_rpc_thread_pool_size: 20
-# (Optional) Whether to enable the periodic tasks for OneView
-# driver be aware when OneView hardware resources are taken
-# and released by Ironic or OneView users and proactively
-# manage nodes in clean fail state according to Dynamic
-# Allocation model of hardware resources allocation in
-# OneView
-ironic_oneviewd_enable_periodic_tasks: True
-# Period (in seconds) for periodic tasks to be executed when
-# enable_periodic_tasks is True
-ironic_oneviewd_periodic_check_interval: "{{ ironic_oneviewd_retry_interval }}"
-# (Optional) Enable auditing of OneView API requests
-ironic_oneviewd_audit_enabled: False
-# Path to map file for OneView audit cases. Used only when
-# OneView API audit is enabled
-ironic_oneviewd_audit_map_file: "None"
-# Path to OneView audit log file. Created only when Oneview
-# API audit is enabled.
-ironic_oneviewd_audit_output_file: "None"
-
 # Database
 ironic_db_setup_host: "{{ ('galera_all' in groups) | ternary(groups['galera_all'][0], 'localhost') }}"
 ironic_galera_address: "{{ galera_address | default('127.0.0.1') }}"
@@ -227,12 +190,6 @@ ironic_venv_download: "{{ not ironic_developer_mode | bool }}"
 ironic_venv_download_url: http://127.0.0.1/venvs/untagged/ubuntu/ironic.tgz
 
 ironic_tftp_server_address: "{{ ansible_host }}"
-
-ironic_oneview_optional_pip_packages:
-  - ironic-oneview-cli
-  - ironic-oneviewd
-  - python-oneviewclient
-  - hpOneView
 
 ironic_pip_packages:
   - cryptography
@@ -315,7 +272,6 @@ ironic_role_project_group: ironic_all
 
 ### Config Overrides
 ironic_ironic_conf_overrides: {}
-ironic_ironic_oneviewd_conf_overrides: {}
 ironic_rootwrap_conf_overrides: {}
 ironic_policy_overrides: {}
 ironic_api_uwsgi_ini_overrides: {}
@@ -325,7 +281,6 @@ ironic_pxe_append_params: "ipa-debug=1 systemd.journald.forward_to_console=yes"
 
 ironic_api_init_config_overrides: {}
 ironic_conductor_init_config_overrides: {}
-ironic_oneviewd_init_config_overrides: {}
 
 # driver definitions
 ironic_drivers_enabled:
