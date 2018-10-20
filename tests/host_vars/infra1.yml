@@ -16,6 +16,7 @@
 ansible_host: 10.1.1.101
 ansible_become: True
 ansible_user: root
+container_name: infra1
 container_networks:
   management_address:
     address: "{{ ansible_host }}"
