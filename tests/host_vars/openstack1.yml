@@ -19,7 +19,7 @@ ansible_user: root
 tunnel_address: 10.1.2.102
 neutron_local_ip: 10.1.2.102
 storage_address: 10.1.5.102
-container_name: "{{ inventory_hostname }}"
+container_name: openstack1
 container_networks:
   management_address:
     address: "{{ ansible_host }}"

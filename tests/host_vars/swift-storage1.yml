@@ -17,6 +17,7 @@ ansible_host: 10.1.1.103
 storage_address: 10.1.5.103
 ansible_user: root
 ansible_become: True
+container_name: swift-storage1
 container_networks:
   management_address:
     address: "{{ ansible_host }}"

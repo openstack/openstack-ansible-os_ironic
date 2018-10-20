@@ -17,7 +17,7 @@ ansible_host: 10.1.1.104
 ansible_become: True
 ansible_user: root
 ipmi_address: 10.1.4.104
-container_name: "{{ inventory_hostname }}"
+container_name: ironic1
 container_networks:
   management_address:
     address: "{{ ansible_host }}"
