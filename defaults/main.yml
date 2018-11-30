@@ -22,6 +22,7 @@ debug: False
 # for the service setup. The host must already have
 # clouds.yaml properly configured.
 ironic_service_setup_host: "{{ openstack_service_setup_host | default('localhost') }}"
+ironic_service_setup_host_python_interpreter: "{{ openstack_service_setup_host_python_interpreter | default((ironic_service_setup_host == 'localhost') | ternary(ansible_playbook_python, ansible_python['executable'])) }}"
 
 # Comma separated list of Glance API servers
 ironic_glance_api_servers: "{{ (glance_service_internalurl | default('http://localhost')) | netorigin }}"
