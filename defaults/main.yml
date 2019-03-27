@@ -25,7 +25,7 @@ ironic_service_setup_host: "{{ openstack_service_setup_host | default('localhost
 ironic_service_setup_host_python_interpreter: "{{ openstack_service_setup_host_python_interpreter | default((ironic_service_setup_host == 'localhost') | ternary(ansible_playbook_python, ansible_python['executable'])) }}"
 
 # Comma separated list of Glance API servers
-ironic_glance_api_servers: "{{ (glance_service_internalurl | default('http://localhost')) | netorigin }}"
+ironic_glance_api_servers: "{{ (glance_service_internalurl | default('http://localhost')) | urlsplit('scheme') ~ '://' ~ (glance_service_internalurl | default('http://localhost')) | urlsplit('netloc') }}"
 
 # Set the package install state for distribution and pip packages
 # Options are 'present' and 'latest'
