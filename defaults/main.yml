@@ -32,25 +32,14 @@ ironic_glance_api_servers: "{{ (glance_service_internalurl | default('http://loc
 ironic_package_state: "latest"
 ironic_pip_package_state: "latest"
 
-# These variables are used in 'developer mode' in order to allow the role
-# to build an environment directly from a git source without the presence
-# of an OpenStack-Ansible repo_server.
 ironic_git_repo: https://git.openstack.org/openstack/ironic
 ironic_git_install_branch: master
-ironic_developer_mode: false
-ironic_developer_constraints:
+ironic_upper_constraints_url: "{{ requirements_git_url | default('https://git.openstack.org/cgit/openstack/requirements/plain/upper-constraints.txt?h=' ~ requirements_git_install_branch | default('master')) }}"
+ironic_git_constraints:
   - "git+{{ ironic_git_repo }}@{{ ironic_git_install_branch }}#egg=ironic"
+  - "--constraint {{ ironic_upper_constraints_url }}"
 
-# TODO(odyssey4me):
-# This can be simplified once all the roles are using
-# python_venv_build. We can then switch to using a
-# set of constraints in pip.conf inside the venv,
-# perhaps prepared by giving a giving a list of
-# constraints to the role.
-ironic_pip_install_args: >-
-  {{ ironic_developer_mode | ternary(pip_install_developer_constraints | default('--constraint /opt/developer-pip-constraints.txt'), '') }}
-  {{ (pip_install_upper_constraints is defined) | ternary('--constraint ' + pip_install_upper_constraints | default(''), '') }}
-  {{ pip_install_options | default('') }}
+ironic_pip_install_args: "{{ pip_install_options | default('') }}"
 
 # Name of the virtual env to deploy into
 ironic_venv_tag: "{{ venv_tag | default('untagged') }}"
@@ -184,11 +173,6 @@ ironic_node_name: ironic
 # var to True. Otherwise keys will be generated on the first run and not
 # regenerated each run.
 ironic_recreate_keys: False
-
-# venv_download, even when true, will use the fallback method of building the
-# venv from scratch if the venv download fails.
-ironic_venv_download: "{{ not ironic_developer_mode | bool }}"
-ironic_venv_download_url: http://127.0.0.1/venvs/untagged/ubuntu/ironic.tgz
 
 ironic_tftp_server_address: "{{ ansible_host }}"
 
