@@ -103,11 +103,14 @@
       group: "root"
       config_overrides: "{{ ironic_rootwrap_conf_overrides }}"
       config_type: "ini"
-    - src: "policy.json.j2"
-      dest: "/etc/ironic/policy.json"
-      config_overrides: "{{ ironic_policy_overrides }}"
-      config_type: "json"
   notify: Restart ironic services
+
+- name: Implement policy.json
+  copy:
+    content: "{{ ironic_policy_overrides | to_nice_json }}"
+    dest: "/etc/ironic/policy.json"
+  when:
+    - ironic_policy_overrides != {}
 
 - name: Copy rootwrap filters
   copy:

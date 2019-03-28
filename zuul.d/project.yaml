@@ -15,18 +15,16 @@
 - project:
     templates:
       - check-requirements
+      - openstack-ansible-linters
       - publish-openstack-docs-pti
       - release-notes-jobs-python3
     check:
       jobs:
-        - openstack-ansible-linters
-        - openstack-ansible-functional-ubuntu-xenial
-        - openstack-ansible-functional-ubuntu-bionic
-    experimental:
-      jobs:
-        - openstack-ansible-integrated-deploy-aio
+        - openstack-ansible-deploy-aio_metal_ironic-ubuntu-bionic
     gate:
       jobs:
-        - openstack-ansible-linters
-        - openstack-ansible-functional-ubuntu-xenial
-        - openstack-ansible-functional-ubuntu-bionic
+        - openstack-ansible-deploy-aio_metal_ironic-ubuntu-bionic
+    experimental:
+      jobs:
+        - openstack-ansible-deploy-aio_metal_ironic-centos-7
+        - openstack-ansible-deploy-aio_metal_ironic-opensuse-150
