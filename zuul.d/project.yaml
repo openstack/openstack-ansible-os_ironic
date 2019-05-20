@@ -17,17 +17,9 @@
     templates:
       - check-requirements
       - openstack-ansible-linters
+      - openstack-ansible-deploy-aio_metal-jobs
+      # Add this template when
+      # distro installs are supported.
+      # - openstack-ansible-deploy-aio_distro_metal-jobs
       - publish-openstack-docs-pti
       - release-notes-jobs-python3
-    check:
-      jobs:
-        - openstack-ansible-deploy-aio_metal_ironic-debian-stable
-        - openstack-ansible-deploy-aio_metal_ironic-ubuntu-bionic
-    gate:
-      jobs:
-        - openstack-ansible-deploy-aio_metal_ironic-debian-stable
-        - openstack-ansible-deploy-aio_metal_ironic-ubuntu-bionic
-    experimental:
-      jobs:
-        - openstack-ansible-deploy-aio_metal_ironic-centos-7
-        - openstack-ansible-deploy-aio_metal_ironic-opensuse-150
