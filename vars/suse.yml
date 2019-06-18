@@ -1,5 +1,5 @@
 ---
-# Copyright 2015, Rackspace US, Inc.
+# Copyright 2019, SUSE
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,28 +13,31 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-galaxy_info:
-  author: OpenStack
-  description: Baremetal provisioning for Openstack
-  company: OpenStack
-  license: Apache
-  min_ansible_version: 2.2
-  platforms:
-    - name: Debian
-      versions:
-        - stretch
-    - name: Ubuntu
-      versions:
-        - xenial
-        - bionic
-    - name: opensuse
-      versions:
-        - 15
-  categories:
-    - cloud
-    - baremetal
-    - system
-dependencies:
-  - role: apt_package_pinning
-    when:
-      - ansible_pkg_mgr == 'apt'
+cache_timeout: 600
+
+ironic_devel_distro_packages:
+  - git-core
+  - libffi-devel
+
+ironic_api_distro_packages:
+  - libxml2-devel
+
+ironic_conductor_distro_packages:
+  - ipmitool
+  - ipxe-bootimgs
+  - libxml2-devel
+  - libxslt-devel
+  - open-iscsi
+  - postgresql-devel
+  - python-yaml
+  - qemu-tools
+  - syslinux
+  - tftp
+
+ironic_conductor_standalone_distro_packages:
+  - dhcp-server
+
+ironic_library_modules_paths:
+  - "/usr/share/syslinux/pxelinux.0"
+  - "/usr/share/syslinux/chain.c32"
+  - "/usr/share/syslinux/linux.c32"
