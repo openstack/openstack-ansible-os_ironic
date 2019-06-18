@@ -30,6 +30,9 @@ galaxy_info:
     - name: opensuse
       versions:
         - 15
+    - name: EL
+      versions:
+      - 7
   categories:
     - cloud
     - baremetal
