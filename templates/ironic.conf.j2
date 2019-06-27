@@ -143,17 +143,13 @@ region_name = {{ keystone_service_region }}
 
 
 [neutron]
-url = {{ neutron_service_adminurl }}
-region_name = {{ neutron_service_region }}
 auth_type = password
-# Keystone client plugin password option
-password = {{ neutron_service_password }}
-# Keystone client plugin username option
-username = {{ neutron_service_user_name }}
-project_name = {{ neutron_service_project_name }}
-user_domain_name = {{ neutron_service_domain_name |default("Default") }}
-project_domain_name = {{ neutron_service_domain_name |default("Default") }}
-# Keystone client plugin authentication URL option
+# Keystone auth using ironic credentials
+username = {{ ironic_service_user_name }}
+password = {{ ironic_service_password }}
+project_name = {{ ironic_service_project_name }}
+user_domain_id = {{ ironic_service_user_domain_id }}
+project_domain_id = {{ ironic_service_project_domain_id }}
 auth_url = {{ keystone_service_adminurl }}
 insecure = {{ keystone_service_adminuri_insecure | bool }}
 {% if ironic_neutron_provisioning_network_name is defined %}
