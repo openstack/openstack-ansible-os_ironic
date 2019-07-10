@@ -17,28 +17,27 @@ cache_timeout: 600
 
 ironic_devel_distro_packages:
   - git-core
-  - libffi-dev
+  - libffi-devel
 
 ironic_api_distro_packages:
-  - libxml2-dev
+  - libxml2-devel
 
 ironic_conductor_distro_packages:
-  - libxml2-dev
+  - libxml2-devel
   - syslinux
-  - syslinux-common
-  - pxelinux
-  - libxslt1-dev
-  - qemu-utils
-  - libpq-dev
-  - python-yaml
-  - open-iscsi
+  - syslinux-devel
+  - syslinux-tftpboot
+  - libxslt-devel
+  - qemu-kvm-tools
+  - libiscsi-utils
+  - iscsi-initiator-utils
   - ipmitool
-  - tftpd-hpa
+  - tftp-server
 
 ironic_conductor_standalone_distro_packages:
   - isc-dhcp-server
 
 ironic_library_modules_paths:
-  - "/usr/lib/PXELINUX/pxelinux.0"
-  - "/usr/lib/syslinux/modules/efi64/chain.c32"
-  - "/usr/lib/syslinux/modules/bios/ldlinux.c32"
+  - "/usr/share/syslinux/pxelinux.0"
+  - "/usr/share/syslinux/chain.c32"
+  - "/usr/share/syslinux/linux.c32"
