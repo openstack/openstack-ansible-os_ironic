@@ -25,7 +25,7 @@ ironic_api_distro_packages:
 ironic_conductor_distro_packages:
   - libxml2-devel
   - syslinux
-  - syslinux-common
+  - syslinux-devel
   - syslinux-tftpboot
   - libxslt-devel
   - qemu-kvm-tools
@@ -38,6 +38,6 @@ ironic_conductor_standalone_distro_packages:
   - isc-dhcp-server
 
 ironic_library_modules_paths:
-  - "/usr/lib/PXELINUX/pxelinux.0"
-  - "/usr/lib/syslinux/modules/efi64/chain.c32"
-  - "/usr/lib/syslinux/modules/bios/ldlinux.c32"
+  - "/usr/share/syslinux/pxelinux.0"
+  - "/usr/share/syslinux/chain.c32"
+  - "/usr/share/syslinux/linux.c32"
