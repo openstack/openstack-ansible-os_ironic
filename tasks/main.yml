@@ -58,7 +58,7 @@
     - common-mq
     - ironic-config
 
-- include_tasks: ironic_pre_install.yml
+- import_tasks: ironic_pre_install.yml
   tags:
     - ironic-install
 
@@ -79,20 +79,20 @@
   tags:
     - ironic-install
 
-- include_tasks: ironic_post_install.yml
+- import_tasks: ironic_post_install.yml
   tags:
     - ironic-config
 
-- include_tasks: ironic_uwsgi.yml
+- import_tasks: ironic_uwsgi.yml
   tags:
     - ironic-config
 
-- include_tasks: ironic_conductor_post_install.yml
+- import_tasks: ironic_conductor_post_install.yml
   when: "ironic_services['ironic-conductor']['group'] in group_names"
   tags:
     - ironic-config
 
-- include_tasks: ironic_db_setup.yml
+- import_tasks: ironic_db_setup.yml
   when: inventory_hostname == groups['ironic_conductor'][0]
   tags:
     - ironic-config
@@ -115,7 +115,7 @@
     - ironic-config
     - systemd-service
 
-- include_tasks: ironic_service_setup.yml
+- import_tasks: ironic_service_setup.yml
   when: inventory_hostname == groups['ironic_api'][0]
   tags:
     - ironic-config
