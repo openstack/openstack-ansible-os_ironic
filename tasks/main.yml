@@ -97,9 +97,23 @@
   tags:
     - ironic-config
 
-- include_tasks: "ironic_init_{{ ansible_service_mgr }}.yml"
+- name: Run the systemd service role
+  import_role:
+    name: systemd_service
+  vars:
+    systemd_user_name: "{{ ironic_system_user_name }}"
+    systemd_group_name: "{{ ironic_system_group_name }}"
+    systemd_tempd_prefix: openstack
+    systemd_slice_name: ironic
+    systemd_lock_path: /var/lock/ironic
+    systemd_CPUAccounting: true
+    systemd_BlockIOAccounting: true
+    systemd_MemoryAccounting: true
+    systemd_TasksAccounting: true
+    systemd_services: "{{ filtered_ironic_services }}"
   tags:
     - ironic-config
+    - systemd-service
 
 - include_tasks: ironic_service_setup.yml
   when: inventory_hostname == groups['ironic_api'][0]
