@@ -156,7 +156,21 @@ filtered_ironic_services: |-
   {%   if (value['group'] in group_names) and
           (('service_en' not in value) or
            ('service_en' in value and value['service_en'])) %}
-  {%     set _ = value.update({'service_key': key}) %}
+  {%     set _ = value.update(
+           {
+             'service_key': key,
+             'enabled': 'yes',
+             'state': 'started',
+             'config_overrides': value.init_config_overrides
+           }
+         )
+  %}
+  {%     set _ = value.pop('init_config_overrides') %}
+  {# Note (noonedeadpunk): The following if statement is added for backwards compatability #}
+  {# As up to train release ironic role didn't have 'execstarts' in ironic_services keys #}
+  {%     if ('execstarts' not in value) %}
+  {%       set _ = value.update({'execstarts': value.program_override | default(ironic_bin ~ '/' ~ value.service_name)}) %}
+  {%     endif %}
   {%     set _ = services.append(value) %}
   {%   endif %}
   {% endfor %}

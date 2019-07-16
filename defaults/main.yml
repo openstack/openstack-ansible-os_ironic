@@ -67,11 +67,12 @@ ironic_services:
     wsgi_name: ironic-api-wsgi
     uwsgi_port: "{{ ironic_service_port }}"
     uwsgi_bind_address: "{{ ironic_uwsgi_bind_address }}"
-    program_override: "{{ ironic_bin }}/uwsgi --ini /etc/uwsgi/ironic-api.ini"
+    execstarts: "{{ ironic_bin }}/uwsgi --ini /etc/uwsgi/ironic-api.ini"
   ironic-conductor:
     group: ironic_conductor
     service_name: ironic-conductor
     init_config_overrides: "{{ ironic_conductor_init_config_overrides }}"
+    execstarts: "{{ ironic_bin }}/ironic-conductor"
 
 
 ironic_service_name: ironic
