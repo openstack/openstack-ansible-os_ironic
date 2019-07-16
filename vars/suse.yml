@@ -18,9 +18,11 @@ cache_timeout: 600
 ironic_devel_distro_packages:
   - git-core
   - libffi-devel
+  - systemd-devel
 
 ironic_api_distro_packages:
   - libxml2-devel
+  - python-systemd
 
 ironic_conductor_distro_packages:
   - ipmitool

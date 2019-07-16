@@ -16,7 +16,7 @@ lazy-apps = true
 add-header = Connection: close
 buffer-size = {{ ironic_wsgi_buffer_size }}
 thunder-lock = true
-logfile-chmod = 644
+disable-logging = true
 
 # Avoid filling up the logs with health check requests from haproxy.
 route-user-agent = ^osa-haproxy-healthcheck$ donotlog:
