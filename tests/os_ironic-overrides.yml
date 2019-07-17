@@ -31,7 +31,6 @@ neutron_network_device_mtu: 1500
 neutron_l2_population: True
 neutron_dhcp_config:
   dhcp-option-force: "26,1500"
-  log-facility: "/var/log/neutron/neutron-dnsmasq.log"
 ironic_neutron_provisioning_network_name: "ironic-prov"
 neutron_l3: True
 neutron_metadata: True
