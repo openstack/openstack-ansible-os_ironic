@@ -44,3 +44,6 @@ ironic_library_modules_paths:
   - "/usr/lib/PXELINUX/pxelinux.0"
   - "/usr/lib/syslinux/modules/efi64/chain.c32"
   - "/usr/lib/syslinux/modules/bios/ldlinux.c32"
+
+ironic_tftpd_service_name: tftpd-hpa
+ironic_tftpd_root: /tftpboot

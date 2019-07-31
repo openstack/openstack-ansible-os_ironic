@@ -43,3 +43,6 @@ ironic_library_modules_paths:
   - "/usr/share/syslinux/pxelinux.0"
   - "/usr/share/syslinux/chain.c32"
   - "/usr/share/syslinux/linux.c32"
+
+ironic_tftpd_service_name: tftp
+ironic_tftpd_root: /srv/tftpboot

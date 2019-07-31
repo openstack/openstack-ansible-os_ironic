@@ -21,9 +21,9 @@
   notify:
     - Restart isc-dhcp-server
 
-- name: Create /tftpboot
+- name: Create tftpboot path
   file:
-    path: "/tftpboot"
+    path: "{{ ironic_tftpd_root }}"
     state: directory
     owner: "{{ ironic_system_user_name }}"
     group: "{{ ironic_system_group_name }}"
@@ -33,19 +33,37 @@
   template:
     src: "tftpd-hpa.j2"
     dest: "/etc/default/tftpd-hpa"
+  when:
+    - ansible_os_family == 'Debian'
   notify:
-    - Restart tftpd-hpa
+    - Restart tftpd
 
-- name: Copy in tftpd-hpa map file
-  copy:
+- name: Copy in tftpd map file
+  template:
     src: "map-file"
-    dest: "/tftpboot/map-file"
+    dest: "{{ ironic_tftpd_root }}/map-file"
   notify:
-    - Restart tftpd-hpa
+    - Restart tftpd
 
-- name: Copy library modules into /tftpboot
+- name: Copy library modules into tftpboot
   copy:
     src: "{{ item }}"
-    dest: "/tftpboot/"
+    dest: "{{ ironic_tftpd_root }}/"
     remote_src: True
   with_items: "{{ ironic_library_modules_paths }}"
+
+# Add 'yum' in condition if tftp socket required to be started for centos.
+- name: Start up tftp socket
+  when:
+    - "ansible_pkg_mgr in ['zypper']"
+  systemd:
+    daemon_reload: yes
+    name: "{{ ironic_tftpd_service_name }}.socket"
+    state: started
+    enabled: true
+
+- name: Start up tftp
+  service:
+    name: "{{ ironic_tftpd_service_name }}"
+    state: started
+    enabled: true
