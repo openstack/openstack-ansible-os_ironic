@@ -31,6 +31,7 @@ ironic_conductor_distro_packages:
   - syslinux-tftpboot
   - libxslt-devel
   - qemu-kvm-tools
+  - qemu-img-ev
   - libiscsi-utils
   - iscsi-initiator-utils
   - ipmitool
