@@ -176,6 +176,8 @@ pool_max_size = {{ ironic_wsgi_processes }}
 [pxe]
 tftp_server = {{ ironic_tftp_server_address }}
 pxe_append_params = {{ ironic_pxe_append_params }}
+tftp_root = {{ ironic_tftpd_root }}
+tftp_master_path = {{ ironic_tftpd_root }}/master_images
 
 [seamicro]
 
