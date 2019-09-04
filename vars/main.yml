@@ -155,7 +155,8 @@ filtered_ironic_services: |-
   {% for key, value in ironic_services.items() %}
   {%   if (value['group'] in group_names) and
           (('service_en' not in value) or
-           ('service_en' in value and value['service_en'])) %}
+           ('service_en' in value and value['service_en'])) and
+           not ('wsgi_app' in value and value['wsgi_app']) %}
   {%     set _ = value.update(
            {
              'service_key': key,
@@ -172,6 +173,27 @@ filtered_ironic_services: |-
   {%       set _ = value.update({'execstarts': value.program_override | default(ironic_bin ~ '/' ~ value.service_name)}) %}
   {%     endif %}
   {%     set _ = services.append(value) %}
+  {%   endif %}
+  {% endfor %}
+  {{ services }}
+
+uwsgi_ironic_services: |-
+  {% set services = {} %}
+  {% for key, value in ironic_services.items() %}
+  {%   if (value['group'] in group_names) and
+         (('condition' not in value) or ('condition' in value and value['condition']))
+         and ('wsgi_app' in value and value['wsgi_app']) %}
+  {%     set _ = value.update(
+            {
+             'wsgi_path':  ironic_bin ~ '/' ~ value.wsgi_name,
+             'wsgi_venv': ironic_bin | dirname,
+             'uwsgi_uid': ironic_system_user_name,
+             'uwsgi_guid': ironic_system_group_name,
+             'uwsgi_processes': ironic_wsgi_processes,
+             'uwsgi_threads': ironic_wsgi_threads
+           }
+         ) %}
+  {%     set _ = services.update({key: value}) %}
   {%   endif %}
   {% endfor %}
   {{ services }}
