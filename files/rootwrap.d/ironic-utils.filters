@@ -8,3 +8,4 @@ iscsiadm: CommandFilter, iscsiadm, root
 # ironic/common/utils.py
 mount: CommandFilter, mount, root
 umount: CommandFilter, umount, root
+systemctl: CommandFilter, systemctl, root
