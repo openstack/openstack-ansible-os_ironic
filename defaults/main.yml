@@ -73,7 +73,11 @@ ironic_services:
     service_name: ironic-conductor
     init_config_overrides: "{{ ironic_conductor_init_config_overrides }}"
     execstarts: "{{ ironic_bin }}/ironic-conductor"
-
+  ironic-inspector:
+    group: ironic_inspector
+    service_name: ironic-inspector
+    init_config_overrides: "{{ ironic_inspector_init_config_overrides }}"
+    execstarts: "{{ ironic_bin }}/ironic-inspector"
 
 ironic_service_name: ironic
 ironic_service_type: baremetal
@@ -180,6 +184,7 @@ ironic_tftp_server_address: "{{ ansible_host }}"
 ironic_pip_packages:
   - cryptography
   - ironic
+  - "{{ (ironic_services['ironic-inspector']['group'] in group_names) | ternary('ironic-inspector', '') }}"
   - osprofiler
   - proliantutils
   - PyMySQL
@@ -269,3 +274,108 @@ ironic_conductor_init_config_overrides: {}
 ironic_drivers_enabled:
   - agent_ipmitool
   - pxe_ipmitool
+
+ironic_inspector_developer_mode: false
+ironic_inspector_venv_python_executable: "{{ openstack_venv_python_executable | default('python2') }}"
+
+# System info
+ironic_inspector_service_setup_host: "{{ openstack_service_setup_host | default('localhost') }}"
+ironic_inspector_lock_path: /var/lock/ironic-inspector
+
+ironic_inspector_service_name: ironic-inspector
+ironic_inspector_service_type: baremetal-introspection
+ironic_inspector_service_description: "Ironic Baremetal Introspection Service"
+ironic_inspector_service_publicuri_proto: "{{ openstack_service_publicuri_proto | default(ironic_service_proto) }}"
+ironic_inspector_service_adminuri_proto: "{{ openstack_service_adminuri_proto | default(ironic_service_proto) }}"
+ironic_inspector_service_internaluri_proto: "{{ openstack_service_internaluri_proto | default(ironic_service_proto) }}"
+ironic_inspector_service_port: 5050
+ironic_inspector_service_publicuri: "{{ ironic_inspector_service_publicuri_proto }}://{{ external_lb_vip_address }}:{{ ironic_inspector_service_port }}"
+ironic_inspector_service_publicurl: "{{ ironic_inspector_service_publicuri }}"
+ironic_inspector_service_adminuri: "{{ ironic_inspector_service_adminuri_proto }}://{{ internal_lb_vip_address }}:{{ ironic_inspector_service_port }}"
+ironic_inspector_service_adminurl: "{{ ironic_inspector_service_adminuri }}"
+ironic_inspector_service_internaluri: "{{ ironic_inspector_service_internaluri_proto }}://{{ internal_lb_vip_address }}:{{ ironic_inspector_service_port }}"
+ironic_inspector_service_internalurl: "{{ ironic_inspector_service_internaluri }}"
+ironic_inspector_service_role_name: "admin"
+ironic_inspector_service_project_name: "service"
+ironic_inspector_service_in_ldap: False
+ironic_inspector_service_domain_id: default
+
+# Database
+ironic_inspector_db_setup_host: "{{ ('galera_all' in groups) | ternary(groups['galera_all'][0], 'localhost') }}"
+ironic_inspector_galera_address: "{{ galera_address | default('127.0.0.1') }}"
+ironic_inspector_galera_user: ironic-inspector
+ironic_inspector_galera_database: ironic_inspector
+
+# Ironic db tuning
+ironic_inspector_db_max_overflow: 10
+ironic_inspector_db_max_pool_size: 120
+ironic_inspector_db_pool_timeout: 30
+
+ironic_inspector_pip_install_args: "{{ pip_install_options | default('') }}"
+
+
+# Auth
+ironic_inspector_service_user_name: "ironic_inspector"
+
+### OpenStack Services to integrate with
+# Ironic swift store information
+ironic_inspector_swift_user_name: swift-inspector
+ironic_inspector_swift_role_names:
+  - _member_
+  - swiftoperator
+
+# Ironic inspector
+ironic_inspector_enable_discovery: True
+ironic_inspector_openstack_db_connection_string: "mysql+pymysql://{{ ironic_inspector_galera_user }}:{{ ironic_inspector_container_mysql_password }}@{{ ironic_inspector_galera_address }}/{{ ironic_inspector_galera_database }}"
+
+# Ironic inspector dhcp
+ironic_inspector_dhcp_pool_range: 192.168.0.51 192.168.0.150
+ironic_inspector_dhcp_subnet: 192.168.0.0/22
+ironic_inspector_dhcp_subnet_mask: 255.255.252.0
+ironic_inspector_dhcp_gateway: 192.168.0.1
+ironic_inspector_dhcp_nameservers: 192.168.0.1
+ironic_inspector_dhcp_lease_time: 600
+
+ironic_inspector_dhcp_type: dnsmasq # isc_dhcp
+ironic_inspector_boot_mode: http #tftp
+ironic_inspector_pxe_boot_mode: "{{ ironic_inspector_boot_mode }}"
+ironic_inspector_httpboot_dir: /httpboot
+ironic_inspector_tftpboot_dir: "{{ ironic_tftpd_root }}"
+
+ironic_inspector_dhcp_interface: br-ironic
+ironic_inspector_valid_interfaces: internal,public
+
+### Config Overrides
+ironic_inspector_conf_overrides: {}
+ironic_inspector_rootwrap_conf_overrides: {}
+ironic_inspector_init_config_overrides: {}
+# pxe boot
+ironic_inspector_pxe_append_params: "ipa-debug=1 systemd.journald.forward_to_console=yes" #ipa-inspection-collectors=default,logs,extra_hardware
+
+ironic_inspector_pxe_filter: dnsmasq #iptables
+
+ironic_inspector_oslomsg_rpc_host_group: "{{ oslomsg_rpc_host_group | default('rabbitmq_all') }}"
+ironic_inspector_oslomsg_rpc_setup_host: "{{ (ironic_oslomsg_rpc_host_group in groups) | ternary(groups[ironic_oslomsg_rpc_host_group][0], 'localhost') }}"
+ironic_inspector_oslomsg_rpc_transport: "{{ oslomsg_rpc_transport | default('rabbit') }}"
+ironic_inspector_oslomsg_rpc_servers: "{{ oslomsg_rpc_servers | default('127.0.0.1') }}"
+ironic_inspector_oslomsg_rpc_port: "{{ oslomsg_rpc_port | default('5672') }}"
+ironic_inspector_oslomsg_rpc_use_ssl: "True"
+ironic_inspector_oslomsg_rpc_userid: ironic
+ironic_inspector_oslomsg_rpc_vhost: /ironic
+
+ironic_inspector_oslomsg_notify_host_group: "{{ oslomsg_notify_host_group | default('rabbitmq_all') }}"
+ironic_inspector_oslomsg_notify_setup_host: "{{ (ironic_inspector_oslomsg_notify_host_group in groups) | ternary(groups[ironic_inspector_oslomsg_notify_host_group][0], 'localhost') }}"
+ironic_inspector_oslomsg_notify_transport: "{{ oslomsg_notify_transport | default('rabbit') }}"
+ironic_inspector_oslomsg_notify_servers: "{{ oslomsg_notify_servers | default('127.0.0.1') }}"
+ironic_inspector_oslomsg_notify_port: "{{ oslomsg_notify_port | default('5672') }}"
+ironic_inspector_oslomsg_notify_use_ssl: "False"
+ironic_inspector_oslomsg_notify_userid: "{{ ironic_inspector_oslomsg_rpc_userid }}"
+ironic_inspector_oslomsg_notify_password: "{{ ironic_oslomsg_rpc_password }}"
+ironic_inspector_oslomsg_notify_vhost: "{{ ironic_inspector_oslomsg_rpc_vhost }}"
+ironic_inspector_optional_oslomsg_amqp1_pip_packages:
+  - oslo.messaging[amqp1]
+ironic_inspector_oslomsg_amqp1_enabled: True
+ironic_inspector_upper_constraints_url: "{{ requirements_git_url | default('https://git.openstack.org/cgit/openstack/requirements/plain/upper-constraints.txt?h=' ~ requirements_git_install_branch | default('master')) }}"
+
+ironic_inspector_ipa_initrd_name: ironic-deploy.initrd
+ironic_inspector_ipa_kernel_name: ironic-deploy.kernel

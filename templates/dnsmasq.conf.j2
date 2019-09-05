@@ -1,0 +1,15 @@
+port=15553
+interface={{ ironic_inspector_dhcp_interface }}
+dhcp-range={{ ironic_inspector_dhcp_pool_range | regex_replace(' ', ',') }}
+tftp-root={{ ironic_inspector_tftpboot_dir }}
+dhcp-option=3,{{ ironic_inspector_dhcp_gateway }}
+dhcp-option=6,{{ ironic_inspector_dhcp_nameservers }}
+dhcp-match=ipxe,175
+dhcp-match=set:efi,option:client-arch,7
+listen-address={{ ironic_inspector_dhcp_address }}
+dhcp-match=set:efi,option:client-arch,9
+dhcp-match=set:efi,option:client-arch,11
+dhcp-boot=tag:efi,tag:!ipxe,ipxe.efi
+dhcp-boot=pxelinux.0,localhost.localdomain,{{ ironic_tftp_server_address }}
+conf-dir=/etc/dnsmasq.d/,*.conf
+dhcp-hostsdir=/etc/dnsmasq.d/dhcp-hostsdir
