@@ -83,9 +83,15 @@
   tags:
     - ironic-config
 
-- import_tasks: ironic_uwsgi.yml
+- name: Import uwsgi role
+  import_role:
+    name: uwsgi
+  vars:
+    uwsgi_services: "{{ uwsgi_ironic_services }}"
+    uwsgi_install_method: "source"
   tags:
     - ironic-config
+    - uwsgi
 
 - import_tasks: ironic_conductor_post_install.yml
   when: "ironic_services['ironic-conductor']['group'] in group_names"
