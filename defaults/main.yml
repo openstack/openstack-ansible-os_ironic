@@ -179,7 +179,6 @@ ironic_tftp_server_address: "{{ ansible_host }}"
 
 ironic_pip_packages:
   - cryptography
-  - ImcSdk
   - ironic
   - osprofiler
   - proliantutils
@@ -195,7 +194,6 @@ ironic_pip_packages:
   - python-xclarityclient
   - sushy
   - systemd-python
-  - UcsSdk
 
 ## Oslo Messaging Info
 # RPC
