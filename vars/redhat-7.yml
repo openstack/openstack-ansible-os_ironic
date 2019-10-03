@@ -36,6 +36,7 @@ ironic_conductor_distro_packages:
   - iscsi-initiator-utils
   - ipmitool
   - tftp-server
+  - gdisk
 
 ironic_conductor_standalone_distro_packages:
   - isc-dhcp-server

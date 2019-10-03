@@ -35,6 +35,7 @@ ironic_conductor_distro_packages:
   - qemu-tools
   - syslinux
   - tftp
+  - gptfdisk
 
 ironic_conductor_standalone_distro_packages:
   - dhcp-server
