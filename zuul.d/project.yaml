@@ -30,4 +30,4 @@
     experimental:
       jobs:
         - openstack-ansible-deploy-aio_metal_ironic-centos-7
-        - openstack-ansible-deploy-aio_metal_ironic-opensuse-150
+        - openstack-ansible-deploy-aio_metal_ironic-opensuse-15
