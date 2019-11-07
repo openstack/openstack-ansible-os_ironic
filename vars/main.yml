@@ -167,7 +167,7 @@ filtered_ironic_services: |-
          )
   %}
   {%     set _ = value.pop('init_config_overrides') %}
-  {# Note (noonedeadpunk): The following if statement is added for backwards compatability #}
+  {# Note (noonedeadpunk): The following if statement is added for backwards compatibility #}
   {# As up to train release ironic role didn't have 'execstarts' in ironic_services keys #}
   {%     if ('execstarts' not in value) %}
   {%       set _ = value.update({'execstarts': value.program_override | default(ironic_bin ~ '/' ~ value.service_name)}) %}
