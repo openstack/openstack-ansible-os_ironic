@@ -35,9 +35,9 @@ ironic_glance_api_servers: "{{ (glance_service_internalurl | default('http://loc
 ironic_package_state: "latest"
 ironic_pip_package_state: "latest"
 
-ironic_git_repo: https://git.openstack.org/openstack/ironic
+ironic_git_repo: https://opendev.org/openstack/ironic
 ironic_git_install_branch: master
-ironic_upper_constraints_url: "{{ requirements_git_url | default('https://git.openstack.org/cgit/openstack/requirements/plain/upper-constraints.txt?h=' ~ requirements_git_install_branch | default('master')) }}"
+ironic_upper_constraints_url: "{{ requirements_git_url | default('https://releases.openstack.org/constraints/upper/' ~ requirements_git_install_branch | default('master')) }}"
 ironic_git_constraints:
   - "git+{{ ironic_git_repo }}@{{ ironic_git_install_branch }}#egg=ironic"
   - "--constraint {{ ironic_upper_constraints_url }}"
