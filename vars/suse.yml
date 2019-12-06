@@ -35,7 +35,6 @@ ironic_conductor_distro_packages:
   - qemu-tools
   - syslinux
   - tftp
-  - gptfdisk
 
 ironic_conductor_standalone_distro_packages:
   - dhcp-server
@@ -47,3 +46,29 @@ ironic_library_modules_paths:
 
 ironic_tftpd_service_name: tftp
 ironic_tftpd_root: /srv/tftpboot
+
+ironic_inspector_http_distro_packages:
+   - nginx
+
+ironic_inspector_isc_dhcp_distro_packages:
+   - tftpd-hpa
+   - isc-dhcp-server
+
+ironic_inspector_dnsmasq_distro_packages:
+   - dnsmasq
+
+ironic_inspector_standalone_distro_packages:
+  - isc-dhcp-server
+
+ironic_inspector_devel_distro_packages:
+  - git-core
+  - libffi-dev
+  - libsystemd-dev
+
+ironic_inspector_library_modules_paths:
+  - "/usr/lib/PXELINUX/pxelinux.0"
+  - "/usr/lib/PXELINUX/lpxelinux.0"
+  - "/usr/lib/syslinux/modules/efi64/chain.c32"
+  - "/usr/lib/syslinux/modules/bios/ldlinux.c32"
+  - "/usr/lib/SYSLINUX.EFI/efi64/syslinux.efi"
+  - "/usr/lib/syslinux/modules/efi64/ldlinux.e64"

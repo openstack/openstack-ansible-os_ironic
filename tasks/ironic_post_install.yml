@@ -92,6 +92,7 @@
     mode: "0644"
     config_overrides: "{{ item.config_overrides }}"
     config_type: "{{ item.config_type }}"
+  when: item.condition | default(True)
   with_items:
     - src: "ironic.conf.j2"
       dest: "/etc/ironic/ironic.conf"
@@ -103,6 +104,18 @@
       group: "root"
       config_overrides: "{{ ironic_rootwrap_conf_overrides }}"
       config_type: "ini"
+    - src: "inspector.conf.j2"
+      dest: "/etc/ironic-inspector/ironic-inspector.conf"
+      config_overrides: "{{ ironic_inspector_conf_overrides }}"
+      config_type: "ini"
+      condition: inventory_hostname in groups['ironic-inspector']
+    - src: "rootwrap.conf.j2"
+      dest: "/etc/ironic-inspector/rootwrap.conf"
+      owner: "root"
+      group: "root"
+      config_overrides: "{{ ironic_inspector_rootwrap_conf_overrides }}"
+      config_type: "ini"
+      condition: inventory_hostname in groups['ironic-inspector']
   notify: Restart ironic services
 
 - name: Implement policy.json

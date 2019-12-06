@@ -36,7 +36,6 @@ ironic_conductor_distro_packages:
   - open-iscsi
   - ipmitool
   - tftpd-hpa
-  - gdisk
 
 ironic_conductor_standalone_distro_packages:
   - isc-dhcp-server
@@ -48,3 +47,39 @@ ironic_library_modules_paths:
 
 ironic_tftpd_service_name: tftpd-hpa
 ironic_tftpd_root: /tftpboot
+
+ironic_inspector_distro_packages:
+   - libxml2-dev
+   - pxelinux
+   - syslinux
+   - syslinux-common
+   - syslinux-efi
+   - libxslt1-dev
+   - libpq-dev
+   - python-yaml
+   - ipmitool
+
+ironic_inspector_http_distro_packages:
+   - nginx
+
+ironic_inspector_isc_dhcp_distro_packages:
+   - tftpd-hpa
+   - isc-dhcp-server
+
+ironic_inspector_dnsmasq_distro_packages:
+   - dnsmasq
+
+ironic_inspector_standalone_distro_packages:
+  - isc-dhcp-server
+
+ironic_inspector_devel_distro_packages:
+  - git-core
+  - libffi-dev
+  - libsystemd-dev
+
+ironic_inspector_library_modules_paths:
+  - "/usr/lib/PXELINUX/pxelinux.0"
+  - "/usr/lib/PXELINUX/lpxelinux.0"
+  - "/usr/lib/syslinux/modules/efi64/chain.c32"
+  - "/usr/lib/syslinux/modules/bios/ldlinux.c32"
+  - "/usr/lib/syslinux/modules/efi64/ldlinux.e64"

@@ -29,7 +29,7 @@
     - "{{ ironic_system_home_folder }}/.ssh/id_rsa.pub"
   when: ironic_recreate_keys | bool
 
-- name: Create the ironic system user
+- name: Create ironic system users
   user:
     name: "{{ ironic_system_user_name }}"
     group: "{{ ironic_system_group_name }}"
@@ -47,16 +47,31 @@
     owner: "{{ item.owner|default(ironic_system_user_name) }}"
     group: "{{ item.group|default(ironic_system_group_name) }}"
     mode: "{{ item.mode|default('0755') }}"
+  when: item.condition | default(True)
   with_items:
     - { path: "/openstack/venvs", mode: "0755", owner: "root", group: "root" }
     - { path: "/etc/ironic" }
+    - path: "/etc/ironic-inspector"
+      condition: inventory_hostname in groups['ironic-inspector']
     - { path: "/etc/ironic/rootwrap.d" }
+    - path: "/etc/ironic-inspector/rootwrap.d"
+      condition: inventory_hostname in groups['ironic-inspector']
     - { path: "/etc/sudoers.d", mode: "0750", owner: "root", group: "root" }
     - { path: "/var/cache/ironic" }
+    - path: "/var/cache/ironic-inspector"
+      condition: inventory_hostname in groups['ironic-inspector']
     - { path: "{{ ironic_system_home_folder }}" }
     - { path: "{{ ironic_system_home_folder }}/.ssh", mode: "0700" }
     - { path: "{{ ironic_system_home_folder }}/images" }
     - { path: "{{ ironic_system_home_folder }}/master_images" }
     - { path: "{{ ironic_system_home_folder }}/cache/api", mode: "0700" }
     - { path: "{{ ironic_lock_path }}" }
+    - path: "{{ ironic_inspector_lock_path }}"
+      condition: inventory_hostname in groups['ironic-inspector']
     - { path: "/var/run/ironic" }
+    - path: "/var/run/ironic-inspector"
+      condition: inventory_hostname in groups['ironic-inspector']
+    - path: "{{ ironic_inspector_tftpboot_dir }}/pxelinux.cfg"
+      condition: inventory_hostname in groups['ironic-inspector']
+    - path: "/httpboot"
+      condition: inventory_hostname in groups['ironic-inspector']

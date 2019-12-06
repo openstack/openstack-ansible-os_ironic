@@ -6,6 +6,7 @@ OpenStack-Ansible role for Bare Metal (ironic) service
    :maxdepth: 2
 
    configure-ironic.rst
+   configure-inspector.rst
 
 This is an OpenStack-Ansible role to deploy the Bare Metal (ironic)
 service. See the `role-ironic spec`_ for more information.

@@ -98,6 +98,17 @@ use_web_server_for_images = True
 {% endif %}
 
 [inspector]
+{% if  ironic_services['ironic-inspector']['group'] in group_names %}
+auth_type = {{ ironic_keystone_auth_plugin }}
+auth_url = {{ keystone_service_adminuri }}
+insecure = {{ keystone_service_internaluri_insecure | bool }}
+password = {{ ironic_inspector_service_password  }}
+project_domain_name = {{ ironic_inspector_service_domain_id }}
+project_name ={{ ironic_inspector_service_project_name }}
+user_domain_name = {{ ironic_inspector_service_domain_id }}
+username = {{ ironic_inspector_service_user_name }}
+valid_interfaces = {{ ironic_inspector_valid_interfaces }}
+{% endif %}
 
 [ipmi]
 
