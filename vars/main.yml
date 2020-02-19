@@ -318,3 +318,13 @@ filtered_ironic_drivers: |-
   {%   endif %}
   {% endfor %}
   {{ concat_drivers }}
+
+ironic_venv_packages: |-
+  {%- set pkg_list = ironic_pip_packages %}
+  {%- if (ironic_oslomsg_amqp1_enabled | bool) %}
+  {%-   set _ = pkg_list.extend(ironic_optional_oslomsg_amqp1_pip_packages) %}
+  {%- endif %}
+  {%- if (ironic_services['ironic-inspector']['group'] in group_names) %}
+  {%-   set _ = pkg_list.extend(ironic_inspector_pip_packages) %}
+  {%- endif %}
+  {{- pkg_list | unique }}

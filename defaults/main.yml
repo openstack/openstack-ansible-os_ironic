@@ -184,7 +184,6 @@ ironic_tftp_server_address: "{{ ansible_host }}"
 ironic_pip_packages:
   - cryptography
   - ironic
-  - "{{ (ironic_services['ironic-inspector']['group'] in group_names) | ternary('ironic-inspector', '') }}"
   - osprofiler
   - proliantutils
   - PyMySQL
@@ -192,13 +191,16 @@ ironic_pip_packages:
   - python-dracclient
   - python-ilorest-library
   - python-ironicclient
-  - python-ironic-inspector-client
   - python-memcached
   - python-scciclient
   - python-swiftclient
   - python-xclarityclient
   - sushy
   - systemd-python
+
+ironic_inspector_pip_packages:
+  - ironic-inspector
+  - python-ironic-inspector-client
 
 ## Oslo Messaging Info
 # RPC
