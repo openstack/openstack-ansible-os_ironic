@@ -26,6 +26,8 @@
   command: "{{ ironic_bin }}/ironic-inspector-dbsync --config-file /etc/ironic-inspector/ironic-inspector.conf upgrade"
   become: yes
   changed_when: false
-  when: "'ironic_inspector' in groups and inventory_hostname == groups['ironic_inspector'][0]"
+  when:
+    - ironic_services['ironic-inspector']['group'] in group_names
+    - inventory_hostname == groups[ironic_services['ironic-inspector']['group']][0]
   notify:
     - Restart ironic services

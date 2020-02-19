@@ -87,7 +87,7 @@
     venv_install_destination_path: "{{ ironic_bin | dirname }}"
     venv_install_distro_package_list: "{{ ironic_packages_list }}"
     venv_pip_install_args: "{{ ironic_pip_install_args }}"
-    venv_pip_packages: "{{ (ironic_oslomsg_amqp1_enabled | bool) | ternary(ironic_pip_packages + ironic_optional_oslomsg_amqp1_pip_packages, ironic_pip_packages) }}"
+    venv_pip_packages: "{{ ironic_venv_packages }}"
     venv_facts_when_changed:
       - section: "ironic"
         option: "venv_tag"
