@@ -187,6 +187,7 @@ ironic_pip_packages:
   - osprofiler
   - proliantutils
   - PyMySQL
+  - pymemcache
   - pysnmp
   - python-dracclient
   - python-ilorest-library
@@ -201,6 +202,9 @@ ironic_pip_packages:
 ironic_inspector_pip_packages:
   - ironic-inspector
   - python-ironic-inspector-client
+
+# Memcached override
+ironic_memcached_servers: "{{ memcached_servers }}"
 
 ## Oslo Messaging Info
 # RPC

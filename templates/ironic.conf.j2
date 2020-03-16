@@ -9,7 +9,7 @@ debug = {{ debug }}
 auth_strategy = {{ ironic_auth_strategy }}
 host = {{ inventory_hostname }}
 
-memcached_servers = {{ memcached_servers }}
+memcached_servers = {{ ironic_memcached_servers }}
 enabled_network_interfaces = {{ ironic_enabled_network_interfaces_list }}
 default_network_interface = {{ ironic_default_network_interface }}
 
@@ -131,7 +131,7 @@ username = {{ ironic_service_user_name }}
 password = {{ ironic_service_password }}
 region_name = {{ keystone_service_region }}
 
-memcached_servers = {{ memcached_servers }}
+memcached_servers = {{ ironic_memcached_servers }}
 
 token_cache_time = 300
 
