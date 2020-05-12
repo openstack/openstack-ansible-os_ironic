@@ -258,12 +258,6 @@ ironic_glance_keystone_auth_url: "{{ keystone_service_internalurl | default('htt
 # Neutron
 ironic_neutron_auth_strategy: "{{ ironic_auth_strategy }}"
 
-# This variable is used by the repo_build process to determine
-# which host group to check for members of before building the
-# pip packages required by this role. The value is picked up
-# by the py_pkgs lookup.
-ironic_role_project_group: ironic_all
-
 ### Config Overrides
 ironic_ironic_conf_overrides: {}
 ironic_rootwrap_conf_overrides: {}
