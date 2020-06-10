@@ -38,6 +38,8 @@ ironic_conductor_distro_packages:
   - gdisk
   - ipxe
   - nginx
+  - grub-efi-amd64-signed
+  - shim-signed
 
 ironic_conductor_standalone_distro_packages:
   - isc-dhcp-server
@@ -48,6 +50,12 @@ ironic_library_modules_paths:
   - "/usr/lib/syslinux/modules/bios/ldlinux.c32"
   - "/usr/lib/ipxe/undionly.kpxe"
   - "/usr/lib/ipxe/ipxe.efi"
+
+ironic_uefi_modules:
+  - name: "bootx64.efi"
+    path: "/usr/lib/shim/shimx64.efi.signed"
+  - name: "grubx64.efi"
+    path: "/usr/lib/grub/x86_64-efi-signed/grubnetx64.efi.signed"
 
 ironic_tftpd_service_name: tftpd-hpa
 ironic_tftpd_root: /tftpboot
@@ -89,3 +97,4 @@ ironic_inspector_library_modules_paths:
   - "/usr/lib/syslinux/modules/efi64/ldlinux.e64"
 
 ironic_nginx_conf_path: "sites-available"
+ironic_grub_dir: "/tftpboot/grub"

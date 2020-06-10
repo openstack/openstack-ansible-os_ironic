@@ -52,6 +52,27 @@
     remote_src: True
   with_items: "{{ ironic_library_modules_paths }}"
 
+- name: Ensure grub directory exists in tftpboot
+  file:
+    path: "{{ ironic_grub_dir }}"
+    state: directory
+    recurse: yes
+
+- name: Copy PXE grub config into tftpboot
+  copy:
+    src: "grub.conf"
+    dest: "{{ ironic_grub_dir }}/grub.cfg"
+    mode: "0644"
+    owner: "ironic"
+    group: "ironic"
+
+- name: Copy uefi modules into tftpboot
+  copy:
+    src: "{{ item.path }}"
+    dest: "{{ ironic_tftpd_root }}/{{ item.name }}"
+    remote_src: True
+  with_items: "{{ ironic_uefi_modules }}"
+
 - name: Start up tftp
   service:
     name: "{{ ironic_tftpd_service_name }}"

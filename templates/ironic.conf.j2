@@ -204,7 +204,7 @@ pool_max_size = {{ ironic_wsgi_processes }}
 [pxe]
 {% if ironic_ipxe_enabled | bool %}
 pxe_bootfile_name = undionly.kpxe
-uefi_pxe_bootfile_name = ipxe.efi
+uefi_ipxe_bootfile_name = ipxe.efi
 pxe_config_template = $pybasedir/drivers/modules/ipxe_config.template
 uefi_pxe_config_template = $pybasedir/drivers/modules/ipxe_config.template
 {% endif %}
