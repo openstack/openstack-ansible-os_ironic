@@ -210,7 +210,7 @@ ironic_service_endpoint_list: >
         )
   %}
   {%- endif %}
-  {%- if inventory_hostname in groups['ironic_inspector'] %}
+  {%- if ironic_services['ironic-inspector']['group'] in group_names %}
   {%-   set _ = service_endpoint_list.append(
           {
             'service': ironic_inspector_service_name,
@@ -250,7 +250,7 @@ ironic_service_catalog_list: >
         )
   %}
   {%- endif %}
-  {%- if inventory_hostname in groups['ironic_inspector'] %}
+  {%- if ironic_services['ironic-inspector']['group'] in group_names %}
   {%-   set _ = service_catalog_list.append(
           {
             'name': ironic_inspector_service_name,
