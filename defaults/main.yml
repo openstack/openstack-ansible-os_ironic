@@ -114,8 +114,8 @@ ironic_service_in_ldap: False
 # config file. If this is set to False, then Ironic will use
 # Swift to host the floppy images and generated boot_iso.
 ironic_enable_web_server_for_images: False
-ironic_http_url: null
-ironic_http_root: null
+ironic_http_url: "{{ ironic_ipxe_proto }}://{{ ansible_host }}:{{ ironic_ipxe_port }}"
+ironic_http_root: "/httpboot"
 #
 ### Swift Config
 #
@@ -320,6 +320,10 @@ ironic_inspector_db_pool_timeout: 30
 
 ironic_inspector_pip_install_args: "{{ pip_install_options | default('') }}"
 
+# Ironic iPXE support
+ironic_ipxe_enabled: False
+ironic_ipxe_port: 8051
+ironic_ipxe_proto: "http"
 
 # Auth
 ironic_inspector_service_user_name: "ironic_inspector"

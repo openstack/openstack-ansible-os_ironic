@@ -24,6 +24,10 @@ enabled_inspect_interfaces = {{ filtered_ironic_drivers | json_query('[*].inspec
 enabled_management_interfaces = {{ filtered_ironic_drivers | json_query('[*].management') | unique | join(',') }}
 enabled_power_interfaces = {{ filtered_ironic_drivers | json_query('[*].power') | unique | join(',') }}
 
+# Ironic boot interface (defaults to None)
+{% if ironic_ipxe_enabled | bool %}
+default_boot_interface = ipxe
+{% endif %}
 
 [agent]
 
@@ -185,6 +189,13 @@ pool_max_size = {{ ironic_wsgi_processes }}
 [oslo_policy]
 
 [pxe]
+{% if ironic_ipxe_enabled | bool %}
+pxe_bootfile_name = undionly.kpxe
+uefi_pxe_bootfile_name = ipxe.efi
+pxe_config_template = $pybasedir/drivers/modules/ipxe_config.template
+uefi_pxe_config_template = $pybasedir/drivers/modules/ipxe_config.template
+{% endif %}
+
 tftp_server = {{ ironic_tftp_server_address }}
 pxe_append_params = {{ ironic_pxe_append_params }}
 tftp_root = {{ ironic_tftpd_root }}
