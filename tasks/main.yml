@@ -147,7 +147,7 @@
     _service_users: "{{ ironic_service_user_list }}"
     _service_endpoints: "{{ ironic_service_endpoint_list }}"
     _service_catalog: "{{ ironic_service_catalog_list }}"
-  when: inventory_hostname == groups['ironic_api'][0]
+  when: (inventory_hostname == groups['ironic_api'][0] or inventory_hostname == groups['ironic_inspector'][0])
   tags:
     - ironic-config
 
