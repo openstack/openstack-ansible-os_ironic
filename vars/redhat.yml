@@ -22,16 +22,14 @@ ironic_devel_distro_packages:
 
 ironic_api_distro_packages:
   - libxml2-devel
-  - systemd-python
+  - "{{ ansible_distribution_major_version is version('8', '<') | ternary('systemd-python', 'python3-systemd') }}"
 
 ironic_conductor_distro_packages:
   - libxml2-devel
-  - syslinux
-  - syslinux-devel
+  - "{{ ansible_distribution_major_version is version('8', '<') | ternary('syslinux-devel', 'syslinux') }}"
   - syslinux-tftpboot
   - libxslt-devel
-  - qemu-kvm-tools
-  - qemu-img-ev
+  - "qemu-kvm{% if ansible_distribution_major_version is version('8', '<') %}-ev{% endif %}"
   - libiscsi-utils
   - iscsi-initiator-utils
   - ipmitool
