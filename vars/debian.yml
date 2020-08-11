@@ -22,7 +22,7 @@ ironic_devel_distro_packages:
 
 ironic_api_distro_packages:
   - libxml2-dev
-  - python-systemd
+  - python3-systemd
 
 ironic_conductor_distro_packages:
   - libxml2-dev
@@ -32,7 +32,7 @@ ironic_conductor_distro_packages:
   - libxslt1-dev
   - qemu-utils
   - libpq-dev
-  - python-yaml
+  - python3-yaml
   - open-iscsi
   - ipmitool
   - tftpd-hpa
@@ -57,7 +57,7 @@ ironic_inspector_distro_packages:
    - syslinux-efi
    - libxslt1-dev
    - libpq-dev
-   - python-yaml
+   - python3-yaml
    - ipmitool
 
 ironic_inspector_http_distro_packages:
