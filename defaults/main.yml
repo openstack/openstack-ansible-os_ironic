@@ -36,10 +36,13 @@ ironic_package_state: "latest"
 ironic_pip_package_state: "latest"
 
 ironic_git_repo: https://opendev.org/openstack/ironic
+ironic_inspector_git_repo: https://opendev.org/openstack/ironic-inspector
 ironic_git_install_branch: master
+ironic_inspector_git_install_branch: master
 ironic_upper_constraints_url: "{{ requirements_git_url | default('https://releases.openstack.org/constraints/upper/' ~ requirements_git_install_branch | default('master')) }}"
 ironic_git_constraints:
   - "git+{{ ironic_git_repo }}@{{ ironic_git_install_branch }}#egg=ironic"
+  - "git+{{ ironic_inspector_git_repo }}@{{ ironic_inspector_git_install_branch }}#egg=ironic-inspector"
   - "--constraint {{ ironic_upper_constraints_url }}"
 
 ironic_pip_install_args: "{{ pip_install_options | default('') }}"
@@ -375,7 +378,6 @@ ironic_inspector_oslomsg_notify_vhost: "{{ ironic_inspector_oslomsg_rpc_vhost }}
 ironic_inspector_optional_oslomsg_amqp1_pip_packages:
   - oslo.messaging[amqp1]
 ironic_inspector_oslomsg_amqp1_enabled: True
-ironic_inspector_upper_constraints_url: "{{ requirements_git_url | default('https://git.openstack.org/cgit/openstack/requirements/plain/upper-constraints.txt?h=' ~ requirements_git_install_branch | default('master')) }}"
 
 ironic_inspector_ipa_initrd_name: ironic-deploy.initrd
 ironic_inspector_ipa_kernel_name: ironic-deploy.kernel
