@@ -30,6 +30,9 @@
     - "inventory_hostname == ((groups[ironic_services['ironic-api']['group']]| intersect(ansible_play_hosts)) | list)[0]"
   vars:
     _oslodb_setup_host: "{{ ironic_db_setup_host }}"
+    _oslodb_ansible_python_interpreter: "{{ ironic_db_setup_python_interpreter }}"
+    _oslodb_setup_endpoint: "{{ ironic_galera_address }}"
+    _oslodb_setup_port: "{{ ironic_galera_port }}"
     _oslodb_databases:
       - name: "{{ ironic_galera_database }}"
         users:
@@ -45,6 +48,9 @@
     - "inventory_hostname == ((groups[ironic_services['ironic-inspector']['group']]| intersect(ansible_play_hosts)) | list)[0]"
   vars:
     _oslodb_setup_host: "{{ ironic_inspector_db_setup_host }}"
+    _oslodb_ansible_python_interpreter: "{{ ironic_inspector_db_setup_python_interpreter }}"
+    _oslodb_setup_endpoint: "{{ ironic_inspector_galera_address }}"
+    _oslodb_setup_port: "{{ ironic_inspector_galera_port }}"
     _oslodb_databases:
       - name: "{{ ironic_inspector_galera_database }}"
         users:
