@@ -72,7 +72,7 @@ add_ports = pxe
 keep_ports = present
 store_data = database
 store_data_location = report_path
-ramdisk_logs_dir = /ironic/log
+ramdisk_logs_dir = {{ ironic_system_home_folder }}/ramdisk-logs
 always_store_ramdisk_logs = true
 {% if ironic_inspector_processing_hooks is defined %}
 processing_hooks = {{ ironic_inspector_processing_hooks }}
