@@ -25,5 +25,4 @@
   become: yes
   changed_when: false
   when:
-    - ironic_services['ironic-inspector']['group'] in group_names
-    - inventory_hostname == groups[ironic_services['ironic-inspector']['group']][0]
+    - _ironic_inspector_is_first_play_host

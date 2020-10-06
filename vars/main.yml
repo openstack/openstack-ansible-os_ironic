@@ -13,6 +13,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+_ironic_api_is_first_play_host: "{{ (ironic_services['ironic-api']['group'] in group_names and inventory_hostname == (groups[ironic_services['ironic-api']['group']] | intersect(ansible_play_hosts)) | first) | bool }}"
+_ironic_inspector_is_first_play_host: "{{ (ironic_services['ironic-inspector']['group'] in group_names and inventory_hostname == (groups[ironic_services['ironic-inspector']['group']] | intersect(ansible_play_hosts)) | first) | bool }}"
+
 # This special list brings together all of the package installations into one
 # task to save time.
 

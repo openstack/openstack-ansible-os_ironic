@@ -25,7 +25,7 @@
     OS_ENDPOINT_TYPE: internalURL
   when:
     - not ironic_enable_web_server_for_images | bool
-    - inventory_hostname == groups['ironic_all'][0]
+    - _ironic_api_is_first_play_host
     - not ironic_standalone | bool
   tags:
     - always
