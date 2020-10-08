@@ -116,7 +116,9 @@
       config_overrides: "{{ ironic_inspector_rootwrap_conf_overrides }}"
       config_type: "ini"
       condition: inventory_hostname in groups['ironic-inspector']
-  notify: Restart ironic services
+  notify:
+    - Restart ironic services
+    - Restart uwsgi services
 
 - name: Implement policy.json
   copy:
@@ -133,7 +135,9 @@
     group: "root"
   with_fileglob:
     - rootwrap.d/*
-  notify: Restart ironic services
+  notify:
+    - Restart ironic services
+    - Restart uwsgi services
 
 - name: Include sudoers file
   template:
