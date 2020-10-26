@@ -36,6 +36,7 @@ ironic_conductor_distro_packages:
   - syslinux
   - tftp
   - gptfdisk
+  - nginx
 
 ironic_conductor_standalone_distro_packages:
   - dhcp-server
@@ -73,3 +74,5 @@ ironic_inspector_library_modules_paths:
   - "/usr/lib/syslinux/modules/bios/ldlinux.c32"
   - "/usr/lib/SYSLINUX.EFI/efi64/syslinux.efi"
   - "/usr/lib/syslinux/modules/efi64/ldlinux.e64"
+
+ironic_nginx_conf_path: "conf.d"

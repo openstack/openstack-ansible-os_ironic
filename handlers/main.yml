@@ -52,3 +52,16 @@
     name: "dnsmasq"
     state: restarted
   failed_when: false
+
+- name: Restart web server
+  service:
+    name: "nginx"
+    enabled: yes
+    state: restarted
+    daemon_reload: "{{ (ansible_service_mgr == 'systemd') | ternary('yes', omit) }}"
+  register: _restart
+  until: _restart is success
+  retries: 5
+  delay: 2
+  listen:
+    - "venv changed"

@@ -37,6 +37,8 @@ ironic_conductor_distro_packages:
   - ipmitool
   - tftpd-hpa
   - gdisk
+  - ipxe
+  - nginx
 
 ironic_conductor_standalone_distro_packages:
   - isc-dhcp-server
@@ -45,6 +47,8 @@ ironic_library_modules_paths:
   - "/usr/lib/PXELINUX/pxelinux.0"
   - "/usr/lib/syslinux/modules/efi64/chain.c32"
   - "/usr/lib/syslinux/modules/bios/ldlinux.c32"
+  - "/usr/lib/ipxe/undionly.kpxe"
+  - "/usr/lib/ipxe/ipxe.efi"
 
 ironic_tftpd_service_name: tftpd-hpa
 ironic_tftpd_root: /tftpboot
@@ -84,3 +88,5 @@ ironic_inspector_library_modules_paths:
   - "/usr/lib/syslinux/modules/efi64/chain.c32"
   - "/usr/lib/syslinux/modules/bios/ldlinux.c32"
   - "/usr/lib/syslinux/modules/efi64/ldlinux.e64"
+
+ironic_nginx_conf_path: "sites-available"
