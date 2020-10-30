@@ -246,7 +246,7 @@ ironic_service_user_name: "ironic"
 # WSGI settings
 ironic_wsgi_threads: 1
 ironic_wsgi_processes_max: 16
-ironic_wsgi_processes: "{{ [[ansible_processor_vcpus|default(4) // 4, 1] | max, ironic_wsgi_processes_max] | min }}"
+ironic_wsgi_processes: "{{ [[(ansible_processor_vcpus//ansible_processor_threads_per_core)|default(1), 1] | max * 2, ironic_wsgi_processes_max] | min }}"
 ironic_uwsgi_bind_address: "{{ openstack_service_bind_address | default('0.0.0.0') }}"
 
 ### OpenStack Services to integrate with
