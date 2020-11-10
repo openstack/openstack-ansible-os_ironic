@@ -156,12 +156,14 @@ ironic_keystone_auth_plugin: password
 
 # Neutron network - Set these in a playbook/task - can be set manually.
 # Only "name" or "uuid" is needed, uuid will take preference if both are specified.
-# The cleaning network is not required to be set - it will default to the same as
-# the provisioning network if not specified.
+# The cleaning and inspection network is not required to be set; they will default
+# to the provisioning network if not specified.
 # ironic_neutron_provisioning_network_uuid: "UUID for provisioning network in neutron"
 # ironic_neutron_cleaning_network_uuid: "UUID for cleaning network in neutron"
+# ironic_neutron_inspection_network_uuid: "UUID for inspection network in neutron"
 # ironic_neutron_provisioning_network_name: "Name of provisioning network in neutron"
 # ironic_neutron_cleaning_network_name: "Name of cleaning network in neutron"
+# ironic_neutron_inspection_network_name: "Name of inspection network in neutron"
 
 # Integrated Openstack configuration
 ironic_enabled_network_interfaces_list: "flat,noop{{ (ironic_neutron_provisioning_network_uuid is defined) | ternary(',neutron','') }}"
@@ -293,6 +295,7 @@ ironic_inspector_service_description: "Ironic Baremetal Introspection Service"
 ironic_inspector_service_publicuri_proto: "{{ openstack_service_publicuri_proto | default(ironic_service_proto) }}"
 ironic_inspector_service_adminuri_proto: "{{ openstack_service_adminuri_proto | default(ironic_service_proto) }}"
 ironic_inspector_service_internaluri_proto: "{{ openstack_service_internaluri_proto | default(ironic_service_proto) }}"
+ironic_inspector_service_address: "{{ openstack_service_bind_address }}"
 ironic_inspector_service_port: 5050
 ironic_inspector_service_publicuri: "{{ ironic_inspector_service_publicuri_proto }}://{{ external_lb_vip_address }}:{{ ironic_inspector_service_port }}"
 ironic_inspector_service_publicurl: "{{ ironic_inspector_service_publicuri }}"

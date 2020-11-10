@@ -171,6 +171,7 @@ insecure = {{ keystone_service_adminuri_insecure | bool }}
 {% if ironic_neutron_provisioning_network_name is defined %}
 provisioning_network = {{ ironic_neutron_provisioning_network_uuid | default(ironic_neutron_provisioning_network_name) | default('') }}
 cleaning_network = {{ ironic_neutron_cleaning_network_uuid | default(ironic_neutron_cleaning_network_name) | default(ironic_neutron_provisioning_network_uuid) | default(ironic_neutron_provisioning_network_name) | default('') }}
+inspection_network = {{ ironic_neutron_inspection_network_uuid | default(ironic_neutron_inspection_network_name) | default(ironic_neutron_provisioning_network_uuid) | default(ironic_neutron_provisioning_network_name) | default('') }}
 {% endif %}
 
 [oslo_concurrency]

@@ -1,6 +1,9 @@
 # {{ ansible_managed }}
 
 [DEFAULT]
+listen_address = {{ ironic_inspector_service_address }}
+listen_port = {{ ironic_inspector_service_port }}
+
 rootwrap_config = /etc/ironic-inspector/rootwrap.conf
 auth_strategy = keystone
 debug = {{ debug }}
