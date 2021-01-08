@@ -30,10 +30,9 @@ ironic_service_setup_host_python_interpreter: "{{ openstack_service_setup_host_p
 # Comma separated list of Glance API servers
 ironic_glance_api_servers: "{{ (glance_service_internalurl | default('http://localhost')) | urlsplit('scheme') ~ '://' ~ (glance_service_internalurl | default('http://localhost')) | urlsplit('netloc') }}"
 
-# Set the package install state for distribution and pip packages
+# Set the package install state for distribution packages
 # Options are 'present' and 'latest'
-ironic_package_state: "latest"
-ironic_pip_package_state: "latest"
+ironic_package_state: "{{ package_state | default('latest') }}"
 
 ironic_git_repo: https://opendev.org/openstack/ironic
 ironic_inspector_git_repo: https://opendev.org/openstack/ironic-inspector
@@ -95,12 +94,12 @@ ironic_service_adminurl: "{{ ironic_service_adminuri }}"
 ironic_service_internaluri: "{{ ironic_service_internaluri_proto }}://{{ internal_lb_vip_address }}:{{ ironic_service_port }}"
 ironic_service_internalurl: "{{ ironic_service_internaluri }}"
 ironic_program_name: ironic-api
-ironic_service_region: RegionOne
+ironic_service_region: "{{ service_region | default('RegionOne') }}"
 ironic_service_project_name: "service"
 ironic_service_project_domain_id: default
 ironic_service_user_domain_id: default
 ironic_service_role_name: "admin"
-ironic_service_in_ldap: False
+ironic_service_in_ldap: "{{ service_ldap_backend_enabled | default(False) }}"
 
 # Ironic image store information
 #
@@ -147,7 +146,7 @@ ironic_galera_user: ironic
 ironic_galera_database: ironic
 ironic_galera_use_ssl: "{{ galera_use_ssl | default(False) }}"
 ironic_galera_ssl_ca_cert: "{{ galera_ssl_ca_cert | default('/etc/ssl/certs/galera-ca.pem') }}"
-ironic_galera_port: 3306
+ironic_galera_port: "{{ galera_port | default('3306') }}"
 
 ## Keystone authentication middleware
 ironic_keystone_auth_plugin: password
@@ -303,7 +302,7 @@ ironic_inspector_service_internaluri: "{{ ironic_inspector_service_internaluri_p
 ironic_inspector_service_internalurl: "{{ ironic_inspector_service_internaluri }}"
 ironic_inspector_service_role_name: "admin"
 ironic_inspector_service_project_name: "service"
-ironic_inspector_service_in_ldap: False
+ironic_inspector_service_in_ldap: "{{ service_ldap_backend_enabled | default(False) }}"
 ironic_inspector_service_domain_id: default
 
 # Database
