@@ -41,8 +41,6 @@ ironic_git_install_branch: master
 ironic_inspector_git_install_branch: master
 ironic_upper_constraints_url: "{{ requirements_git_url | default('https://releases.openstack.org/constraints/upper/' ~ requirements_git_install_branch | default('master')) }}"
 ironic_git_constraints:
-  - "git+{{ ironic_git_repo }}@{{ ironic_git_install_branch }}#egg=ironic"
-  - "git+{{ ironic_inspector_git_repo }}@{{ ironic_inspector_git_install_branch }}#egg=ironic-inspector"
   - "--constraint {{ ironic_upper_constraints_url }}"
 
 ironic_pip_install_args: "{{ pip_install_options | default('') }}"
@@ -189,8 +187,8 @@ ironic_recreate_keys: False
 ironic_tftp_server_address: "{{ ansible_host }}"
 
 ironic_pip_packages:
+  - "git+{{ ironic_git_repo }}@{{ ironic_git_install_branch }}#egg=ironic"
   - cryptography
-  - ironic
   - osprofiler
   - proliantutils
   - PyMySQL
@@ -207,7 +205,7 @@ ironic_pip_packages:
   - systemd-python
 
 ironic_inspector_pip_packages:
-  - ironic-inspector
+  - "git+{{ ironic_inspector_git_repo }}@{{ ironic_inspector_git_install_branch }}#egg=ironic-inspector"
   - python-ironic-inspector-client
 
 # Memcached override
