@@ -23,16 +23,6 @@
   listen:
     - "venv changed"
 
-- name: Restart tftpd socket
-  service:
-    name: "{{ ironic_tftpd_service_name }}.socket"
-    state: restarted
-    enabled: yes
-    daemon_reload: yes
-  failed_when: false
-  when:
-    - "ansible_pkg_mgr in ['zypper']"
-
 - name: Restart tftpd
   service:
     name: "{{ ironic_tftpd_service_name }}"

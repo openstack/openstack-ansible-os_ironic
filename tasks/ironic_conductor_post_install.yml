@@ -52,16 +52,6 @@
     remote_src: True
   with_items: "{{ ironic_library_modules_paths }}"
 
-# Add 'yum' in condition if tftp socket required to be started for centos.
-- name: Start up tftp socket
-  when:
-    - "ansible_pkg_mgr in ['zypper']"
-  systemd:
-    daemon_reload: yes
-    name: "{{ ironic_tftpd_service_name }}.socket"
-    state: started
-    enabled: true
-
 - name: Start up tftp
   service:
     name: "{{ ironic_tftpd_service_name }}"
