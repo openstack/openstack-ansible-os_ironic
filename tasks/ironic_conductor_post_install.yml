@@ -34,7 +34,7 @@
     src: "tftpd-hpa.j2"
     dest: "/etc/default/tftpd-hpa"
   when:
-    - ansible_os_family == 'Debian'
+    - ansible_facts['os_family'] == 'Debian'
   notify:
     - Restart tftpd
 
@@ -97,7 +97,7 @@
     path: "/etc/nginx/sites-enabled/ironic-ipxe.conf"
     state: link
   when:
-    - ansible_os_family == "Debian"
+    - ansible_facts['os_family'] == "Debian"
     - "ironic_ipxe_enabled | bool"
   notify:
     - Restart web server

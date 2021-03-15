@@ -25,7 +25,7 @@ ironic_venv_python_executable: "{{ openstack_venv_python_executable | default('p
 # for the service setup. The host must already have
 # clouds.yaml properly configured.
 ironic_service_setup_host: "{{ openstack_service_setup_host | default('localhost') }}"
-ironic_service_setup_host_python_interpreter: "{{ openstack_service_setup_host_python_interpreter | default((ironic_service_setup_host == 'localhost') | ternary(ansible_playbook_python, ansible_python['executable'])) }}"
+ironic_service_setup_host_python_interpreter: "{{ openstack_service_setup_host_python_interpreter | default((ironic_service_setup_host == 'localhost') | ternary(ansible_playbook_python, ansible_facts['python']['executable'])) }}"
 
 # Comma separated list of Glance API servers
 ironic_glance_api_servers: "{{ (glance_service_internalurl | default('http://localhost')) | urlsplit('scheme') ~ '://' ~ (glance_service_internalurl | default('http://localhost')) | urlsplit('netloc') }}"
@@ -141,7 +141,7 @@ ironic_erase_devices_priority: 10
 
 # Database
 ironic_db_setup_host: "{{ openstack_db_setup_host | default('localhost') }}"
-ironic_db_setup_python_interpreter: "{{ openstack_db_setup_python_interpreter | default((ironic_db_setup_host == 'localhost') | ternary(ansible_playbook_python, ansible_python['executable'])) }}"
+ironic_db_setup_python_interpreter: "{{ openstack_db_setup_python_interpreter | default((ironic_db_setup_host == 'localhost') | ternary(ansible_playbook_python, ansible_facts['python']['executable'])) }}"
 ironic_galera_address: "{{ galera_address | default('127.0.0.1') }}"
 ironic_galera_user: ironic
 ironic_galera_database: ironic
@@ -246,7 +246,7 @@ ironic_service_user_name: "ironic"
 # WSGI settings
 ironic_wsgi_threads: 1
 ironic_wsgi_processes_max: 16
-ironic_wsgi_processes: "{{ [[(ansible_processor_vcpus//ansible_processor_threads_per_core)|default(1), 1] | max * 2, ironic_wsgi_processes_max] | min }}"
+ironic_wsgi_processes: "{{ [[(ansible_facts['processor_vcpus']//ansible_facts['processor_threads_per_core'])|default(1), 1] | max * 2, ironic_wsgi_processes_max] | min }}"
 ironic_uwsgi_bind_address: "{{ openstack_service_bind_address | default('0.0.0.0') }}"
 
 ### OpenStack Services to integrate with
@@ -308,7 +308,7 @@ ironic_inspector_service_domain_id: default
 
 # Database
 ironic_inspector_db_setup_host: "{{ openstack_db_setup_host | default('localhost') }}"
-ironic_inspector_db_setup_python_interpreter: "{{ openstack_db_setup_python_interpreter | default((ironic_inspector_db_setup_host == 'localhost') | ternary(ansible_playbook_python, ansible_python['executable'])) }}"
+ironic_inspector_db_setup_python_interpreter: "{{ openstack_db_setup_python_interpreter | default((ironic_inspector_db_setup_host == 'localhost') | ternary(ansible_playbook_python, ansible_facts['python']['executable'])) }}"
 ironic_inspector_galera_address: "{{ galera_address | default('127.0.0.1') }}"
 ironic_inspector_galera_user: ironic-inspector
 ironic_inspector_galera_database: ironic_inspector

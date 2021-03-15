@@ -25,7 +25,7 @@
     path: /etc/default/dnsmasq
     state: present
     line: 'DNSMASQ_EXCEPT=lo'
-  when: ansible_os_family == 'Debian'
+  when: ansible_facts['os_family'] == 'Debian'
   notify:
     - Restart dnsmasq
 
@@ -36,7 +36,7 @@
     regexp: '^#IGNORE_RESOLVCONF=.*'
     line: 'IGNORE_RESOLVCONF=yes'
     backrefs: yes
-  when: ansible_os_family == 'Debian'
+  when: ansible_facts['os_family'] == 'Debian'
   notify:
     - Restart dnsmasq
 
