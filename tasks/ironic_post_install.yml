@@ -120,12 +120,27 @@
     - Restart ironic services
     - Restart uwsgi services
 
-- name: Implement policy.json
-  copy:
-    content: "{{ ironic_policy_overrides | to_nice_json }}"
-    dest: "/etc/ironic/policy.json"
+- name: Implement policy.yaml
+  config_template:
+    content: "{{ ironic_policy_overrides }}"
+    dest: "/etc/ironic/policy.yaml"
+    owner: "{{ ironic_system_user_name }}"
+    group: "{{ ironic_system_group_name }}"
+    mode: "0644"
+    config_type: yaml
   when:
-    - ironic_policy_overrides != {}
+    - ironic_policy_overrides | length > 0
+  tags:
+    - ironic-policy-override
+
+- name: Remove legacy policy.yaml file
+  file:
+    path: "/etc/ironic/policy.yaml"
+    state: absent
+  when:
+    - ironic_policy_overrides | length == 0
+  tags:
+    - ironic-policy-override
 
 - name: Copy rootwrap filters
   copy:
