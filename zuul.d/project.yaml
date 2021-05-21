@@ -16,7 +16,7 @@
 - project:
     templates:
       - check-requirements
-      - openstack-ansible-linters
+      - openstack-ansible-linters-jobs
       - openstack-ansible-deploy-aio_metal-jobs
       # Add this template when
       # distro installs are supported.
