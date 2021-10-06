@@ -33,7 +33,6 @@ ironic_conductor_distro_packages:
   - qemu-utils
   - libpq-dev
   - python3-yaml
-  - open-iscsi
   - ipmitool
   - tftpd-hpa
   - gdisk
