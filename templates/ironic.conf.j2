@@ -186,7 +186,7 @@ project_domain_id = {{ ironic_service_project_domain_id }}
 insecure = {{ keystone_service_adminuri_insecure | bool }}
 
 [oslo_concurrency]
-lock_path = {{ ironic_lock_path }}
+lock_path = {{ ironic_lock_dir }}/{{ ironic_system_slice_name }}
 
 [oslo_messaging_amqp]
 

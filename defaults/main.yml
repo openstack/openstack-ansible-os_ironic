@@ -54,7 +54,8 @@ ironic_system_group_name: ironic
 ironic_system_shell: /bin/bash
 ironic_system_comment: ironic system user
 ironic_system_home_folder: "/var/lib/{{ ironic_system_user_name }}"
-ironic_lock_path: /var/lock/ironic
+ironic_system_slice_name: ironic
+ironic_lock_dir: "{{ openstack_lock_dir | default('/run/lock') }}"
 
 # Ironic Program and Service names
 python_ironic_client_program_name: ironic
@@ -288,8 +289,6 @@ ironic_inspector_venv_python_executable: "{{ openstack_venv_python_executable | 
 
 # System info
 ironic_inspector_service_setup_host: "{{ openstack_service_setup_host | default('localhost') }}"
-ironic_inspector_lock_path: /var/lock/ironic-inspector
-
 ironic_inspector_service_name: ironic-inspector
 ironic_inspector_service_type: baremetal-introspection
 ironic_inspector_service_description: "Ironic Baremetal Introspection Service"

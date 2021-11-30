@@ -57,20 +57,11 @@
     - path: "/etc/ironic-inspector/rootwrap.d"
       condition: inventory_hostname in groups['ironic-inspector']
     - { path: "/etc/sudoers.d", mode: "0750", owner: "root", group: "root" }
-    - { path: "/var/cache/ironic" }
-    - path: "/var/cache/ironic-inspector"
-      condition: inventory_hostname in groups['ironic-inspector']
     - { path: "{{ ironic_system_home_folder }}" }
     - { path: "{{ ironic_system_home_folder }}/.ssh", mode: "0700" }
     - { path: "{{ ironic_system_home_folder }}/images" }
     - { path: "{{ ironic_system_home_folder }}/master_images" }
     - { path: "{{ ironic_system_home_folder }}/cache/api", mode: "0700" }
-    - { path: "{{ ironic_lock_path }}" }
-    - path: "{{ ironic_inspector_lock_path }}"
-      condition: inventory_hostname in groups['ironic-inspector']
-    - { path: "/var/run/ironic" }
-    - path: "/var/run/ironic-inspector"
-      condition: inventory_hostname in groups['ironic-inspector']
     - path: "{{ ironic_inspector_tftpboot_dir }}/pxelinux.cfg"
       condition: inventory_hostname in groups['ironic-inspector']
     - path: "/httpboot"

@@ -128,8 +128,8 @@
     systemd_user_name: "{{ ironic_system_user_name }}"
     systemd_group_name: "{{ ironic_system_group_name }}"
     systemd_tempd_prefix: openstack
-    systemd_slice_name: ironic
-    systemd_lock_path: /var/lock/ironic
+    systemd_slice_name: "{{ ironic_system_slice_name }}"
+    systemd_lock_dir: "{{ ironic_lock_dir }}"
     systemd_CPUAccounting: true
     systemd_BlockIOAccounting: true
     systemd_MemoryAccounting: true
