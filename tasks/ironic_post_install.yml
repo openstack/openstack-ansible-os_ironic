@@ -84,7 +84,7 @@
     - always
 
 - name: Generate ironic config
-  config_template:
+  openstack.config_template.config_template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
     owner: "{{ item.owner|default(ironic_system_user_name) }}"
@@ -121,7 +121,7 @@
     - Restart uwsgi services
 
 - name: Implement policy.yaml
-  config_template:
+  openstack.config_template.config_template:
     content: "{{ ironic_policy_overrides }}"
     dest: "/etc/ironic/policy.yaml"
     owner: "{{ ironic_system_user_name }}"
