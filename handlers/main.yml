@@ -46,9 +46,9 @@
     state: restarted
   failed_when: false
 
-- name: Restart dnsmasq
+- name: Restart ironic-inspector-dnsmasq
   service:
-    name: "dnsmasq"
+    name: "ironic-inspector-dnsmasq"
     state: restarted
   failed_when: false
 
