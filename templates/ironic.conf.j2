@@ -24,11 +24,6 @@ enabled_inspect_interfaces = {{ filtered_ironic_drivers | json_query('[*].inspec
 enabled_management_interfaces = {{ filtered_ironic_drivers | json_query('[*].management') | unique | join(',') }}
 enabled_power_interfaces = {{ filtered_ironic_drivers | json_query('[*].power') | unique | join(',') }}
 
-# Ironic boot interface (defaults to None)
-{% if ironic_ipxe_enabled | bool %}
-default_boot_interface = ipxe
-{% endif %}
-
 [agent]
 
 [amt]
