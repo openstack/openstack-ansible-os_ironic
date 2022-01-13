@@ -29,7 +29,12 @@
   tags:
     - always
 
-- import_tasks: db_setup.yml
+- include_role:
+    name: openstack.osa.db_setup
+    apply:
+      tags:
+        - common-db
+        - ironic-config
   when:
     - _ironic_api_is_first_play_host
   vars:
@@ -43,10 +48,14 @@
           - username: "{{ ironic_galera_user }}"
             password: "{{ ironic_container_mysql_password }}"
   tags:
-    - common-db
-    - ironic-config
+    - always
 
-- import_tasks: db_setup.yml
+- include_role:
+    name: openstack.osa.db_setup
+    apply:
+      tags:
+        - common-db
+        - ironic-config
   when:
     - _ironic_inspector_is_first_play_host
   vars:
@@ -60,10 +69,14 @@
           - username: "{{ ironic_inspector_galera_user }}"
             password: "{{ ironic_inspector_container_mysql_password }}"
   tags:
-    - common-db
-    - ironic-config
+    - always
 
-- import_tasks: mq_setup.yml
+- include_role:
+    name: openstack.osa.mq_setup
+    apply:
+      tags:
+        - common-mq
+        - ironic-config
   when:
     - _ironic_api_is_first_play_host
   vars:
@@ -78,8 +91,7 @@
     _oslomsg_notify_vhost: "{{ ironic_oslomsg_notify_vhost }}"
     _oslomsg_notify_transport: "{{ ironic_oslomsg_notify_transport }}"
   tags:
-    - common-mq
-    - ironic-config
+    - always
 
 - import_tasks: ironic_pre_install.yml
   tags:
@@ -144,7 +156,12 @@
     - ironic-config
     - systemd-service
 
-- include_tasks: service_setup.yml
+- include_role:
+    name: openstack.osa.service_setup
+    apply:
+      tags:
+        - common-service
+        - ironic-config
   vars:
     _service_adminuri_insecure: "{{ keystone_service_adminuri_insecure }}"
     _service_in_ldap: "{{ ironic_service_in_ldap }}"
@@ -157,7 +174,7 @@
     _service_catalog: "{{ ironic_service_catalog_list }}"
   when: (_ironic_api_is_first_play_host or _ironic_inspector_is_first_play_host)
   tags:
-    - ironic-config
+    - always
 
 - import_tasks: ironic_inspector_post_install.yml
   when: "{{ inventory_hostname in groups['ironic_inspector'] }}"
