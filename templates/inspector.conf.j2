@@ -28,16 +28,16 @@ enroll_node_driver = ipmi
 
 [dnsmasq_pxe_filter]
 {% if ironic_inspector_pxe_filter == "dnsmasq" %}
-dhcp_hostsdir = /etc/dnsmasq.d/dhcp-hostsdir
-dnsmasq_start_command = systemctl start dnsmasq
-dnsmasq_stop_command  = systemctl stop dnsmasq
+dhcp_hostsdir = /etc/ironic-inspector/dhcp-hostsdir
+dnsmasq_start_command = systemctl start ironic-inspector-dnsmasq
+dnsmasq_stop_command  = systemctl stop ironic-inspector-dnsmasq
 {% endif %}
 
 [iptables]
 {% if ironic_inspector_pxe_filter == "iptables" %}
 manage_firewall = True
 {% endif %}
-dnsmasq_interface =  br-ironic
+dnsmasq_interface =  {{ ironic_inspector_dhcp_interface }}
 
 [ironic]
 username = ironic

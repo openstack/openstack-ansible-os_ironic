@@ -138,6 +138,11 @@
   tags:
     - ironic-config
 
+- import_tasks: ironic_inspector_pre_install.yml
+  when: inventory_hostname in groups['ironic_inspector']
+  tags:
+    - ironic-inspector
+
 - name: Run the systemd service role
   import_role:
     name: systemd_service
@@ -177,6 +182,6 @@
     - always
 
 - import_tasks: ironic_inspector_post_install.yml
-  when: "{{ inventory_hostname in groups['ironic_inspector'] }}"
+  when: inventory_hostname in groups['ironic_inspector']
   tags:
     - ironic-inspector

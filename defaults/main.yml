@@ -76,6 +76,18 @@ ironic_services:
     service_name: ironic-inspector
     init_config_overrides: "{{ ironic_inspector_init_config_overrides }}"
     execstarts: "{{ ironic_bin }}/ironic-inspector"
+  ironic-inspector-dnsmasq:
+    group: ironic_inspector
+    service_name: ironic-inspector-dnsmasq
+    service_type: forking
+    systemd_user_name: root
+    systemd_group_name: root
+    init_config_overrides: "{{ ironic_inspector_dnsmasq_init_config_overrides }}"
+    execstarts: "/usr/sbin/dnsmasq --conf-file=/etc/ironic-inspector/inspector-dnsmasq.conf"
+    after_targets:
+      - openvswitch.service
+      - network.target
+    state: stopped
 
 ironic_service_name: ironic
 ironic_service_type: baremetal
@@ -353,13 +365,14 @@ ironic_inspector_pxe_boot_mode: "{{ ironic_inspector_boot_mode }}"
 ironic_inspector_httpboot_dir: /httpboot
 ironic_inspector_tftpboot_dir: "{{ ironic_tftpd_root }}"
 
-ironic_inspector_dhcp_interface: br-ironic
+ironic_inspector_dhcp_interface: br-bmaas
 ironic_inspector_valid_interfaces: internal,public
 
 ### Config Overrides
 ironic_inspector_conf_overrides: {}
 ironic_inspector_rootwrap_conf_overrides: {}
 ironic_inspector_init_config_overrides: {}
+ironic_inspector_dnsmasq_init_config_overrides: {}
 # pxe boot
 ironic_inspector_pxe_append_params: "ipa-debug=1 systemd.journald.forward_to_console=yes" #ipa-inspection-collectors=default,logs,extra_hardware
 
@@ -394,3 +407,12 @@ ironic_inspector_oslomsg_amqp1_enabled: True
 
 ironic_inspector_ipa_initrd_name: ironic-deploy.initrd
 ironic_inspector_ipa_kernel_name: ironic-deploy.kernel
+
+# The URLs defined here provide the location to the kernel and ramdisk used
+# for booting via ironic-inspector. The integrated Ironic Python Agent may
+# not be backwards compatible, so the version listed should match the
+# deployed cloud.
+ironic_deploy_ramdisk_url: https://tarballs.opendev.org/openstack/ironic-python-agent/dib/files/ipa-centos8-stable-xena.initramfs
+ironic_deploy_ramdisk_sha_url: https://tarballs.opendev.org/openstack/ironic-python-agent/dib/files/ipa-centos8-stable-xena.initramfs.sha256
+ironic_deploy_kernel_url: https://tarballs.opendev.org/openstack/ironic-python-agent/dib/files/ipa-centos8-stable-xena.kernel
+ironic_deploy_kernel_sha_url: https://tarballs.opendev.org/openstack/ironic-python-agent/dib/files/ipa-centos8-stable-xena.kernel.sha256
