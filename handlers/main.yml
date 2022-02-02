@@ -23,15 +23,6 @@
   listen:
     - "venv changed"
 
-# NOTE (noonedeadpunk): Remove this task after Xena release
-- name: Remove obsoleted policy.json
-  file:
-    path: "/etc/ironic/policy.json"
-    state: absent
-  listen:
-    - "Restart ironic services"
-    - "venv changed"
-
 - name: Restart tftpd
   service:
     name: "{{ ironic_tftpd_service_name }}"
