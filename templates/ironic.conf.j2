@@ -113,9 +113,6 @@ valid_interfaces = {{ ironic_inspector_valid_interfaces }}
 
 [ironic_lib]
 
-[keystone]
-region_name = {{ ironic_service_region }}
-
 [keystone_authtoken]
 insecure = {{ keystone_service_internaluri_insecure | bool }}
 auth_type = {{ ironic_keystone_auth_plugin }}
