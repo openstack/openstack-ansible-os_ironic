@@ -50,9 +50,9 @@ ironic_library_modules_paths:
 
 ironic_uefi_modules:
   - name: "bootx64.efi"
-    path: "/boot/efi/EFI/centos/shimx64.efi"
+    path: "/boot/efi/EFI/{{ ansible_facts['distribution'] | lower }}/shimx64.efi"
   - name: "grubx64.efi"
-    path: "/boot/efi/EFI/centos/grubx64.efi"
+    path: "/boot/efi/EFI/{{ ansible_facts['distribution'] | lower }}/grubx64.efi"
 
 ironic_tftpd_service_name: tftp
 ironic_tftpd_root: /var/lib/tftpboot
@@ -84,4 +84,4 @@ ironic_inspector_library_modules_paths:
   - "/usr/lib/syslinux/modules/efi64/ldlinux.e64"
 
 ironic_nginx_conf_path: "conf.d"
-ironic_grub_dir: "/tftpboot/EFI/centos"
+ironic_grub_dir: "/tftpboot/EFI/{{ ansible_facts['distribution'] | lower }}"
