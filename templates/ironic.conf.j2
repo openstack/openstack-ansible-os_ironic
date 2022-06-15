@@ -128,6 +128,10 @@ username = {{ ironic_service_user_name }}
 password = {{ ironic_service_password }}
 region_name = {{ keystone_service_region }}
 
+service_token_roles = {{ ironic_service_token_roles | join(',') }}
+service_token_roles_required = {{ ironic_service_token_roles_required | bool }}
+service_type = {{ ironic_service_type }}
+
 memcached_servers = {{ ironic_memcached_servers }}
 
 token_cache_time = 300

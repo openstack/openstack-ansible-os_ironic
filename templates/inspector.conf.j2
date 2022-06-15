@@ -62,6 +62,11 @@ project_name = "service"
 username = ironic_inspector
 password = {{ ironic_inspector_service_password }}
 region_name = {{ keystone_service_region }}
+
+service_token_roles = {{ ironic_inspector_service_token_roles | join(',') }}
+service_token_roles_required = {{ ironic_inspector_service_token_roles_required | bool }}
+service_type = {{ ironic_inspector_service_type }}
+
 memcached_servers = {{ memcached_servers }}
 # if your memcached server is shared, use these settings to avoid cache poisoning
 memcache_security_strategy = ENCRYPT

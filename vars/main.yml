@@ -147,7 +147,7 @@ ironic_service_user_list: >
           {
             'name': ironic_service_user_name,
             'password': ironic_service_password,
-            'role': ironic_service_role_name
+            'role': ironic_service_role_names
           }
         )
   %}
@@ -157,7 +157,7 @@ ironic_service_user_list: >
           {
             'name': ironic_inspector_service_user_name,
             'password': ironic_inspector_service_password,
-            'role': ironic_inspector_service_role_name
+            'role': ironic_inspector_service_role_names
           }
         )
   %}
