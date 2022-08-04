@@ -116,6 +116,21 @@ ironic_service_token_roles:
 ironic_service_token_roles_required: "{{ openstack_service_token_roles_required | default(True) }}"
 ironic_service_in_ldap: "{{ service_ldap_backend_enabled | default(False) }}"
 
+# The name of the entry in container_networks for the bmaas network
+# This is the default provisioning / inspection / cleaning network for this role
+ironic_container_network_name: "bmaas_address"
+
+# The name of the bridge on the host for the bmaas network
+ironic_bmaas_bridge: "{{ container_networks[ironic_container_network_name]['bridge'] | default('bridge_undefined') }}"
+
+# The address of this host on the bmaas network
+ironic_bmaas_address: "{{ (is_metal | default(False)) | ternary(ansible_facts[ironic_bmaas_bridge | replace('-','_')]['ipv4']['address'],
+                                                                container_networks[ironic_container_network_name]['address']) | default('address_undefined') }}"
+# The name of the interface on the bmaas network
+# This is the bmaas bridge name on metal, or the corresponding interface name in a container
+ironic_bmaas_interface: "{{ (is_metal | default(False)) | ternary(ironic_bmaas_bridge,
+                                                                  container_networks[ironic_container_network_name]['interface']) | default('interface_undefined') }}"
+
 # Ironic image store information
 #
 ### Hosted Web Server
@@ -126,7 +141,8 @@ ironic_service_in_ldap: "{{ service_ldap_backend_enabled | default(False) }}"
 # config file. If this is set to False, then Ironic will use
 # Swift to host the floppy images and generated boot_iso.
 ironic_enable_web_server_for_images: False
-ironic_http_url: "{{ ironic_ipxe_proto }}://{{ ansible_host }}:{{ ironic_ipxe_port }}"
+ironic_http_bind_address: "{{ ironic_bmaas_address }}"
+ironic_http_url: "{{ ironic_ipxe_proto }}://{{ ironic_http_bind_address }}:{{ ironic_ipxe_port }}"
 ironic_http_root: "/httpboot"
 #
 ### Swift Config
@@ -197,7 +213,7 @@ ironic_node_name: ironic
 # regenerated each run.
 ironic_recreate_keys: False
 
-ironic_tftp_server_address: "{{ ansible_host }}"
+ironic_tftp_server_address: "{{ ironic_bmaas_address }}"
 
 ironic_pip_packages:
   - "git+{{ ironic_git_repo }}@{{ ironic_git_install_branch }}#egg=ironic"
@@ -362,6 +378,7 @@ ironic_inspector_enable_discovery: True
 ironic_inspector_openstack_db_connection_string: "mysql+pymysql://{{ ironic_inspector_galera_user }}:{{ ironic_inspector_container_mysql_password }}@{{ ironic_inspector_galera_address }}:{{ ironic_inspector_galera_port }}/{{ ironic_inspector_galera_database }}?charset=utf8{% if ironic_inspector_galera_use_ssl | bool %}&ssl_verify_cert=true{% if ironic_inspector_galera_ssl_ca_cert | length > 0 %}&ssl_ca={{ ironic_inspector_galera_ssl_ca_cert }}{% endif %}{% endif %}"
 
 # Ironic inspector dhcp
+ironic_inspector_dhcp_address: "{{ ironic_bmaas_address }}"
 ironic_inspector_dhcp_pool_range: 192.168.0.51 192.168.0.150
 ironic_inspector_dhcp_subnet: 192.168.0.0/22
 ironic_inspector_dhcp_subnet_mask: 255.255.252.0
@@ -375,7 +392,7 @@ ironic_inspector_pxe_boot_mode: "{{ ironic_inspector_boot_mode }}"
 ironic_inspector_httpboot_dir: /httpboot
 ironic_inspector_tftpboot_dir: "{{ ironic_tftpd_root }}"
 
-ironic_inspector_dhcp_interface: br-bmaas
+ironic_inspector_dhcp_interface: "{{ ironic_bmaas_interface }}"
 ironic_inspector_valid_interfaces: internal,public
 
 ### Config Overrides

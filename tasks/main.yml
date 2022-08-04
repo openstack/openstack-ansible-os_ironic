@@ -29,6 +29,18 @@
   tags:
     - always
 
+- name: Gathering facts for {{ ironic_container_network_name }} interface on metal hosts
+  setup:
+    gather_subset: "!all,network"
+    filter: "{{ dynamic_address_gather_filter | default(('ansible_' ~ default_network_interface_name) | replace('-','_')) }}"
+  vars:
+    default_network_interface_name: "{{ container_networks[ironic_container_network_name]['bridge'] | default }}"
+  when:
+    - is_metal
+    - (dynamic_address_gather_filter is defined) or (default_network_interface_name | length > 0)
+  tags:
+    - always
+
 - include_role:
     name: openstack.osa.db_setup
     apply:
