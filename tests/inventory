@@ -34,15 +34,11 @@ memcached_all
 [ironic_all:children]
 ironic_api
 ironic_conductor
-ironic_server
 
 [ironic_api]
 ironic1
 
 [ironic_conductor]
-ironic1
-
-[ironic_server]
 ironic1
 
 [keystone_all]
