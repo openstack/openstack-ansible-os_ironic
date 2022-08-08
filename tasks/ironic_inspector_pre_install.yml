@@ -17,6 +17,7 @@
   template:
     src: "dhcpd.conf.j2"
     dest: "/etc/dhcp/dhcpd.conf"
+  when: ironic_inspector_dhcp_type == "isc_dhcp"
   notify:
     - Restart isc-dhcp-server
 
@@ -27,6 +28,7 @@
     owner: "{{ ironic_system_user_name }}"
     group: "{{ ironic_system_group_name }}"
     mode: "0640"
+  when: ironic_inspector_dhcp_type == "dnsmasq"
   notify:
     - Restart ironic-inspector-dnsmasq
 
