@@ -203,7 +203,7 @@ uefi_pxe_config_template = $pybasedir/drivers/modules/ipxe_config.template
 {% endif %}
 
 tftp_server = {{ ironic_tftp_server_address }}
-pxe_append_params = {{ ironic_pxe_append_params }}
+kernel_append_params = {{ ironic_pxe_append_params | default(ironic_kernel_append_params) }}
 tftp_root = {{ ironic_tftpd_root }}
 tftp_master_path = {{ ironic_tftpd_root }}/master_images
 
