@@ -303,7 +303,7 @@ ironic_policy_overrides: {}
 ironic_api_uwsgi_ini_overrides: {}
 
 # pxe boot
-ironic_pxe_append_params: "ipa-debug=1 systemd.journald.forward_to_console=yes"
+ironic_kernel_append_params: "ipa-debug=1 systemd.journald.forward_to_console=yes"
 
 ironic_api_init_config_overrides: {}
 ironic_conductor_init_config_overrides: {}
