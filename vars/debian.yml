@@ -16,7 +16,7 @@
 cache_timeout: 600
 
 ironic_devel_distro_packages:
-  - git-core
+  - git
   - libffi-dev
   - libsystemd-dev
 
@@ -85,7 +85,7 @@ ironic_inspector_standalone_distro_packages:
   - isc-dhcp-server
 
 ironic_inspector_devel_distro_packages:
-  - git-core
+  - git
   - libffi-dev
   - libsystemd-dev
 
