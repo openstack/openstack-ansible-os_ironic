@@ -341,6 +341,7 @@ ironic_inspector_service_token_roles_required: "{{ openstack_service_token_roles
 ironic_inspector_service_project_name: "service"
 ironic_inspector_service_in_ldap: "{{ service_ldap_backend_enabled | default(False) }}"
 ironic_inspector_service_domain_id: default
+ironic_inspector_callback_url: "{{ ironic_inspector_service_internaluri_proto }}://{{ internal_lb_vip_address }}:{{ ironic_inspector_service_port }}/v1/continue"
 
 # Database
 ironic_inspector_db_setup_host: "{{ openstack_db_setup_host | default('localhost') }}"
