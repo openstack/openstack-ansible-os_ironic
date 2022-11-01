@@ -11,8 +11,12 @@ set pxetype = option pxe-system-type;
 
 
 subnet {{ ironic_inspector_dhcp_subnet }} netmask {{ ironic_inspector_dhcp_subnet_mask }} {
+{% if ironic_inspector_enable_dhcp_gateway | bool %}
      option routers             {{ ironic_inspector_dhcp_gateway }};
+{% endif %}
+{% if ironic_inspector_enable_dhcp_nameservers | bool %}
      option domain-name-servers {{ ironic_inspector_dhcp_nameservers}};
+{% endif %}
      option subnet-mask         {{ ironic_inspector_dhcp_subnet_mask }};
      range dynamic-bootp        {{ ironic_inspector_dhcp_pool_range }};
      default-lease-time         {{ ironic_inspector_dhcp_lease_time }};

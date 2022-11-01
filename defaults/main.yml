@@ -383,7 +383,9 @@ ironic_inspector_dhcp_address: "{{ ironic_bmaas_address }}"
 ironic_inspector_dhcp_pool_range: 192.168.0.51 192.168.0.150
 ironic_inspector_dhcp_subnet: 192.168.0.0/22
 ironic_inspector_dhcp_subnet_mask: 255.255.252.0
+ironic_insepctor_dhcp_enable_gateway: True
 ironic_inspector_dhcp_gateway: 192.168.0.1
+ironic_inspector_dhcp_enable_nameservers: True
 ironic_inspector_dhcp_nameservers: 192.168.0.1
 ironic_inspector_dhcp_lease_time: 600
 
