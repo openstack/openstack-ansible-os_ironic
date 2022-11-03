@@ -29,10 +29,6 @@ Required Overrides
 ~~~~~~~~~~~~~~~~~~
   .. code-block::
 
-     # names of your ironic-python-agent initrd/kernel images
-     ironic_inspector_ipa_initrd_name: ironic-deploy.initramfs
-     ironic_inspector_ipa_kernel_name: ironic-deploy.vmlinuz
-
      # dnsmasq/dhcp information for inspector
      ironic_inspector_dhcp_pool_range: <START> <END> (subset of ironic IPs)
      ironic_inspector_dhcp_subnet: <IRONIC SUBNET CIDR>
