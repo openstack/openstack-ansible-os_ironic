@@ -42,3 +42,45 @@
     owner: "{{ ironic_system_user_name }}"
     group: "{{ ironic_system_group_name }}"
     mode: '0644'
+
+- name: Configure nginx when inspector boot mode is http
+  when: ironic_inspector_boot_mode == 'http'
+  block:
+
+    - name: Disable default nginx configuration
+      file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+      notify:
+        - Restart web server
+
+    - name: Remove default nginx config
+      file:
+        path: /etc/nginx/conf.d/default.conf
+        state: absent
+      notify:
+        - Restart web server
+
+    - name: Ensure nginx configuration directories exist
+      file:
+        path: "{{ item }}"
+        state: directory
+      with_items:
+        - "/etc/nginx/{{ ironic_nginx_conf_path }}"
+
+    - name: Configure nginx virtual hosts
+      template:
+        src: ironic-ipxe.conf.j2
+        dest: "/etc/nginx/{{ ironic_nginx_conf_path }}/ironic-ipxe.conf"
+      notify:
+        - Restart web server
+
+    - name: Link to enable nginx virtual hosts
+      file:
+        src: "/etc/nginx/sites-available/ironic-ipxe.conf"
+        path: "/etc/nginx/sites-enabled/ironic-ipxe.conf"
+        state: link
+      when:
+        - ansible_facts['os_family'] == "Debian"
+      notify:
+        - Restart web server
