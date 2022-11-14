@@ -95,7 +95,7 @@ use_web_server_for_images = True
 {% endif %}
 
 [inspector]
-{% if  ironic_services['ironic-inspector']['group'] in group_names %}
+{% if  ironic_services['ironic-api']['group'] in group_names %}
 auth_type = {{ ironic_keystone_auth_plugin }}
 auth_url = {{ keystone_service_adminuri }}
 insecure = {{ keystone_service_internaluri_insecure | bool }}
