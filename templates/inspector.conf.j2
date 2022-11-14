@@ -33,6 +33,9 @@ dnsmasq_start_command = systemctl start ironic-inspector-dnsmasq
 dnsmasq_stop_command  = systemctl stop ironic-inspector-dnsmasq
 {% endif %}
 
+[healthcheck]
+enabled = True
+
 [iptables]
 {% if ironic_inspector_pxe_filter == "iptables" %}
 manage_firewall = True
