@@ -402,6 +402,9 @@ ironic_deploy_image_list:
    disk_format: 'ari'
    name: "{{ ironic_deploy_image_initramfs_name }}"
 
+#allow user defined extra images to upload
+ironic_extra_deploy_image_list: []
+
 # Ironic inspector
 ironic_inspector_enable_discovery: True
 ironic_inspector_openstack_db_connection_string: "mysql+pymysql://{{ ironic_inspector_galera_user }}:{{ ironic_inspector_container_mysql_password }}@{{ ironic_inspector_galera_address }}:{{ ironic_inspector_galera_port }}/{{ ironic_inspector_galera_database }}?charset=utf8{% if ironic_inspector_galera_use_ssl | bool %}&ssl_verify_cert=true{% if ironic_inspector_galera_ssl_ca_cert | length > 0 %}&ssl_ca={{ ironic_inspector_galera_ssl_ca_cert }}{% endif %}{% endif %}"
