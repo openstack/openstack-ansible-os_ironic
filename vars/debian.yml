@@ -98,3 +98,5 @@ ironic_inspector_library_modules_paths:
 
 ironic_nginx_conf_path: "sites-available"
 ironic_grub_dir: "/tftpboot/grub"
+
+_ironic_ssl_truststore_location: /etc/ssl/certs/ca-certificates.crt

@@ -23,3 +23,15 @@
       # - openstack-ansible-deploy-aio_distro_metal-jobs
       - publish-openstack-docs-pti
       - build-release-notes-jobs-python3
+    check:
+      jobs:
+        - openstack-ansible-deploy-aio_metal-centos-8-stream:
+            voting: false
+        - openstack-ansible-deploy-aio_metal-rockylinux-8:
+            voting: false
+    gate:
+      jobs:
+        - openstack-ansible-deploy-aio_metal-centos-8-stream:
+            voting: false
+        - openstack-ansible-deploy-aio_metal-rockylinux-8:
+            voting: false
