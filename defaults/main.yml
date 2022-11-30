@@ -420,7 +420,7 @@ ironic_inspector_dhcp_lease_time: 600
 ironic_inspector_dhcp_type: dnsmasq # isc_dhcp
 ironic_inspector_boot_mode: http #tftp
 ironic_inspector_pxe_boot_mode: "{{ ironic_inspector_boot_mode }}"
-ironic_inspector_httpboot_dir: /httpboot
+ironic_inspector_httpboot_dir: "{{ ironic_http_root }}"
 ironic_inspector_tftpboot_dir: "{{ ironic_tftpd_root }}"
 
 ironic_inspector_dhcp_interface: "{{ ironic_bmaas_interface }}"
