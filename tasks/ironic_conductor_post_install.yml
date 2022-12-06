@@ -102,7 +102,6 @@
   when: "ironic_ipxe_enabled | bool"
   with_items:
     - "/etc/nginx/{{ ironic_nginx_conf_path }}"
-    - "/etc/nginx/conf.d"
 
 - name: Configure nginx virtual hosts
   template:
