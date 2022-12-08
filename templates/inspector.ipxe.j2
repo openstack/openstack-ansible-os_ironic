@@ -5,6 +5,6 @@ dhcp || goto retry_dhcp
 
 :retry_boot
 imgfree
-kernel --timeout 30000 {{ ironic_http_url }}/{{ ironic_deploy_image_kernel_name }} ipa-inspection-callback-url={{ ironic_inspector_callback_url }} systemd.journald.forward_to_console=yes BOOTIF=${mac} initrd={{ ironic_deploy_image_initramfs_name }} || goto retry_boot
+kernel --timeout 30000 {{ ironic_http_url }}/{{ ironic_deploy_image_kernel_name }} ipa-inspection-callback-url={{ ironic_inspector_callback_url }} {{ ironic_inspector_extra_callback_parameters }} systemd.journald.forward_to_console=yes BOOTIF=${mac} initrd={{ ironic_deploy_image_initramfs_name }} || goto retry_boot
 initrd --timeout 30000 {{ ironic_http_url }}/{{ ironic_deploy_image_initramfs_name }} || goto retry_boot
 boot
