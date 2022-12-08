@@ -374,6 +374,34 @@ ironic_inspector_swift_role_names:
   - _member_
   - swiftoperator
 
+#Ironic deploy images need to be uploaded to glance.
+ironic_deploy_image_glance_upload: True
+
+# Set the directory where the downloaded image will be stored
+# on the ironic_service_setup_host host. If the host is localhost,
+# then the user running the playbook must have access to it.
+ironic_deploy_image_path: "/root/openstack-ansible/ironic"
+ironic_deploy_image_path_owner: "root"
+
+#The default download URL is like https://tarballs.opendev.org/openstack/ironic-python-agent/dib/files/ipa-centos8-stable-xena.initramfs
+#Allow various parts of this to be overidden to local mirrors, or replaced completely with custom settings
+ironic_deploy_image_server: "https://tarballs.opendev.org/"
+ironic_deploy_image_server_path: "openstack/ironic-python-agent/dib/files/"
+ironic_deploy_image_base_name: "ipa-centos8-stable-yoga"
+ironic_deploy_image_kernel_name: "{{ ironic_deploy_image_base_name + '.kernel' }}"
+ironic_deploy_image_initramfs_name: "{{ ironic_deploy_image_base_name + '.initramfs' }}"
+ironic_deploy_image_list:
+ - url: "{{ ironic_deploy_image_server ~ ironic_deploy_image_server_path ~ ironic_deploy_image_kernel_name }}"
+   sha_url: "{{ ironic_deploy_image_server ~ ironic_deploy_image_server_path ~ ironic_deploy_image_kernel_name ~ '.sha256' }}"
+   container_format: 'aki'
+   disk_format: 'aki'
+   name: "{{ ironic_deploy_image_kernel_name }}"
+ - url: "{{ ironic_deploy_image_server ~ ironic_deploy_image_server_path ~ ironic_deploy_image_initramfs_name }}"
+   sha_url: "{{ ironic_deploy_image_server ~ ironic_deploy_image_server_path ~ ironic_deploy_image_initramfs_name ~ '.sha256' }}"
+   container_format: 'ari'
+   disk_format: 'ari'
+   name: "{{ ironic_deploy_image_initramfs_name }}"
+
 # Ironic inspector
 ironic_inspector_enable_discovery: True
 ironic_inspector_openstack_db_connection_string: "mysql+pymysql://{{ ironic_inspector_galera_user }}:{{ ironic_inspector_container_mysql_password }}@{{ ironic_inspector_galera_address }}:{{ ironic_inspector_galera_port }}/{{ ironic_inspector_galera_database }}?charset=utf8{% if ironic_inspector_galera_use_ssl | bool %}&ssl_verify_cert=true{% if ironic_inspector_galera_ssl_ca_cert | length > 0 %}&ssl_ca={{ ironic_inspector_galera_ssl_ca_cert }}{% endif %}{% endif %}"
@@ -434,15 +462,3 @@ ironic_inspector_oslomsg_notify_ssl_ca_file: "{{ oslomsg_notify_ssl_ca_file | de
 ironic_inspector_optional_oslomsg_amqp1_pip_packages:
   - oslo.messaging[amqp1]
 ironic_inspector_oslomsg_amqp1_enabled: True
-
-ironic_inspector_ipa_initrd_name: ironic-deploy.initrd
-ironic_inspector_ipa_kernel_name: ironic-deploy.kernel
-
-# The URLs defined here provide the location to the kernel and ramdisk used
-# for booting via ironic-inspector. The integrated Ironic Python Agent may
-# not be backwards compatible, so the version listed should match the
-# deployed cloud.
-ironic_deploy_ramdisk_url: https://tarballs.opendev.org/openstack/ironic-python-agent/dib/files/ipa-centos8-stable-xena.initramfs
-ironic_deploy_ramdisk_sha_url: https://tarballs.opendev.org/openstack/ironic-python-agent/dib/files/ipa-centos8-stable-xena.initramfs.sha256
-ironic_deploy_kernel_url: https://tarballs.opendev.org/openstack/ironic-python-agent/dib/files/ipa-centos8-stable-xena.kernel
-ironic_deploy_kernel_sha_url: https://tarballs.opendev.org/openstack/ironic-python-agent/dib/files/ipa-centos8-stable-xena.kernel.sha256

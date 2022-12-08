@@ -21,27 +21,19 @@
 - name: Copy Inspector iPXE Configuration
   template:
     src: inspector.ipxe.j2
-    dest: "{{ ironic_http_root }}/inspector.ipxe"  
+    dest: "{{ ironic_http_root }}/inspector.ipxe"
     owner: "{{ ironic_system_user_name }}"
     group: "{{ ironic_system_group_name }}"
 
-- name: Download IPA Kernel Image
+- name: Download IPA Images
   get_url:
-    url: "{{ ironic_deploy_kernel_url }}"
-    dest: "/httpboot/{{ ironic_inspector_ipa_kernel_name }}"
-    checksum: "sha256:{{ ironic_deploy_kernel_sha_url }}"
+    url: "{{ item.url }}"
+    dest: "/httpboot/{{ item.name }}"
+    checksum: "sha256:{{ item.sha_url }}"
     owner: "{{ ironic_system_user_name }}"
     group: "{{ ironic_system_group_name }}"
     mode: '0644'
-
-- name: Download IPA Ramdisk Image
-  get_url:
-    url: "{{ ironic_deploy_ramdisk_url }}"
-    dest: "/httpboot/{{ ironic_inspector_ipa_initrd_name }}"
-    checksum: "sha256:{{ ironic_deploy_ramdisk_sha_url }}"
-    owner: "{{ ironic_system_user_name }}"
-    group: "{{ ironic_system_group_name }}"
-    mode: '0644'
+  with_items: "{{ ironic_deploy_image_list }}"
 
 - name: Configure nginx when inspector boot mode is http
   when: ironic_inspector_boot_mode == 'http'

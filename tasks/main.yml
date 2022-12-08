@@ -196,3 +196,14 @@
   when: inventory_hostname in groups['ironic_inspector']
   tags:
     - ironic-inspector
+
+- include_tasks: ironic_deploy_image.yml
+  args:
+    apply:
+      tags:
+        - ironic-deploy-image
+  when:
+    - _ironic_api_is_first_play_host
+    - ironic_deploy_image_glance_upload
+  tags:
+    - always
