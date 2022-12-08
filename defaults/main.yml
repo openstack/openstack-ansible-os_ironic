@@ -233,9 +233,15 @@ ironic_pip_packages:
   - sushy
   - systemd-python
 
+# Specific pip packages provided by the user for the ironic service
+ironic_user_pip_packages: []
+
 ironic_inspector_pip_packages:
   - "git+{{ ironic_inspector_git_repo }}@{{ ironic_inspector_git_install_branch }}#egg=ironic-inspector"
   - python-ironic-inspector-client
+
+# Specific pip packages provided by the user for the ironic inspector service
+ironic_inspector_user_pip_packages: []
 
 # Memcached override
 ironic_memcached_servers: "{{ memcached_servers }}"
