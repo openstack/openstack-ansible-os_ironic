@@ -57,6 +57,7 @@
     - path: "/etc/ironic-inspector/rootwrap.d"
       condition: inventory_hostname in groups['ironic-inspector']
     - { path: "/etc/sudoers.d", mode: "0750", owner: "root", group: "root" }
+    - { path: "/var/log/ironic" }
     - { path: "{{ ironic_system_home_folder }}" }
     - { path: "{{ ironic_system_home_folder }}/.ssh", mode: "0700" }
     - { path: "{{ ironic_system_home_folder }}/images" }
