@@ -38,8 +38,7 @@
       retries: 10
       delay: 10
       register: ironic_download_results
-      with_items:
-        - "{{ ironic_deploy_image_list }}"
+      with_items: "{{ ironic_deploy_image_list + ironic_extra_deploy_image_list }}"
 
     - name: Upload images
       openstack.cloud.image:
@@ -49,5 +48,4 @@
         container_format: "{{ item.item.container_format }}"
         disk_format: "{{ item.item.disk_format }}"
         filename: "{{ item.dest }}"
-      with_items:
-        - "{{ ironic_download_results.results }}"
+      with_items: "{{ ironic_download_results.results }}"
