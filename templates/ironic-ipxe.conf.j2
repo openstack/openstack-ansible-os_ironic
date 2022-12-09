@@ -10,7 +10,7 @@ server {
 
   # directory to store ipxe
   location / {
-    root /httpboot;
+    root {{ ironic_http_root }};
     autoindex off;
     expires 1h;
   }

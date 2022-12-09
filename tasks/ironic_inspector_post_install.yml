@@ -28,7 +28,7 @@
 - name: Download IPA Images
   get_url:
     url: "{{ item.url }}"
-    dest: "/httpboot/{{ item.name }}"
+    dest: "{{ ironic_inspector_httpboot_dir }}/{{ item.name }}"
     checksum: "sha256:{{ item.sha_url }}"
     owner: "{{ ironic_system_user_name }}"
     group: "{{ ironic_system_group_name }}"
