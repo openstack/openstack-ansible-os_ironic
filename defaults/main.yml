@@ -215,6 +215,14 @@ ironic_recreate_keys: False
 
 ironic_tftp_server_address: "{{ ironic_bmaas_address }}"
 
+# Use this variable to add extra files into the ironic_tftp_root directory
+# ironic_tftp_extra_content:
+#   - path: /some/local/dir/local-file.txt
+#     name: local-file.txt
+#   - url: http://boot.ipxe.org/arm64-efi/ipxe.efi
+#     name: ipxe_aa64.efi
+ironic_tftp_extra_content: []
+
 ironic_pip_packages:
   - "git+{{ ironic_git_repo }}@{{ ironic_git_install_branch }}#egg=ironic"
   - cryptography

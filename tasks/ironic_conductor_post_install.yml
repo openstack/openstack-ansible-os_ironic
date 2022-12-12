@@ -66,12 +66,18 @@
     owner: "ironic"
     group: "ironic"
 
-- name: Copy uefi modules into tftpboot
+- name: Copy content into tftpboot (files)
   copy:
     src: "{{ item.path }}"
     dest: "{{ ironic_tftpd_root }}/{{ item.name }}"
     remote_src: True
-  with_items: "{{ ironic_uefi_modules }}"
+  with_items: "{{ (ironic_uefi_modules + ironic_tftp_extra_content) | selectattr('path', 'defined') | list }}"
+
+- name: Copy content into tftpboot (urls)
+  get_url:
+    url: "{{ item.url }}"
+    dest: "{{ ironic_tftpd_root }}/{{ item.name }}"
+  with_items: "{{ (ironic_uefi_modules + ironic_tftp_extra_content) | selectattr('url', 'defined') | list }}"
 
 - name: Start up tftp
   service:
