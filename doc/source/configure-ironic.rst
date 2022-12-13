@@ -2,6 +2,13 @@
 Configuring the Bare Metal (Ironic) Service (optional)
 ======================================================
 
+This section describes the general concepts involved in an Ironic
+deployment. It will be necessary for a deployer to make decisions
+about how to apply the general concepts in their own environment to
+meet a specific set of requirements. It should be understood that
+the Ironic service is highly configurable and pluggable so there is
+no single reference design specified by the Ironic project team.
+
 .. note::
 
    This feature is experimental at this time and has not been fully
