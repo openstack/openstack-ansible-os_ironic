@@ -23,6 +23,7 @@ enabled_deploy_interfaces = {{ filtered_ironic_drivers | json_query('[*].deploy'
 enabled_inspect_interfaces = {{ filtered_ironic_drivers | json_query('[*].inspect') | unique | join(',') }}
 enabled_management_interfaces = {{ filtered_ironic_drivers | json_query('[*].management') | unique | join(',') }}
 enabled_power_interfaces = {{ filtered_ironic_drivers | json_query('[*].power') | unique | join(',') }}
+enabled_console_interfaces = {{ filtered_ironic_drivers | json_query('[*].console') | unique | join(',') }}
 
 [agent]
 
@@ -38,6 +39,10 @@ sync_power_state_interval = {{ ironic_sync_power_state_interval }}
 automated_clean = {{ ironic_automated_clean }}
 
 [console]
+{% if 'ipmitool-socat' in (filtered_ironic_drivers | json_query('[*].console') | unique) %}
+socat_address = {{ ironic_socat_bind_address }}
+port_range = "{{ ironic_socat_port_range }}"
+{% endif %}
 
 [cors]
 

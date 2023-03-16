@@ -27,6 +27,7 @@ ironic_driver_types:
     inspect: ilo
     management: ilo
     power: ilo
+    console: ilo
   agent_ipmitool:
     hardware_type: ipmi
     boot: pxe
@@ -34,6 +35,7 @@ ironic_driver_types:
     inspect: inspector
     management: ipmitool
     power: ipmitool
+    console: no-console
   agent_ipmitool_socat:
     hardware_type: ipmi
     boot: pxe
@@ -41,6 +43,7 @@ ironic_driver_types:
     inspect: inspector
     management: ipmitool
     power: ipmitool
+    console: ipmitool-socat
   agent_irmc:
     hardware_type: irmc
     boot: irmc-virtual-media
@@ -48,6 +51,7 @@ ironic_driver_types:
     inspect: irmc
     management: irmc
     power: irmc
+    console: ipmitool-socat
   pxe_drac:
     hardware_type: idrac
     boot: pxe
@@ -55,6 +59,7 @@ ironic_driver_types:
     inspect: idrac
     management: idrac
     power: idrac
+    console: no-console
   pxe_drac_inspector:
     hardware_type: idrac
     boot: pxe
@@ -62,6 +67,7 @@ ironic_driver_types:
     inspect: inspector
     management: idrac
     power: idrac
+    console: no-console
   pxe_ilo:
     hardware_type: ilo
     boot: ilo-pxe
@@ -69,6 +75,7 @@ ironic_driver_types:
     inspect: ilo
     management: ilo
     power: ilo
+    console: ilo
   pxe_ipmitool:
     hardware_type: ipmi
     boot: pxe
@@ -76,6 +83,7 @@ ironic_driver_types:
     inspect: inspector
     management: ipmitool
     power: ipmitool
+    console: no-console
   pxe_ipmitool_socat:
     hardware_type: ipmi
     boot: pxe
@@ -83,6 +91,7 @@ ironic_driver_types:
     inspect: inspector
     management: ipmitool
     power: ipmitool
+    console: ipmitool-socat
   pxe_irmc:
     hardware_type: irmc
     boot: irmc-pxe
@@ -90,6 +99,7 @@ ironic_driver_types:
     inspect: irmc
     management: irmc
     power: irmc
+    console: ipmitool-socat
   pxe_snmp:
     hardware_type: snmp
     boot: pxe
@@ -97,6 +107,7 @@ ironic_driver_types:
     inspect: no-inspect
     management: fake
     power: snmp
+    console: no-console
 
 ironic_packages_list: >
   {%- set package_list = [] %}
@@ -116,6 +127,9 @@ ironic_packages_list: >
   {%- endif %}
   {%- if ironic_inspector_boot_mode == "http" %}
   {%-   set package_list = package_list + ironic_inspector_http_distro_packages %}
+  {%- endif %}
+  {%- if 'ipmitool-socat' in (filtered_ironic_drivers | json_query('[*].console') | unique) %}
+  {%    set package_list = package_list + ironic_ipmitool_socat_distro_packages %}
   {%- endif %}
   {{- package_list -}}
 
@@ -295,3 +309,6 @@ ironic_venv_packages: |-
   {%-   set _ = pkg_list.extend(ironic_inspector_user_pip_packages) %}
   {%- endif %}
   {{- pkg_list | unique }}
+
+ironic_ipmitool_socat_distro_packages:
+  - socat
