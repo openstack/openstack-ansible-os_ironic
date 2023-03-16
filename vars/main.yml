@@ -20,6 +20,10 @@ _ironic_inspector_is_first_play_host: "{{ (ironic_services['ironic-inspector']['
 # task to save time.
 
 ironic_driver_types:
+  no_driver:
+    inspect: no-inspect
+    console: no-console
+    raid: no-raid
   agent_ilo:
     hardware_type: ilo
     boot: ilo-virtual-media
@@ -140,7 +144,7 @@ ironic_packages_list: >
   {%-   set package_list = package_list + ironic_inspector_http_distro_packages %}
   {%- endif %}
   {%- if 'ipmitool-socat' in (filtered_ironic_drivers | json_query('[*].console') | unique) %}
-  {%    set package_list = package_list + ironic_ipmitool_socat_distro_packages %}
+  {%-   set package_list = package_list + ironic_ipmitool_socat_distro_packages %}
   {%- endif %}
   {{- package_list -}}
 
