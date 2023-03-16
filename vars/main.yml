@@ -28,6 +28,7 @@ ironic_driver_types:
     management: ilo
     power: ilo
     console: ilo
+    raid: agent
   agent_ipmitool:
     hardware_type: ipmi
     boot: pxe
@@ -36,6 +37,7 @@ ironic_driver_types:
     management: ipmitool
     power: ipmitool
     console: no-console
+    raid: agent
   agent_ipmitool_socat:
     hardware_type: ipmi
     boot: pxe
@@ -44,6 +46,7 @@ ironic_driver_types:
     management: ipmitool
     power: ipmitool
     console: ipmitool-socat
+    raid: agent
   agent_irmc:
     hardware_type: irmc
     boot: irmc-virtual-media
@@ -52,6 +55,7 @@ ironic_driver_types:
     management: irmc
     power: irmc
     console: ipmitool-socat
+    raid: irmc
   pxe_drac:
     hardware_type: idrac
     boot: pxe
@@ -60,6 +64,7 @@ ironic_driver_types:
     management: idrac-wsman
     power: idrac-wsman
     console: no-console
+    raid: idrac-wsman
   pxe_drac_inspector:
     hardware_type: idrac
     boot: pxe
@@ -68,6 +73,7 @@ ironic_driver_types:
     management: idrac-wsman
     power: idrac-wsman
     console: no-console
+    raid: idrac-wsman
   pxe_ilo:
     hardware_type: ilo
     boot: ilo-pxe
@@ -76,6 +82,7 @@ ironic_driver_types:
     management: ilo
     power: ilo
     console: ilo
+    raid: ilo
   pxe_ipmitool:
     hardware_type: ipmi
     boot: pxe
@@ -84,6 +91,7 @@ ironic_driver_types:
     management: ipmitool
     power: ipmitool
     console: no-console
+    raid: no-raid
   pxe_ipmitool_socat:
     hardware_type: ipmi
     boot: pxe
@@ -92,6 +100,7 @@ ironic_driver_types:
     management: ipmitool
     power: ipmitool
     console: ipmitool-socat
+    raid: no-raid
   pxe_irmc:
     hardware_type: irmc
     boot: irmc-pxe
@@ -100,6 +109,7 @@ ironic_driver_types:
     management: irmc
     power: irmc
     console: ipmitool-socat
+    raid: irmc
   pxe_snmp:
     hardware_type: snmp
     boot: pxe
@@ -108,6 +118,7 @@ ironic_driver_types:
     management: fake
     power: snmp
     console: no-console
+    raid: no-raid
 
 ironic_packages_list: >
   {%- set package_list = [] %}

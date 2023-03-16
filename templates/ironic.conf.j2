@@ -24,6 +24,7 @@ enabled_inspect_interfaces = {{ filtered_ironic_drivers | json_query('[*].inspec
 enabled_management_interfaces = {{ filtered_ironic_drivers | json_query('[*].management') | unique | join(',') }}
 enabled_power_interfaces = {{ filtered_ironic_drivers | json_query('[*].power') | unique | join(',') }}
 enabled_console_interfaces = {{ filtered_ironic_drivers | json_query('[*].console') | unique | join(',') }}
+enabled_raid_interfaces = {{ filtered_ironic_drivers | json_query('[*].raid') | unique | join(',') }}
 
 [agent]
 
