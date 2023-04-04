@@ -83,8 +83,6 @@ including:
 * agent_ipmitool
 * agent_ipmitool_socat
 * agent_irmc
-* agent_ucs
-* pxe_agent_cimc
 * pxe_drac
 * pxe_drac_inspector
 * pxe_ilo
@@ -92,7 +90,6 @@ including:
 * pxe_ipmitool_socat
 * pxe_irmc
 * pxe_snmp
-* pxe_ucs
 
 .. note::
 

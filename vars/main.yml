@@ -48,20 +48,6 @@ ironic_driver_types:
     inspect: irmc
     management: irmc
     power: irmc
-  agent_ucs:
-    hardware_type: cisco-ucs-managed
-    boot: pxe
-    deploy: direct
-    inspect: inspector
-    management: ucsm
-    power: ucsm
-  pxe_agent_cimc:
-    hardware_type: cisco-ucs-standalone
-    boot: pxe
-    deploy: direct
-    inspect: inspector
-    management: cimc
-    power: cimc
   pxe_drac:
     hardware_type: idrac
     boot: pxe
@@ -111,13 +97,6 @@ ironic_driver_types:
     inspect: no-inspect
     management: fake
     power: snmp
-  pxe_ucs:
-    hardware_type: cisco-ucs-managed
-    boot: pxe
-    deploy: direct
-    inspect: inspector
-    management: ucsm
-    power: ucsm
 
 ironic_packages_list: >
   {%- set package_list = [] %}
