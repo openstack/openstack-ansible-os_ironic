@@ -328,6 +328,7 @@ ironic_conductor_init_config_overrides: {}
 
 # driver definitions
 ironic_drivers_enabled:
+  - no_driver
   - agent_ipmitool
   - pxe_ipmitool
 
