@@ -241,6 +241,10 @@ ironic_pip_packages:
   - sushy
   - systemd-python
 
+# ipmitool-socat console settings
+ironic_socat_bind_address: "{{ openstack_service_bind_address | default('0.0.0.0') }}"
+ironic_socat_port_range: "10000:10099"
+
 # Specific pip packages provided by the user for the ironic service
 ironic_user_pip_packages: []
 
