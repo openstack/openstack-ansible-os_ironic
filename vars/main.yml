@@ -56,17 +56,17 @@ ironic_driver_types:
     hardware_type: idrac
     boot: pxe
     deploy: direct
-    inspect: idrac
-    management: idrac
-    power: idrac
+    inspect: idrac-wsman
+    management: idrac-wsman
+    power: idrac-wsman
     console: no-console
   pxe_drac_inspector:
     hardware_type: idrac
     boot: pxe
     deploy: direct
     inspect: inspector
-    management: idrac
-    power: idrac
+    management: idrac-wsman
+    power: idrac-wsman
     console: no-console
   pxe_ilo:
     hardware_type: ilo
