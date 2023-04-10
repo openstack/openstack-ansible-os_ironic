@@ -262,8 +262,8 @@ filtered_ironic_services: |-
   {%     set _ = value.update(
            {
              'service_key': key,
-             'enabled': 'yes',
-             'state': 'started',
+             'enabled': value['enabled'] | default(True),
+             'state': value['state'] | default('started'),
              'config_overrides': value.init_config_overrides
            }
          )
