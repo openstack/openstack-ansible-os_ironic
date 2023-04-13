@@ -3,6 +3,9 @@
 [DEFAULT]
 listen_address = {{ ironic_inspector_service_address }}
 listen_port = {{ ironic_inspector_service_port }}
+{% if ironic_backend_ssl | bool %}
+use_ssl = True
+{% endif %}
 
 rootwrap_config = /etc/ironic-inspector/rootwrap.conf
 auth_strategy = keystone
@@ -10,6 +13,12 @@ debug = {{ debug }}
 
 # RPC Backend
 transport_url = {{ ironic_inspector_oslomsg_rpc_transport }}://{% for host in ironic_inspector_oslomsg_rpc_servers.split(',') %}{{ ironic_inspector_oslomsg_rpc_userid }}:{{ ironic_oslomsg_rpc_password }}@{{ host }}:{{ ironic_inspector_oslomsg_rpc_port }}{% if not loop.last %},{% else %}/{{ ironic_inspector_oslomsg_rpc_vhost }}{% if ironic_inspector_oslomsg_rpc_use_ssl | bool %}?ssl=1{% else %}?ssl=0{% endif %}{% endif %}{% endfor %}
+
+{% if ironic_backend_ssl | bool %}
+[ssl]
+cert_file = {{ ironic_ssl_cert }}
+key_file = {{ ironic_ssl_key }}
+{% endif %}
 
 [capabilities]
 

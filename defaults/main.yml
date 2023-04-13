@@ -66,6 +66,7 @@ ironic_services:
     uwsgi_overrides: "{{ ironic_api_uwsgi_ini_overrides }}"
     uwsgi_port: "{{ ironic_service_port }}"
     uwsgi_bind_address: "{{ ironic_uwsgi_bind_address }}"
+    uwsgi_tls: "{{ ironic_backend_ssl | ternary(ironic_uwsgi_tls, {}) }}"
   ironic-conductor:
     group: ironic_conductor
     service_name: ironic-conductor
@@ -299,6 +300,9 @@ ironic_wsgi_threads: 1
 ironic_wsgi_processes_max: 16
 ironic_wsgi_processes: "{{ [[(ansible_facts['processor_vcpus']//ansible_facts['processor_threads_per_core'])|default(1), 1] | max * 2, ironic_wsgi_processes_max] | min }}"
 ironic_uwsgi_bind_address: "{{ openstack_service_bind_address | default('0.0.0.0') }}"
+ironic_uwsgi_tls:
+  crt: "{{ ironic_ssl_cert }}"
+  key: "{{ ironic_ssl_key }}"
 
 ### OpenStack Services to integrate with
 
@@ -491,3 +495,51 @@ ironic_inspector_oslomsg_notify_ssl_ca_file: "{{ oslomsg_notify_ssl_ca_file | de
 ironic_inspector_optional_oslomsg_amqp1_pip_packages:
   - oslo.messaging[amqp1]
 ironic_inspector_oslomsg_amqp1_enabled: True
+
+###
+### Backend TLS
+###
+
+# Define if communication between haproxy and service backends should be
+# encrypted with TLS.
+ironic_backend_ssl: "{{ openstack_service_backend_ssl | default(False) }}"
+
+# Storage location for SSL certificate authority
+ironic_pki_dir: "{{ openstack_pki_dir | default('/etc/openstack_deploy/pki') }}"
+
+# Delegated host for operating the certificate authority
+ironic_pki_setup_host: "{{ openstack_pki_setup_host | default('localhost') }}"
+
+# ironic server certificate
+ironic_pki_keys_path: "{{ ironic_pki_dir ~ '/certs/private/' }}"
+ironic_pki_certs_path: "{{ ironic_pki_dir ~ '/certs/certs/' }}"
+ironic_pki_intermediate_cert_name: "{{ openstack_pki_service_intermediate_cert_name | default('ExampleCorpIntermediate') }}"
+ironic_pki_regen_cert: ''
+ironic_pki_san: "{{ openstack_pki_san | default('DNS:' ~ ansible_facts['hostname'] ~ ',IP:' ~ management_address) }}"
+ironic_pki_certificates:
+  - name: "ironic_{{ ansible_facts['hostname'] }}"
+    provider: ownca
+    cn: "{{ ansible_facts['hostname'] }}"
+    san: "{{ ironic_pki_san }}"
+    signed_by: "{{ ironic_pki_intermediate_cert_name }}"
+
+# ironic destination files for SSL certificates
+ironic_ssl_cert: /etc/ironic/ironic.pem
+ironic_ssl_key: /etc/ironic/ironic.key
+
+# Installation details for SSL certificates
+ironic_pki_install_certificates:
+  - src: "{{ ironic_user_ssl_cert | default(ironic_pki_certs_path ~ 'ironic_' ~ ansible_facts['hostname'] ~ '-chain.crt') }}"
+    dest: "{{ ironic_ssl_cert }}"
+    owner: "{{ ironic_system_user_name }}"
+    group: "{{ ironic_system_user_name }}"
+    mode: "0644"
+  - src: "{{ ironic_user_ssl_key | default(ironic_pki_keys_path ~ 'ironic_' ~ ansible_facts['hostname'] ~ '.key.pem') }}"
+    dest: "{{ ironic_ssl_key }}"
+    owner: "{{ ironic_system_user_name }}"
+    group: "{{ ironic_system_user_name }}"
+    mode: "0600"
+
+# Define user-provided SSL certificates
+#ironic_user_ssl_cert: <path to cert on ansible deployment host>
+#ironic_user_ssl_key: <path to cert on ansible deployment host>
