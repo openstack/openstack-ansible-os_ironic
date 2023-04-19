@@ -300,7 +300,7 @@ switch gives the ``neutron`` user access to a minimal set of commands
 for configuring VLAN membership on specific ports.
 
 To control the commands that the ``neutron`` user is allowed to issue
-on the switch create a role:
+on the Cisco Nexus switch create a role:
 
 .. code-block:: bash
 
@@ -329,6 +329,25 @@ deployment should also be permitted, range 3100-3200 here.
 The interfaces which the ``neutron`` user is permitted to modify are
 listed, in this case individually but consult the switch documentation
 for other options such as a regular expression.
+
+A similar config can be made on an Arista switch, where a much more
+explicit list of allowed CLI commands must be defined using regular
+expressions.
+
+.. code-block:: bash
+
+  role neutron-role
+     10 permit mode exec command configure
+     20 permit mode exec command terminal width 511
+     30 permit mode exec command terminal length 0
+     40 permit mode exec command enable
+     50 permit mode exec command copy running-config startup-config
+     60 permit mode config command interface
+     70 permit mode if-Et([1-9]|27|29)\/1 command switchport mode access
+     80 permit mode if-Et([1-9]|27|29)\/1 command (no )*switchport access vlan (3003|3966)
+     90 permit mode if-Et([1-9]|27|29)\/1 command no switchport mode trunk
+     100 permit mode if-Et([1-9]|27|29)\/1 command switchport trunk allowed vlan none
+     110 permit mode config command copy running-config startup-config
 
 Create the user and password, which must match those in the
 ``neutron.conf / genericswitch`` config file options:
