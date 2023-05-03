@@ -108,6 +108,27 @@
   tags:
     - ironic-install
 
+- name: Create and install SSL certificates
+  include_role:
+    name: pki
+    tasks_from: main_certs.yml
+    apply:
+      tags:
+        - ironic-config
+        - pki
+  vars:
+    pki_setup_host: "{{ ironic_pki_setup_host }}"
+    pki_dir: "{{ ironic_pki_dir }}"
+    pki_create_certificates: "{{ ironic_user_ssl_cert is not defined and ironic_user_ssl_key is not defined }}"
+    pki_regen_cert: "{{ ironic_pki_regen_cert }}"
+    pki_certificates: "{{ ironic_pki_certificates }}"
+    pki_install_certificates: "{{ ironic_pki_install_certificates }}"
+  when:
+    - ironic_backend_ssl
+    - "'ironic_api' in group_names or 'ironic_inspector' in group_names"
+  tags:
+    - always
+
 - name: Install the python venv
   import_role:
     name: "python_venv_build"

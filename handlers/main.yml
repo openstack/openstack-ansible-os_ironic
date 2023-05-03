@@ -23,6 +23,7 @@
   listen:
     - "venv changed"
     - "systemd service changed"
+    - "cert installed"
 
 - name: Restart tftpd
   service:
@@ -56,3 +57,4 @@
   delay: 2
   listen:
     - "venv changed"
+    - "cert installed"
