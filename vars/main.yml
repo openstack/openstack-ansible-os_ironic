@@ -123,6 +123,15 @@ ironic_driver_types:
     power: snmp
     console: no-console
     raid: no-raid
+  pxe_redfish:
+    hardware_type: redfish
+    boot: pxe
+    deploy: direct
+    inspect: redfish
+    managment: redfish
+    power: redfish
+    console: no-console
+    raid: no-raid
 
 ironic_packages_list: >
   {%- set package_list = [] %}
