@@ -429,6 +429,10 @@ In ``/etc/openstack_deploy/user_variables_ironic.yml``
   # as well as the mgmt interface for the loadbalancer
   ironic_uwsgi_bind_address: 0.0.0.0
 
+  # Add ipa-insecure=1 to kernel parameters
+  # Needed when ironic endpoint is available over https with self-signed cert.
+  ironic_kernel_append_params: "ipa-debug=1 systemd.journald.forward_to_console=yes ipa-insecure=1"
+
   # INI file overrides
   ironic_ironic_conf_overrides:
     # Disable full device erasure (slow) and just metadata erasure, and replace with "Express erasure"
@@ -454,6 +458,10 @@ In ``/etc/openstack_deploy/user_variables_ironic.yml``
   # Direct Inspector to callback directly to deploying ironic container (via BMAAS network)
   # instead of going via HAProxy on mgmt network. Only applies when bmaas network is isolated.
   ironic_inspector_callback_url: "{{ ironic_inspector_service_internaluri_proto }}://{{ container_networks['bmaas_address']['address'] }}:{{ ironic_inspector_service_port }}/v1/continue"
+
+  # Add ipa-insecure=1 to kernel parameters
+  # Needed when inspector is available over https with self-signed cert.
+  ironic_inspector_extra_callback_parameters: "ipa-collect-lldp=1 ipa-insecure=1"
 
   # Ensure inspector API (using uwsgi) listens on br-bmaas for agent callbacks
   # as well as the mgmt interface for the loadbalancer
