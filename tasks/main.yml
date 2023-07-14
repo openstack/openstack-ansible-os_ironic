@@ -28,7 +28,7 @@
   tags:
     - always
 
-- name: Gathering facts for {{ ironic_container_network_name }} interface on metal hosts
+- name: Gathering facts on metal hosts for interface {{ ironic_container_network_name }}
   setup:
     gather_subset: "!all,network"
     filter: "{{ dynamic_address_gather_filter | default(('ansible_' ~ default_network_interface_name) | replace('-','_')) }}"
@@ -40,7 +40,8 @@
   tags:
     - always
 
-- include_role:
+- name: Including osa.db_setup role
+  include_role:
     name: openstack.osa.db_setup
     apply:
       tags:
@@ -61,7 +62,8 @@
   tags:
     - always
 
-- include_role:
+- name: Including osa.db_setup role
+  include_role:
     name: openstack.osa.db_setup
     apply:
       tags:
@@ -82,7 +84,8 @@
   tags:
     - always
 
-- include_role:
+- name: Including osa.mq_setup role
+  include_role:
     name: openstack.osa.mq_setup
     apply:
       tags:
@@ -104,7 +107,8 @@
   tags:
     - always
 
-- import_tasks: ironic_pre_install.yml
+- name: Importing ironic_pre_install tasks
+  import_tasks: ironic_pre_install.yml
   tags:
     - ironic-install
 
@@ -147,7 +151,8 @@
   tags:
     - ironic-install
 
-- import_tasks: ironic_post_install.yml
+- name: Importing ironic_post_install tasks
+  import_tasks: ironic_post_install.yml
   tags:
     - ironic-config
 
@@ -161,16 +166,19 @@
     - ironic-config
     - uwsgi
 
-- import_tasks: ironic_conductor_post_install.yml
+- name: Importing ironic_conductor_post_install tasks
+  import_tasks: ironic_conductor_post_install.yml
   when: "ironic_services['ironic-conductor']['group'] in group_names"
   tags:
     - ironic-config
 
-- import_tasks: ironic_db_setup.yml
+- name: Importing ironic_db_setup tasks
+  import_tasks: ironic_db_setup.yml
   tags:
     - ironic-config
 
-- import_tasks: ironic_inspector_pre_install.yml
+- name: Importing ironic_inspector_pre_install tasks
+  import_tasks: ironic_inspector_pre_install.yml
   when: inventory_hostname in groups['ironic_inspector']
   tags:
     - ironic-inspector
@@ -184,16 +192,17 @@
     systemd_tempd_prefix: openstack
     systemd_slice_name: "{{ ironic_system_slice_name }}"
     systemd_lock_dir: "{{ ironic_lock_dir }}"
-    systemd_CPUAccounting: true
-    systemd_BlockIOAccounting: true
-    systemd_MemoryAccounting: true
-    systemd_TasksAccounting: true
+    systemd_service_cpu_accounting: true
+    systemd_service_block_io_accounting: true
+    systemd_service_memory_accounting: true
+    systemd_service_tasks_accounting: true
     systemd_services: "{{ filtered_ironic_services }}"
   tags:
     - ironic-config
     - systemd-service
 
-- include_role:
+- name: Including osa.service_setup role
+  include_role:
     name: openstack.osa.service_setup
     apply:
       tags:
@@ -213,12 +222,14 @@
   tags:
     - always
 
-- import_tasks: ironic_inspector_post_install.yml
+- name: Importing ironic_inspector_post_install tasks
+  import_tasks: ironic_inspector_post_install.yml
   when: inventory_hostname in groups['ironic_inspector']
   tags:
     - ironic-inspector
 
-- include_tasks: ironic_deploy_image.yml
+- name: Including ironic_deploy_image tasks
+  include_tasks: ironic_deploy_image.yml
   args:
     apply:
       tags:

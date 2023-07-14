@@ -35,6 +35,7 @@
         url: "{{ item['url'] }}"
         dest: "{{ ironic_deploy_image_path }}"
         checksum: "sha256:{{ item['sha_url'] }}"
+        mode: "0644"
       retries: 10
       delay: 10
       register: ironic_download_results

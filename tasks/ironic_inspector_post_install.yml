@@ -17,6 +17,7 @@
   template:
     src: pxelinux-default.j2
     dest: "{{ ironic_inspector_tftpboot_dir }}/pxelinux.cfg/default"
+    mode: "0644"
 
 - name: Copy Inspector iPXE Configuration
   template:
@@ -24,6 +25,7 @@
     dest: "{{ ironic_http_root }}/inspector.ipxe"
     owner: "{{ ironic_system_user_name }}"
     group: "{{ ironic_system_group_name }}"
+    mode: "0644"
 
 - name: Download IPA Images
   get_url:
@@ -57,6 +59,7 @@
       file:
         path: "{{ item }}"
         state: directory
+        mode: "0755"
       with_items:
         - "/etc/nginx/{{ ironic_nginx_conf_path }}"
 
@@ -64,6 +67,7 @@
       template:
         src: ironic-ipxe.conf.j2
         dest: "/etc/nginx/{{ ironic_nginx_conf_path }}/ironic-ipxe.conf"
+        mode: "0644"
       notify:
         - Restart web server
 

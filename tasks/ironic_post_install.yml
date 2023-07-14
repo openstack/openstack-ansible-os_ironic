@@ -23,6 +23,7 @@
         post -m temp-url-key:{{ ironic_swift_temp_url_secret_key }}
   environment:
     OS_ENDPOINT_TYPE: internalURL
+  changed_when: false
   when:
     - not ironic_enable_web_server_for_images | bool
     - _ironic_api_is_first_play_host
@@ -40,6 +41,7 @@
         stat -v | awk '/StorageURL\:/ {print $2}'
   environment:
     OS_ENDPOINT_TYPE: internalURL
+  changed_when: false
   register: swift_storage_url
   when:
     - not ironic_enable_web_server_for_images | bool
@@ -87,8 +89,8 @@
   openstack.config_template.config_template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
-    owner: "{{ item.owner|default(ironic_system_user_name) }}"
-    group: "{{ item.group|default(ironic_system_group_name) }}"
+    owner: "{{ item.owner | default(ironic_system_user_name) }}"
+    group: "{{ item.group | default(ironic_system_group_name) }}"
     mode: "0644"
     config_overrides: "{{ item.config_overrides }}"
     config_type: "{{ item.config_type }}"
@@ -148,6 +150,7 @@
     dest: "/etc/ironic/rootwrap.d/"
     owner: "root"
     group: "root"
+    mode: "0644"
   with_fileglob:
     - rootwrap.d/*
   notify:

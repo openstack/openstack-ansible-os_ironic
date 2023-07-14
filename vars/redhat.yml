@@ -58,14 +58,14 @@ ironic_tftpd_service_name: tftp
 ironic_tftpd_root: /var/lib/tftpboot
 
 ironic_inspector_http_distro_packages:
-   - nginx
+  - nginx
 
 ironic_inspector_isc_dhcp_distro_packages:
-   - tftpd-hpa
-   - isc-dhcp-server
+  - tftpd-hpa
+  - isc-dhcp-server
 
 ironic_inspector_dnsmasq_distro_packages:
-   - dnsmasq
+  - dnsmasq
 
 ironic_inspector_standalone_distro_packages:
   - isc-dhcp-server

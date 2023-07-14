@@ -18,14 +18,18 @@
 # Verbosity Options
 debug: False
 
-#python venv executable
+# python venv executable
 ironic_venv_python_executable: "{{ openstack_venv_python_executable | default('python3') }}"
 
 # Set the host which will execute the shade modules
 # for the service setup. The host must already have
 # clouds.yaml properly configured.
 ironic_service_setup_host: "{{ openstack_service_setup_host | default('localhost') }}"
-ironic_service_setup_host_python_interpreter: "{{ openstack_service_setup_host_python_interpreter | default((ironic_service_setup_host == 'localhost') | ternary(ansible_playbook_python, ansible_facts['python']['executable'])) }}"
+ironic_service_setup_host_python_interpreter: >-
+  {{
+    openstack_service_setup_host_python_interpreter | default(
+      (ironic_service_setup_host == 'localhost') | ternary(ansible_playbook_python, ansible_facts['python']['executable']))
+  }}
 
 # Set the package install state for distribution packages
 # Options are 'present' and 'latest'
@@ -35,7 +39,8 @@ ironic_git_repo: https://opendev.org/openstack/ironic
 ironic_inspector_git_repo: https://opendev.org/openstack/ironic-inspector
 ironic_git_install_branch: master
 ironic_inspector_git_install_branch: master
-ironic_upper_constraints_url: "{{ requirements_git_url | default('https://releases.openstack.org/constraints/upper/' ~ requirements_git_install_branch | default('master')) }}"
+ironic_upper_constraints_url: >-
+  {{ requirements_git_url | default('https://releases.openstack.org/constraints/upper/' ~ requirements_git_install_branch | default('master')) }}
 ironic_git_constraints:
   - "--constraint {{ ironic_upper_constraints_url }}"
 
@@ -125,12 +130,19 @@ ironic_container_network_name: "bmaas_address"
 ironic_bmaas_bridge: "{{ container_networks[ironic_container_network_name]['bridge'] | default('bridge_undefined') }}"
 
 # The address of this host on the bmaas network
-ironic_bmaas_address: "{{ (is_metal | default(False)) | ternary(ansible_facts[ironic_bmaas_bridge | replace('-','_')]['ipv4']['address'],
-                                                                container_networks[ironic_container_network_name]['address']) | default('address_undefined') }}"
+ironic_bmaas_address: >-
+  {{
+    (is_metal | default(False)) | ternary(
+      ansible_facts[ironic_bmaas_bridge | replace('-','_')]['ipv4']['address'],
+      container_networks[ironic_container_network_name]['address']) | default('address_undefined')
+  }}
 # The name of the interface on the bmaas network
 # This is the bmaas bridge name on metal, or the corresponding interface name in a container
-ironic_bmaas_interface: "{{ (is_metal | default(False)) | ternary(ironic_bmaas_bridge,
-                                                                  container_networks[ironic_container_network_name]['interface']) | default('interface_undefined') }}"
+ironic_bmaas_interface: >-
+  {{
+    (is_metal | default(False)) | ternary(
+      ironic_bmaas_bridge, container_networks[ironic_container_network_name]['interface']) | default('interface_undefined')
+  }}
 
 # Ironic image store information
 #
@@ -172,7 +184,11 @@ ironic_erase_devices_priority: 10
 
 # Database
 ironic_db_setup_host: "{{ openstack_db_setup_host | default('localhost') }}"
-ironic_db_setup_python_interpreter: "{{ openstack_db_setup_python_interpreter | default((ironic_db_setup_host == 'localhost') | ternary(ansible_playbook_python, ansible_facts['python']['executable'])) }}"
+ironic_db_setup_python_interpreter: >-
+  {{
+    openstack_db_setup_python_interpreter | default(
+      (ironic_db_setup_host == 'localhost') | ternary(ansible_playbook_python, ansible_facts['python']['executable']))
+  }}
 ironic_galera_address: "{{ galera_address | default('127.0.0.1') }}"
 ironic_galera_user: ironic
 ironic_galera_database: ironic
@@ -199,12 +215,15 @@ ironic_keystone_auth_plugin: password
 # ironic_neutron_inspection_network_name: "Name of inspection network in neutron"
 
 # Integrated Openstack configuration
-ironic_enabled_network_interfaces_list: "flat,noop{{ (ironic_neutron_provisioning_network_uuid is defined) | ternary(',neutron','') }}"
-ironic_default_network_interface: "{{ (ironic_neutron_provisioning_network_uuid is defined) | ternary('neutron','flat') }}"
+ironic_enabled_network_interfaces_list: "flat,noop{{ (ironic_neutron_provisioning_network_uuid is defined) | ternary(',neutron', '') }}"
+ironic_default_network_interface: "{{ (ironic_neutron_provisioning_network_uuid is defined) | ternary('neutron', 'flat') }}"
 ironic_auth_strategy: keystone
 ironic_dhcp_provider: "{{ (ironic_standalone | bool) | ternary('none', 'neutron') }}"
 ironic_sync_power_state_interval: "{{ (ironic_standalone | bool) | ternary('-1', '60') }}"
-ironic_db_connection_string: "mysql+pymysql://{{ ironic_galera_user }}:{{ ironic_container_mysql_password }}@{{ ironic_galera_address }}:{{ ironic_galera_port }}/ironic?charset=utf8{% if ironic_galera_use_ssl | bool %}&ssl_verify_cert=true{% if ironic_galera_ssl_ca_cert | length > 0 %}&ssl_ca={{ ironic_galera_ssl_ca_cert }}{% endif %}{% endif %}"
+ironic_db_connection_string: >-
+  mysql+pymysql://{{ ironic_galera_user }}:{{ ironic_container_mysql_password }}@{{ ironic_galera_address }}:{{ ironic_galera_port
+    }}/ironic?charset=utf8{% if ironic_galera_use_ssl | bool %}&ssl_verify_cert=true{%
+      if ironic_galera_ssl_ca_cert | length > 0 %}&ssl_ca={{ ironic_galera_ssl_ca_cert }}{% endif %}{% endif %}
 
 # Common configuration
 ironic_node_name: ironic
@@ -298,7 +317,8 @@ ironic_service_user_name: "ironic"
 # WSGI settings
 ironic_wsgi_threads: 1
 ironic_wsgi_processes_max: 16
-ironic_wsgi_processes: "{{ [[(ansible_facts['processor_vcpus']//ansible_facts['processor_threads_per_core'])|default(1), 1] | max * 2, ironic_wsgi_processes_max] | min }}"
+ironic_wsgi_processes: >-
+  {{ [[(ansible_facts['processor_vcpus'] // ansible_facts['processor_threads_per_core']) | default(1), 1] | max * 2, ironic_wsgi_processes_max] | min }}
 ironic_uwsgi_bind_address: "{{ openstack_service_bind_address | default('0.0.0.0') }}"
 ironic_uwsgi_tls:
   crt: "{{ ironic_ssl_cert }}"
@@ -364,11 +384,16 @@ ironic_inspector_service_token_roles_required: "{{ openstack_service_token_roles
 ironic_inspector_service_project_name: "service"
 ironic_inspector_service_in_ldap: "{{ service_ldap_backend_enabled | default(False) }}"
 ironic_inspector_service_domain_id: default
-ironic_inspector_callback_url: "{{ ironic_inspector_service_internaluri_proto }}://{{ internal_lb_vip_address }}:{{ ironic_inspector_service_port }}/v1/continue"
+ironic_inspector_callback_url: >-
+  {{ ironic_inspector_service_internaluri_proto }}://{{ internal_lb_vip_address }}:{{ ironic_inspector_service_port }}/v1/continue
 
 # Database
 ironic_inspector_db_setup_host: "{{ openstack_db_setup_host | default('localhost') }}"
-ironic_inspector_db_setup_python_interpreter: "{{ openstack_db_setup_python_interpreter | default((ironic_inspector_db_setup_host == 'localhost') | ternary(ansible_playbook_python, ansible_facts['python']['executable'])) }}"
+ironic_inspector_db_setup_python_interpreter: >-
+  {{
+    openstack_db_setup_python_interpreter | default(
+      (ironic_inspector_db_setup_host == 'localhost') | ternary(ansible_playbook_python, ansible_facts['python']['executable']))
+  }}
 ironic_inspector_galera_address: "{{ galera_address | default('127.0.0.1') }}"
 ironic_inspector_galera_user: ironic-inspector
 ironic_inspector_galera_database: ironic_inspector
@@ -397,7 +422,7 @@ ironic_inspector_swift_role_names:
   - _member_
   - swiftoperator
 
-#Ironic deploy images need to be uploaded to glance.
+# Ironic deploy images need to be uploaded to glance.
 ironic_deploy_image_glance_upload: True
 
 # Set the directory where the downloaded image will be stored
@@ -406,37 +431,41 @@ ironic_deploy_image_glance_upload: True
 ironic_deploy_image_path: "/root/openstack-ansible/ironic"
 ironic_deploy_image_path_owner: "root"
 
-#The default download URL is like https://tarballs.opendev.org/openstack/ironic-python-agent/dib/files/ipa-centos8-stable-xena.initramfs
-#Allow various parts of this to be overidden to local mirrors, or replaced completely with custom settings
+# The default download URL is like https://tarballs.opendev.org/openstack/ironic-python-agent/dib/files/ipa-centos8-stable-xena.initramfs
+# Allow various parts of this to be overidden to local mirrors, or replaced completely with custom settings
 ironic_deploy_image_server: "https://tarballs.opendev.org/"
 ironic_deploy_image_server_path: "openstack/ironic-python-agent/dib/files/"
 ironic_deploy_image_base_name: "ipa-centos9-stable-2023.1"
 ironic_deploy_image_kernel_name: "{{ ironic_deploy_image_base_name + '.kernel' }}"
 ironic_deploy_image_initramfs_name: "{{ ironic_deploy_image_base_name + '.initramfs' }}"
 ironic_deploy_image_list:
- - url: "{{ ironic_deploy_image_server ~ ironic_deploy_image_server_path ~ ironic_deploy_image_kernel_name }}"
-   sha_url: "{{ ironic_deploy_image_server ~ ironic_deploy_image_server_path ~ ironic_deploy_image_kernel_name ~ '.sha256' }}"
-   container_format: 'aki'
-   disk_format: 'aki'
-   name: "{{ ironic_deploy_image_kernel_name }}"
- - url: "{{ ironic_deploy_image_server ~ ironic_deploy_image_server_path ~ ironic_deploy_image_initramfs_name }}"
-   sha_url: "{{ ironic_deploy_image_server ~ ironic_deploy_image_server_path ~ ironic_deploy_image_initramfs_name ~ '.sha256' }}"
-   container_format: 'ari'
-   disk_format: 'ari'
-   name: "{{ ironic_deploy_image_initramfs_name }}"
+  - url: "{{ ironic_deploy_image_server ~ ironic_deploy_image_server_path ~ ironic_deploy_image_kernel_name }}"
+    sha_url: "{{ ironic_deploy_image_server ~ ironic_deploy_image_server_path ~ ironic_deploy_image_kernel_name ~ '.sha256' }}"
+    container_format: 'aki'
+    disk_format: 'aki'
+    name: "{{ ironic_deploy_image_kernel_name }}"
+  - url: "{{ ironic_deploy_image_server ~ ironic_deploy_image_server_path ~ ironic_deploy_image_initramfs_name }}"
+    sha_url: "{{ ironic_deploy_image_server ~ ironic_deploy_image_server_path ~ ironic_deploy_image_initramfs_name ~ '.sha256' }}"
+    container_format: 'ari'
+    disk_format: 'ari'
+    name: "{{ ironic_deploy_image_initramfs_name }}"
 
-#allow user defined extra images to upload
+# allow user defined extra images to upload
 ironic_extra_deploy_image_list: []
 
 # Ironic inspector
 ironic_inspector_enable_discovery: True
-ironic_inspector_openstack_db_connection_string: "mysql+pymysql://{{ ironic_inspector_galera_user }}:{{ ironic_inspector_container_mysql_password }}@{{ ironic_inspector_galera_address }}:{{ ironic_inspector_galera_port }}/{{ ironic_inspector_galera_database }}?charset=utf8{% if ironic_inspector_galera_use_ssl | bool %}&ssl_verify_cert=true{% if ironic_inspector_galera_ssl_ca_cert | length > 0 %}&ssl_ca={{ ironic_inspector_galera_ssl_ca_cert }}{% endif %}{% endif %}"
+ironic_inspector_openstack_db_connection_string: >-
+  mysql+pymysql://{{ ironic_inspector_galera_user }}:{{ ironic_inspector_container_mysql_password }}@{{ ironic_inspector_galera_address -}}:{{
+    ironic_inspector_galera_port }}/{{ ironic_inspector_galera_database }}?charset=utf8{%
+     if ironic_inspector_galera_use_ssl | bool %}&ssl_verify_cert=true{%
+       if ironic_inspector_galera_ssl_ca_cert | length > 0 %}&ssl_ca={{ ironic_inspector_galera_ssl_ca_cert }}{% endif %}{% endif %}
 
-#define this to adjust the inspector processing hooks
-#Example:
-#ironic_inspector_processing_hooks: "$default_processing_hooks,lldp_basic,local_link_connection"
+# define this to adjust the inspector processing hooks
+# Example:
+# ironic_inspector_processing_hooks: "$default_processing_hooks,lldp_basic,local_link_connection"
 
-#pass additional kernel paramters to the deploy image
+# pass additional kernel paramters to the deploy image
 ironic_inspector_extra_callback_parameters: ''
 
 # Ironic inspector dhcp
@@ -451,7 +480,7 @@ ironic_inspector_dhcp_nameservers: 192.168.0.1
 ironic_inspector_dhcp_lease_time: 600
 
 ironic_inspector_dhcp_type: dnsmasq # isc_dhcp
-ironic_inspector_boot_mode: http #tftp
+ironic_inspector_boot_mode: http # tftp
 ironic_inspector_pxe_boot_mode: "{{ ironic_inspector_boot_mode }}"
 ironic_inspector_httpboot_dir: "{{ ironic_http_root }}"
 ironic_inspector_tftpboot_dir: "{{ ironic_tftpd_root }}"
@@ -465,9 +494,9 @@ ironic_inspector_rootwrap_conf_overrides: {}
 ironic_inspector_init_config_overrides: {}
 ironic_inspector_dnsmasq_init_config_overrides: {}
 # pxe boot
-ironic_inspector_pxe_append_params: "ipa-debug=1 systemd.journald.forward_to_console=yes" #ipa-inspection-collectors=default,logs,extra_hardware
+ironic_inspector_pxe_append_params: "ipa-debug=1 systemd.journald.forward_to_console=yes" # ipa-inspection-collectors=default,logs,extra_hardware
 
-ironic_inspector_pxe_filter: dnsmasq #iptables
+ironic_inspector_pxe_filter: dnsmasq # iptables
 
 ironic_inspector_oslomsg_rpc_host_group: "{{ oslomsg_rpc_host_group | default('rabbitmq_all') }}"
 ironic_inspector_oslomsg_rpc_setup_host: "{{ (ironic_oslomsg_rpc_host_group in groups) | ternary(groups[ironic_oslomsg_rpc_host_group][0], 'localhost') }}"
@@ -481,7 +510,8 @@ ironic_inspector_oslomsg_rpc_ssl_version: "{{ oslomsg_rpc_ssl_version | default(
 ironic_inspector_oslomsg_rpc_ssl_ca_file: "{{ oslomsg_rpc_ssl_ca_file | default('') }}"
 
 ironic_inspector_oslomsg_notify_host_group: "{{ oslomsg_notify_host_group | default('rabbitmq_all') }}"
-ironic_inspector_oslomsg_notify_setup_host: "{{ (ironic_inspector_oslomsg_notify_host_group in groups) | ternary(groups[ironic_inspector_oslomsg_notify_host_group][0], 'localhost') }}"
+ironic_inspector_oslomsg_notify_setup_host: >-
+  {{ (ironic_inspector_oslomsg_notify_host_group in groups) | ternary(groups[ironic_inspector_oslomsg_notify_host_group][0], 'localhost') }}
 ironic_inspector_oslomsg_notify_transport: "{{ oslomsg_notify_transport | default('rabbit') }}"
 ironic_inspector_oslomsg_notify_servers: "{{ oslomsg_notify_servers | default('127.0.0.1') }}"
 ironic_inspector_oslomsg_notify_port: "{{ oslomsg_notify_port | default('5672') }}"
@@ -541,5 +571,5 @@ ironic_pki_install_certificates:
     mode: "0600"
 
 # Define user-provided SSL certificates
-#ironic_user_ssl_cert: <path to cert on ansible deployment host>
-#ironic_user_ssl_key: <path to cert on ansible deployment host>
+# ironic_user_ssl_cert: <path to cert on ansible deployment host>
+# ironic_user_ssl_key: <path to cert on ansible deployment host>

@@ -17,6 +17,7 @@
   copy:
     src: "dhcpd.conf"
     dest: "/etc/dhcp/"
+    mode: "0644"
   when: ironic_standalone
   notify:
     - Restart isc-dhcp-server
@@ -33,6 +34,7 @@
   template:
     src: "tftpd-hpa.j2"
     dest: "/etc/default/tftpd-hpa"
+    mode: "0644"
   when:
     - ansible_facts['os_family'] == 'Debian'
   notify:
@@ -42,6 +44,7 @@
   template:
     src: "map-file"
     dest: "{{ ironic_tftpd_root }}/map-file"
+    mode: "0644"
   notify:
     - Restart tftpd
 
@@ -50,6 +53,7 @@
     src: "{{ item }}"
     dest: "{{ ironic_tftpd_root }}/"
     remote_src: True
+    mode: "0644"
   with_items: "{{ ironic_library_modules_paths }}"
 
 - name: Ensure grub directory exists in tftpboot
@@ -71,12 +75,14 @@
     src: "{{ item.path }}"
     dest: "{{ ironic_tftpd_root }}/{{ item.name }}"
     remote_src: True
+    mode: "0644"
   with_items: "{{ (ironic_uefi_modules + ironic_tftp_extra_content) | selectattr('path', 'defined') | list }}"
 
 - name: Copy content into tftpboot (urls)
   get_url:
     url: "{{ item.url }}"
     dest: "{{ ironic_tftpd_root }}/{{ item.name }}"
+    mode: "0644"
   with_items: "{{ (ironic_uefi_modules + ironic_tftp_extra_content) | selectattr('url', 'defined') | list }}"
 
 - name: Start up tftp
@@ -105,6 +111,7 @@
   file:
     path: "{{ item }}"
     state: directory
+    mode: "0755"
   when: "ironic_ipxe_enabled | bool"
   with_items:
     - "/etc/nginx/{{ ironic_nginx_conf_path }}"
@@ -113,6 +120,7 @@
   template:
     src: ironic-ipxe.conf.j2
     dest: "/etc/nginx/{{ ironic_nginx_conf_path }}/ironic-ipxe.conf"
+    mode: "0644"
   when: "ironic_ipxe_enabled | bool"
   notify:
     - Restart web server
