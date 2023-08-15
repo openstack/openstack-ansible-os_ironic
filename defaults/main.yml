@@ -419,7 +419,7 @@ ironic_inspector_service_user_name: "ironic_inspector"
 # Ironic swift store information
 ironic_inspector_swift_user_name: swift-inspector
 ironic_inspector_swift_role_names:
-  - _member_
+  - member
   - swiftoperator
 
 # Ironic deploy images need to be uploaded to glance.
