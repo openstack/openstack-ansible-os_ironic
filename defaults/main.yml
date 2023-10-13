@@ -228,11 +228,6 @@ ironic_db_connection_string: >-
 # Common configuration
 ironic_node_name: ironic
 
-# If you want to regenerate the ironic users SSH keys, on each run, set this
-# var to True. Otherwise keys will be generated on the first run and not
-# regenerated each run.
-ironic_recreate_keys: False
-
 ironic_tftp_server_address: "{{ ironic_bmaas_address }}"
 
 # Use this variable to add extra files into the ironic_tftp_root directory
