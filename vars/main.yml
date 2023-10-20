@@ -23,7 +23,16 @@ _ironic_inspector_is_first_play_host: >-
     (ironic_services['ironic-inspector']['group'] in group_names and
       inventory_hostname == (groups[ironic_services['ironic-inspector']['group']] | intersect(ansible_play_hosts)) | first) | bool
   }}
-
+_ironic_oslomsg_rpc_vhost_conf: >-
+  {{
+    (ironic_oslomsg_rpc_vhost is string) | ternary(
+      ironic_oslomsg_rpc_vhost, ironic_oslomsg_rpc_vhost | selectattr('state', 'eq', 'present') | map(attribute='name') | first)
+  }}
+_ironic_oslomsg_notify_vhost_conf: >-
+  {{
+    (ironic_oslomsg_notify_vhost is string) | ternary(
+      ironic_oslomsg_notify_vhost, ironic_oslomsg_notify_vhost | selectattr('state', 'eq', 'present') | map(attribute='name') | first)
+  }}
 # This special list brings together all of the package installations into one
 # task to save time.
 
