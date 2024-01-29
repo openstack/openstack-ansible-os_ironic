@@ -332,9 +332,10 @@ filtered_ironic_drivers: |-
   {% else %}
   {% set concat_drivers = [] %}
   {% endif %}
+  {% set _driver_types = ironic_driver_types | combine(ironic_user_driver_types, recursive=True) %}
   {% for driver in ironic_drivers_enabled %}
-  {%   if driver in ironic_driver_types.keys() %}
-  {%     set _ = concat_drivers.append(ironic_driver_types[driver]) %}
+  {%   if driver in _driver_types.keys() %}
+  {%     set _ = concat_drivers.append(_driver_types[driver]) %}
   {%   endif %}
   {% endfor %}
   {{ concat_drivers }}

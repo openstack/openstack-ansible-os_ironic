@@ -363,6 +363,9 @@ ironic_drivers_enabled:
   - agent_ipmitool
   - pxe_ipmitool
 
+# extra driver types defined by user
+ironic_user_driver_types: {}
+
 ironic_inspector_developer_mode: false
 ironic_inspector_venv_python_executable: "{{ openstack_venv_python_executable | default('python2') }}"
 
