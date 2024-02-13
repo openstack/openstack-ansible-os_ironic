@@ -145,7 +145,7 @@ ironic_driver_types:
     boot: pxe
     deploy: direct
     inspect: redfish
-    managment: redfish
+    management: redfish
     power: redfish
     console: no-console
     raid: no-raid
