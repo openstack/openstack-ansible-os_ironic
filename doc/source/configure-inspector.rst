@@ -80,4 +80,4 @@ Set the following variables in ``/etc/openstack_deploy/user_variables.yml``
 
   # stackhpc inspector plugins
   ironic_inspector_user_pip_packages:
-    - git+https://github.com/stackhpc/stackhpc-inspector-plugins@master#egg=stackhpc-inspector-
+    - git+https://github.com/stackhpc/stackhpc-inspector-plugins@master#egg=stackhpc-inspector-plugins
