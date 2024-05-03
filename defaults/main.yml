@@ -311,6 +311,10 @@ ironic_oslomsg_notify_policies: []
 
 ## RabbitMQ integration
 ironic_oslomsg_rabbit_quorum_queues: "{{ oslomsg_rabbit_quorum_queues | default(True) }}"
+ironic_oslomsg_rabbit_stream_fanout: "{{ oslomsg_rabbit_stream_fanout | default(ironic_oslomsg_rabbit_quorum_queues) }}"
+ironic_oslomsg_rabbit_transient_quorum_queues: "{{ oslomsg_rabbit_transient_quorum_queues | default(ironic_oslomsg_rabbit_stream_fanout) }}"
+ironic_oslomsg_rabbit_qos_prefetch_count: "{{ oslomsg_rabbit_qos_prefetch_count | default(ironic_oslomsg_rabbit_stream_fanout | ternary(10, 0)) }}"
+ironic_oslomsg_rabbit_queue_manager: "{{ oslomsg_rabbit_queue_manager | default(ironic_oslomsg_rabbit_quorum_queues) }}"
 ironic_oslomsg_rabbit_quorum_delivery_limit: "{{ oslomsg_rabbit_quorum_delivery_limit | default(0) }}"
 ironic_oslomsg_rabbit_quorum_max_memory_bytes: "{{ oslomsg_rabbit_quorum_max_memory_bytes | default(0) }}"
 
