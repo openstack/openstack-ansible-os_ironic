@@ -106,6 +106,7 @@
     _oslomsg_notify_vhost: "{{ ironic_oslomsg_notify_vhost }}"
     _oslomsg_notify_transport: "{{ ironic_oslomsg_notify_transport }}"
     _oslomsg_notify_policies: "{{ ironic_oslomsg_notify_policies }}"
+    _oslomsg_notify_configure: "{{ ironic_oslomsg_notify_configure }}"
   tags:
     - always
 

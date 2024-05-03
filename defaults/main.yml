@@ -295,6 +295,7 @@ ironic_oslomsg_rpc_ssl_version: "{{ oslomsg_rpc_ssl_version | default('TLSv1_2')
 ironic_oslomsg_rpc_ssl_ca_file: "{{ oslomsg_rpc_ssl_ca_file | default('') }}"
 
 # Notify
+ironic_oslomsg_notify_configure: "{{ oslomsg_notify_configure | default(False) }}"
 ironic_oslomsg_notify_host_group: "{{ oslomsg_notify_host_group | default('rabbitmq_all') }}"
 ironic_oslomsg_notify_setup_host: "{{ (ironic_oslomsg_notify_host_group in groups) | ternary(groups[ironic_oslomsg_notify_host_group][0], 'localhost') }}"
 ironic_oslomsg_notify_transport: "{{ oslomsg_notify_transport | default('rabbit') }}"
