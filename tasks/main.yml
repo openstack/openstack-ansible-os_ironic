@@ -158,6 +158,7 @@
   import_tasks: ironic_post_install.yml
   tags:
     - ironic-config
+    - post-install
 
 - name: Import uwsgi role
   import_role:
