@@ -26,6 +26,10 @@ enabled_power_interfaces = {{ filtered_ironic_drivers | json_query('[*].power') 
 enabled_console_interfaces = {{ filtered_ironic_drivers | json_query('[*].console') | unique | join(',') }}
 enabled_raid_interfaces = {{ filtered_ironic_drivers | json_query('[*].raid') | unique | join(',') }}
 
+# rbac
+rbac_service_role_elevated_access = {{ ironic_service_role_elevated_access }}
+rbac_service_project_name = {{ ironic_service_project_name }}
+
 [agent]
 
 [amt]

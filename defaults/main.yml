@@ -122,6 +122,11 @@ ironic_service_token_roles:
 ironic_service_token_roles_required: "{{ openstack_service_token_roles_required | default(True) }}"
 ironic_service_in_ldap: "{{ service_ldap_backend_enabled | default(False) }}"
 
+# Enable interaction with Nova and Neutron from 2024.1 with default policy
+# If more than one service project name is necessary, then you may need to
+# override Ironic 'service_role' policy.
+ironic_service_role_elevated_access: True
+
 # The name of the entry in container_networks for the bmaas network
 # This is the default provisioning / inspection / cleaning network for this role
 ironic_container_network_name: "bmaas_address"
