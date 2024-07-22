@@ -16,12 +16,12 @@
 _ironic_api_is_first_play_host: >-
   {{
     (ironic_services['ironic-api']['group'] in group_names and
-      inventory_hostname == (groups[ironic_services['ironic-api']['group']] | intersect(ansible_play_hosts)) | first) | bool
+      inventory_hostname == (groups[ironic_services['ironic-api']['group']] | select('in', ansible_play_hosts)) | first) | bool
   }}
 _ironic_inspector_is_first_play_host: >-
   {{
     (ironic_services['ironic-inspector']['group'] in group_names and
-      inventory_hostname == (groups[ironic_services['ironic-inspector']['group']] | intersect(ansible_play_hosts)) | first) | bool
+      inventory_hostname == (groups[ironic_services['ironic-inspector']['group']] | select('in', ansible_play_hosts)) | first) | bool
   }}
 _ironic_oslomsg_rpc_vhost_conf: >-
   {{
