@@ -463,13 +463,13 @@ ironic_deploy_image_initramfs_name: "{{ ironic_deploy_image_base_name + '.initra
 ironic_deploy_image_list:
   - url: "{{ ironic_deploy_image_server ~ ironic_deploy_image_server_path ~ ironic_deploy_image_kernel_name }}"
     sha_url: "{{ ironic_deploy_image_server ~ ironic_deploy_image_server_path ~ ironic_deploy_image_kernel_name ~ '.sha256' }}"
-    container_format: 'aki'
-    disk_format: 'aki'
+    container_format: 'bare'
+    disk_format: 'raw'
     name: "{{ ironic_deploy_image_kernel_name }}"
   - url: "{{ ironic_deploy_image_server ~ ironic_deploy_image_server_path ~ ironic_deploy_image_initramfs_name }}"
     sha_url: "{{ ironic_deploy_image_server ~ ironic_deploy_image_server_path ~ ironic_deploy_image_initramfs_name ~ '.sha256' }}"
-    container_format: 'ari'
-    disk_format: 'ari'
+    container_format: 'bare'
+    disk_format: 'raw'
     name: "{{ ironic_deploy_image_initramfs_name }}"
 
 # allow user defined extra images to upload

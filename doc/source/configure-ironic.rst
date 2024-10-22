@@ -233,15 +233,15 @@ creating partition-based images.
       # Kernel image:
       openstack image create my-image.kernel \
       --public \
-      --disk-format aki \
-      --container-format aki \
+      --disk-format raw \
+      --container-format bare \
       --file my-image.vmlinuz
 
       # Ramdisk image
       openstack image create my-image.initrd \
       --public \
-      --disk-format ari \
-      --container-format ari \
+      --disk-format raw \
+      --container-format bare \
       --file my-image.initrd
 
       # User image
@@ -412,10 +412,10 @@ following characteristics:
 .. code-block:: bash
 
     node_name=baremetal01
-    node_mac="f0:92:1c:0c:1f:88"    # MAC address of PXE interface (em1 as example)
-    deploy_aki=ironic-deploy-aki    # Kernel image
-    deploy_ari=ironic-deploy-ari    # Ramdisk image
-    resource=ironic-gold            # Ironic resource class (matches flavor as CUSTOM_IRONIC_GOLD)
+    node_mac="f0:92:1c:0c:1f:88"            # MAC address of PXE interface (em1 as example)
+    deploy_kernel=ironic-deploy-kernel      # Kernel image
+    deploy_ramdisk=ironic-deploy-ramdisk    # Ramdisk image
+    resource=ironic-gold                    # Ironic resource class (matches flavor as CUSTOM_IRONIC_GOLD)
     phys_arch=x86_64
     phys_cpus=32
     phys_ram=32768
@@ -439,8 +439,8 @@ following characteristics:
      --driver-info ipmi_username=$ipmi_username \
      --driver-info ipmi_password=$ipmi_password \
      --driver-info ipmi_address=$ipmi_address \
-     --driver-info deploy_kernel=`openstack image show $deploy_aki -c id |awk '/id / {print $4}'` \
-     --driver-info deploy_ramdisk=`openstack image show $deploy_ari -c id |awk '/id / {print $4}'` \
+     --driver-info deploy_kernel=`openstack image show $deploy_kernel -c id |awk '/id / {print $4}'` \
+     --driver-info deploy_ramdisk=`openstack image show $deploy_ramdisk -c id |awk '/id / {print $4}'` \
      --property cpus=$phys_cpus \
      --property memory_mb=$phys_ram \
      --property local_gb=$phys_disk \
