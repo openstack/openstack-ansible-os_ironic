@@ -63,6 +63,34 @@
       with_items:
         - "/etc/nginx/{{ ironic_nginx_conf_path }}"
 
+    - name: Write alternate nginx.conf for rh like systems
+      template:
+        src: nginx-nodefault.conf.j2
+        dest: "/etc/nginx/nginx-nodefault.conf"
+        mode: "0644"
+      when:
+        - ansible_facts['pkg_mgr'] == 'dnf'
+      notify:
+        - Restart web server
+
+    - name: Create systemd dropin for rh like systems
+      import_role:
+        name: systemd_service
+      when:
+        - ansible_facts['pkg_mgr'] == 'dnf'
+      vars:
+        systemd_services:
+          - service_name: "nginx"
+            systemd_overrides_only: true
+            load: false
+            systemd_overrides:
+              Service:
+                ExecStart:
+                  - ''
+                  - '/usr/sbin/nginx -c /etc/nginx/nginx-nodefault.conf'
+      notify:
+        - Restart web server
+
     - name: Configure nginx virtual hosts
       template:
         src: ironic-ipxe.conf.j2
