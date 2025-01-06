@@ -323,13 +323,6 @@ ironic_oslomsg_rabbit_queue_manager: "{{ oslomsg_rabbit_queue_manager | default(
 ironic_oslomsg_rabbit_quorum_delivery_limit: "{{ oslomsg_rabbit_quorum_delivery_limit | default(0) }}"
 ironic_oslomsg_rabbit_quorum_max_memory_bytes: "{{ oslomsg_rabbit_quorum_max_memory_bytes | default(0) }}"
 
-## (Qdrouterd) integration
-# TODO(ansmith): Change structure when more backends will be supported
-ironic_oslomsg_amqp1_enabled: "{{ ironic_oslomsg_rpc_transport == 'amqp' }}"
-
-ironic_optional_oslomsg_amqp1_pip_packages:
-  - oslo.messaging[amqp1]
-
 # Auth
 ironic_service_user_name: "ironic"
 
@@ -543,10 +536,6 @@ ironic_inspector_oslomsg_notify_password: "{{ ironic_oslomsg_rpc_password }}"
 ironic_inspector_oslomsg_notify_vhost: "{{ ironic_inspector_oslomsg_rpc_vhost }}"
 ironic_inspector_oslomsg_notify_ssl_version: "{{ oslomsg_notify_ssl_version | default('TLSv1_2') }}"
 ironic_inspector_oslomsg_notify_ssl_ca_file: "{{ oslomsg_notify_ssl_ca_file | default('') }}"
-
-ironic_inspector_optional_oslomsg_amqp1_pip_packages:
-  - oslo.messaging[amqp1]
-ironic_inspector_oslomsg_amqp1_enabled: True
 
 ###
 ### Backend TLS

@@ -343,9 +343,6 @@ filtered_ironic_drivers: |-
 ironic_venv_packages: |-
   {%- set pkg_list = ironic_pip_packages %}
   {%- set _ = pkg_list.extend(ironic_user_pip_packages) %}
-  {%- if (ironic_oslomsg_amqp1_enabled | bool) %}
-  {%-   set _ = pkg_list.extend(ironic_optional_oslomsg_amqp1_pip_packages) %}
-  {%- endif %}
   {%- set _ = pkg_list.extend(ironic_inspector_pip_packages) %}
   {%- set _ = pkg_list.extend(ironic_inspector_user_pip_packages) %}
   {{- pkg_list | unique }}
