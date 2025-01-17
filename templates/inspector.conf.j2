@@ -12,7 +12,7 @@ auth_strategy = keystone
 debug = {{ debug }}
 
 # RPC Backend
-transport_url = {{ ironic_inspector_oslomsg_rpc_transport }}://{% for host in ironic_inspector_oslomsg_rpc_servers.split(',') %}{{ ironic_inspector_oslomsg_rpc_userid }}:{{ ironic_oslomsg_rpc_password }}@{{ host }}:{{ ironic_inspector_oslomsg_rpc_port }}{% if not loop.last %},{% else %}/{{ ironic_inspector_oslomsg_rpc_vhost }}{% if ironic_inspector_oslomsg_rpc_use_ssl | bool %}?ssl=1{% else %}?ssl=0{% endif %}{% endif %}{% endfor %}
+transport_url = {{ ironic_inspector_oslomsg_rpc_transport }}://{% for host in ironic_inspector_oslomsg_rpc_servers.split(',') %}{{ ironic_inspector_oslomsg_rpc_userid }}:{{ ironic_inspector_oslomsg_rpc_password }}@{{ host }}:{{ ironic_inspector_oslomsg_rpc_port }}{% if not loop.last %},{% else %}/{{ _ironic_inspector_oslomsg_rpc_vhost_conf }}{% if ironic_inspector_oslomsg_rpc_use_ssl | bool %}?ssl=1{% else %}?ssl=0{% endif %}{% endif %}{% endfor %}
 
 {% if ironic_backend_ssl | bool %}
 [ssl]
@@ -83,6 +83,20 @@ memcached_servers = {{ memcached_servers }}
 # if your memcached server is shared, use these settings to avoid cache poisoning
 memcache_security_strategy = ENCRYPT
 memcache_secret_key = {{ memcached_encryption_key }}
+
+[oslo_messaging_rabbit]
+ssl = {{ ironic_oslomsg_rpc_use_ssl }}
+pool_max_size = {{ ironic_wsgi_processes }}
+rabbit_quorum_queue = {{ ironic_oslomsg_rabbit_quorum_queues }}
+rabbit_transient_quorum_queue = {{ ironic_oslomsg_rabbit_transient_quorum_queues }}
+rabbit_qos_prefetch_count = {{ ironic_oslomsg_rabbit_qos_prefetch_count }}
+use_queue_manager = {{ ironic_oslomsg_rabbit_queue_manager }}
+{% if ironic_oslomsg_rabbit_queue_manager %}
+hostname = {{ [ansible_facts['hostname'], ironic_service_name] | join('-') }}
+{% endif %}
+rabbit_stream_fanout = {{ ironic_oslomsg_rabbit_stream_fanout }}
+rabbit_quorum_delivery_limit = {{ ironic_oslomsg_rabbit_quorum_delivery_limit }}
+rabbit_quorum_max_memory_bytes = {{ ironic_oslomsg_rabbit_quorum_max_memory_bytes }}
 
 [oslo_policy]
 
