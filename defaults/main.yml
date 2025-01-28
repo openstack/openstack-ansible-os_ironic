@@ -450,7 +450,7 @@ ironic_deploy_image_path_owner: "root"
 # Allow various parts of this to be overidden to local mirrors, or replaced completely with custom settings
 ironic_deploy_image_server: "https://tarballs.opendev.org/"
 ironic_deploy_image_server_path: "openstack/ironic-python-agent/dib/files/"
-ironic_deploy_image_base_name: "ipa-centos9-stable-2024.1"
+ironic_deploy_image_base_name: "ipa-centos9-stable-2024.2"
 ironic_deploy_image_kernel_name: "{{ ironic_deploy_image_base_name + '.kernel' }}"
 ironic_deploy_image_initramfs_name: "{{ ironic_deploy_image_base_name + '.initramfs' }}"
 ironic_deploy_image_list:
