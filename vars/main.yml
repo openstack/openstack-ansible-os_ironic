@@ -33,6 +33,11 @@ _ironic_oslomsg_notify_vhost_conf: >-
     (ironic_oslomsg_notify_vhost is string) | ternary(
       ironic_oslomsg_notify_vhost, ironic_oslomsg_notify_vhost | selectattr('state', 'eq', 'present') | map(attribute='name') | first)
   }}
+_ironic_inspector_oslomsg_rpc_vhost_conf: >-
+  {{
+    (ironic_inspector_oslomsg_rpc_vhost is string) | ternary(
+      ironic_inspector_oslomsg_rpc_vhost, ironic_inspector_oslomsg_rpc_vhost | selectattr('state', 'eq', 'present') | map(attribute='name') | first)
+  }}
 # This special list brings together all of the package installations into one
 # task to save time.
 
