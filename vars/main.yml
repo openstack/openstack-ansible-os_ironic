@@ -86,20 +86,20 @@ ironic_driver_types:
     hardware_type: idrac
     boot: pxe
     deploy: direct
-    inspect: idrac-wsman
-    management: idrac-wsman
-    power: idrac-wsman
+    inspect: idrac-redfish
+    management: idrac-redfish
+    power: idrac-redfish
     console: no-console
-    raid: idrac-wsman
+    raid: idrac-redfish
   pxe_drac_inspector:
     hardware_type: idrac
     boot: pxe
     deploy: direct
     inspect: inspector
-    management: idrac-wsman
-    power: idrac-wsman
+    management: idrac-redfish
+    power: idrac-redfish
     console: no-console
-    raid: idrac-wsman
+    raid: idrac-redfish
   pxe_ilo:
     hardware_type: ilo
     boot: ilo-pxe
