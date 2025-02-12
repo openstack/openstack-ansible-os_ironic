@@ -14,7 +14,7 @@
 # limitations under the License.
 
 - name: Restart ironic services
-  service:
+  ansible.builtin.service:
     name: "{{ item.service_name }}"
     state: restarted
     enabled: true
@@ -26,7 +26,7 @@
     - "cert installed"
 
 - name: Restart tftpd
-  service:
+  ansible.builtin.service:
     name: "{{ ironic_tftpd_service_name }}"
     state: restarted
     enabled: true
@@ -34,19 +34,19 @@
   failed_when: false
 
 - name: Restart isc-dhcp-server
-  service:
+  ansible.builtin.service:
     name: "isc-dhcp-server"
     state: restarted
   failed_when: false
 
 - name: Restart ironic-inspector-dnsmasq
-  service:
+  ansible.builtin.service:
     name: "ironic-inspector-dnsmasq"
     state: restarted
   failed_when: false
 
 - name: Restart web server
-  service:
+  ansible.builtin.service:
     name: "nginx"
     enabled: true
     state: restarted

@@ -14,13 +14,13 @@
 # limitations under the License.
 
 - name: Create the system group
-  group:
+  ansible.builtin.group:
     name: "{{ ironic_system_group_name }}"
     state: "present"
     system: "yes"
 
 - name: Create ironic system users
-  user:
+  ansible.builtin.user:
     name: "{{ ironic_system_user_name }}"
     group: "{{ ironic_system_group_name }}"
     comment: "{{ ironic_system_comment }}"
@@ -30,7 +30,7 @@
     home: "{{ ironic_system_home_folder }}"
 
 - name: Create ironic dir
-  file:
+  ansible.builtin.file:
     path: "{{ item.path }}"
     state: directory
     owner: "{{ item.owner | default(ironic_system_user_name) }}"

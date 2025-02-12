@@ -14,7 +14,7 @@
 # limitations under the License.
 
 - name: Copy in dhcp config file
-  template:
+  ansible.builtin.template:
     src: "dhcpd.conf.j2"
     dest: "/etc/dhcp/dhcpd.conf"
     mode: "0644"
@@ -23,7 +23,7 @@
     - Restart isc-dhcp-server
 
 - name: Copy in dnsmasq config file
-  template:
+  ansible.builtin.template:
     src: "dnsmasq.conf.j2"
     dest: "/etc/ironic-inspector/inspector-dnsmasq.conf"
     owner: "{{ ironic_system_user_name }}"
@@ -34,7 +34,7 @@
     - Restart ironic-inspector-dnsmasq
 
 - name: Create directories
-  file:
+  ansible.builtin.file:
     path: "{{ item }}"
     state: directory
     owner: "{{ ironic_system_user_name }}"

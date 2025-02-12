@@ -14,7 +14,7 @@
 # limitations under the License.
 
 - name: Gather variables for each operating system
-  include_vars: "{{ lookup('first_found', params) }}"
+  ansible.builtin.include_vars: "{{ lookup('first_found', params) }}"
   vars:
     params:
       files:
@@ -29,7 +29,7 @@
     - always
 
 - name: Gathering facts on metal hosts for interface {{ ironic_container_network_name }}
-  setup:
+  ansible.builtin.setup:
     gather_subset: "!all,network"
     filter: "{{ dynamic_address_gather_filter | default(('ansible_' ~ default_network_interface_name) | replace('-','_')) }}"
   vars:
@@ -41,7 +41,7 @@
     - always
 
 - name: Including osa.db_setup role
-  include_role:
+  ansible.builtin.include_role:
     name: openstack.osa.db_setup
     apply:
       tags:
@@ -63,7 +63,7 @@
     - always
 
 - name: Including osa.db_setup role
-  include_role:
+  ansible.builtin.include_role:
     name: openstack.osa.db_setup
     apply:
       tags:
@@ -85,7 +85,7 @@
     - always
 
 - name: Including osa.mq_setup role
-  include_role:
+  ansible.builtin.include_role:
     name: openstack.osa.mq_setup
     apply:
       tags:
@@ -111,12 +111,12 @@
     - always
 
 - name: Importing ironic_pre_install tasks
-  import_tasks: ironic_pre_install.yml
+  ansible.builtin.import_tasks: ironic_pre_install.yml
   tags:
     - ironic-install
 
 - name: Create and install SSL certificates
-  include_role:
+  ansible.builtin.include_role:
     name: pki
     tasks_from: main_certs.yml
     apply:
@@ -137,7 +137,7 @@
     - always
 
 - name: Install the python venv
-  import_role:
+  ansible.builtin.import_role:
     name: "python_venv_build"
   vars:
     venv_python_executable: "{{ ironic_venv_python_executable }}"
@@ -155,13 +155,13 @@
     - ironic-install
 
 - name: Importing ironic_post_install tasks
-  import_tasks: ironic_post_install.yml
+  ansible.builtin.import_tasks: ironic_post_install.yml
   tags:
     - ironic-config
     - post-install
 
 - name: Import uwsgi role
-  import_role:
+  ansible.builtin.import_role:
     name: uwsgi
   vars:
     uwsgi_services: "{{ uwsgi_ironic_services }}"
@@ -171,24 +171,24 @@
     - uwsgi
 
 - name: Importing ironic_conductor_post_install tasks
-  import_tasks: ironic_conductor_post_install.yml
+  ansible.builtin.import_tasks: ironic_conductor_post_install.yml
   when: "ironic_services['ironic-conductor']['group'] in group_names"
   tags:
     - ironic-config
 
 - name: Importing ironic_db_setup tasks
-  import_tasks: ironic_db_setup.yml
+  ansible.builtin.import_tasks: ironic_db_setup.yml
   tags:
     - ironic-config
 
 - name: Importing ironic_inspector_pre_install tasks
-  import_tasks: ironic_inspector_pre_install.yml
+  ansible.builtin.import_tasks: ironic_inspector_pre_install.yml
   when: inventory_hostname in groups['ironic_inspector']
   tags:
     - ironic-inspector
 
 - name: Run the systemd service role
-  import_role:
+  ansible.builtin.import_role:
     name: systemd_service
   vars:
     systemd_user_name: "{{ ironic_system_user_name }}"
@@ -206,7 +206,7 @@
     - systemd-service
 
 - name: Including osa.service_setup role
-  include_role:
+  ansible.builtin.include_role:
     name: openstack.osa.service_setup
     apply:
       tags:
@@ -227,13 +227,13 @@
     - always
 
 - name: Importing ironic_inspector_post_install tasks
-  import_tasks: ironic_inspector_post_install.yml
+  ansible.builtin.import_tasks: ironic_inspector_post_install.yml
   when: inventory_hostname in groups['ironic_inspector']
   tags:
     - ironic-inspector
 
 - name: Including ironic_deploy_image tasks
-  include_tasks: ironic_deploy_image.yml
+  ansible.builtin.include_tasks: ironic_deploy_image.yml
   args:
     apply:
       tags:

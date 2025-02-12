@@ -24,14 +24,14 @@
     ansible_python_interpreter: "{{ ironic_service_setup_host_python_interpreter }}"
   block:
     - name: Create image download directory
-      file:
+      ansible.builtin.file:
         path: "{{ ironic_deploy_image_path }}"
         state: directory
         mode: "0750"
         owner: "{{ ironic_deploy_image_path_owner }}"
 
     - name: Download image from artefact server
-      get_url:
+      ansible.builtin.get_url:
         url: "{{ item['url'] }}"
         dest: "{{ ironic_deploy_image_path }}"
         checksum: "sha256:{{ item['sha_url'] }}"
