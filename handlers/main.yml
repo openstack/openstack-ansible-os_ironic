@@ -17,8 +17,8 @@
   service:
     name: "{{ item.service_name }}"
     state: restarted
-    enabled: yes
-    daemon_reload: yes
+    enabled: true
+    daemon_reload: true
   with_list: "{{ filtered_ironic_services }}"
   listen:
     - "venv changed"
@@ -29,8 +29,8 @@
   service:
     name: "{{ ironic_tftpd_service_name }}"
     state: restarted
-    enabled: yes
-    daemon_reload: yes
+    enabled: true
+    daemon_reload: true
   failed_when: false
 
 - name: Restart isc-dhcp-server
@@ -48,9 +48,9 @@
 - name: Restart web server
   service:
     name: "nginx"
-    enabled: yes
+    enabled: true
     state: restarted
-    daemon_reload: yes
+    daemon_reload: true
   register: _restart
   until: _restart is success
   retries: 5

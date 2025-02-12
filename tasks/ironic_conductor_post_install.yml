@@ -52,7 +52,7 @@
   copy:
     src: "{{ item }}"
     dest: "{{ ironic_tftpd_root }}/"
-    remote_src: True
+    remote_src: true
     mode: "0644"
   with_items: "{{ ironic_library_modules_paths }}"
 
@@ -60,7 +60,7 @@
   file:
     path: "{{ ironic_grub_dir }}"
     state: directory
-    recurse: yes
+    recurse: true
 
 - name: Copy PXE grub config into tftpboot
   copy:
@@ -74,7 +74,7 @@
   copy:
     src: "{{ item.path }}"
     dest: "{{ ironic_tftpd_root }}/{{ item.name }}"
-    remote_src: True
+    remote_src: true
     mode: "0644"
   with_items: "{{ (ironic_uefi_modules + ironic_tftp_extra_content) | selectattr('path', 'defined') | list }}"
 
@@ -139,8 +139,8 @@
         systemd_overrides:
           Service:
             ExecStart:
-              - ''
-              - '/usr/sbin/nginx -c /etc/nginx/nginx-nodefault.conf'
+              - ""
+              - "/usr/sbin/nginx -c /etc/nginx/nginx-nodefault.conf"
   notify:
     - Restart web server
 

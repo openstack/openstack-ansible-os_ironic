@@ -16,7 +16,7 @@
 # Defaults file for openstack-ansible-ironic
 
 # Verbosity Options
-debug: False
+debug: false
 
 # python venv executable
 ironic_venv_python_executable: "{{ openstack_venv_python_executable | default('python3') }}"
@@ -66,7 +66,7 @@ ironic_services:
     group: ironic_api
     service_name: ironic-api
     init_config_overrides: "{{ ironic_api_init_config_overrides }}"
-    wsgi_app: True
+    wsgi_app: true
     wsgi_name: ironic-api-wsgi
     uwsgi_overrides: "{{ ironic_api_uwsgi_ini_overrides }}"
     uwsgi_port: "{{ ironic_service_port }}"
@@ -125,7 +125,7 @@ ironic_service_in_ldap: "{{ service_ldap_backend_enabled | default(False) }}"
 # Enable interaction with Nova and Neutron from 2024.1 with default policy
 # If more than one service project name is necessary, then you may need to
 # override Ironic 'service_role' policy.
-ironic_service_role_elevated_access: True
+ironic_service_role_elevated_access: true
 
 # The name of the entry in container_networks for the bmaas network
 # This is the default provisioning / inspection / cleaning network for this role
@@ -158,7 +158,7 @@ ironic_bmaas_interface: >-
 # http_url to be configured in the [deploy] section of the
 # config file. If this is set to False, then Ironic will use
 # Swift to host the floppy images and generated boot_iso.
-ironic_enable_web_server_for_images: False
+ironic_enable_web_server_for_images: false
 ironic_http_bind_address: "{{ ironic_bmaas_address }}"
 ironic_http_url: "{{ ironic_ipxe_proto }}://{{ ironic_http_bind_address }}:{{ ironic_ipxe_port }}"
 ironic_http_root: "/httpboot"
@@ -177,7 +177,7 @@ ironic_swift_url_endpoint_type: swift
 # Is this Ironic installation working standalone?
 # If you're wanting Ironic to work without being integrated to other OpenStack
 # services, set this to True, and update the dhcp configuration appropriately
-ironic_standalone: False
+ironic_standalone: false
 
 # Enables or disables automated cleaning. Automated cleaning
 # is a configurable set of steps, such as erasing disk drives,
@@ -423,7 +423,7 @@ ironic_inspector_db_connection_recycle_time: "{{ openstack_db_connection_recycle
 ironic_inspector_pip_install_args: "{{ pip_install_options | default('') }}"
 
 # Ironic iPXE support
-ironic_ipxe_enabled: False
+ironic_ipxe_enabled: false
 ironic_ipxe_port: 8051
 ironic_ipxe_proto: "http"
 
@@ -438,7 +438,7 @@ ironic_inspector_swift_role_names:
   - swiftoperator
 
 # Ironic deploy images need to be uploaded to glance.
-ironic_deploy_image_glance_upload: True
+ironic_deploy_image_glance_upload: true
 
 # Set the directory where the downloaded image will be stored
 # on the ironic_service_setup_host host. If the host is localhost,
@@ -456,20 +456,20 @@ ironic_deploy_image_initramfs_name: "{{ ironic_deploy_image_base_name + '.initra
 ironic_deploy_image_list:
   - url: "{{ ironic_deploy_image_server ~ ironic_deploy_image_server_path ~ ironic_deploy_image_kernel_name }}"
     sha_url: "{{ ironic_deploy_image_server ~ ironic_deploy_image_server_path ~ ironic_deploy_image_kernel_name ~ '.sha256' }}"
-    container_format: 'bare'
-    disk_format: 'raw'
+    container_format: "bare"
+    disk_format: "raw"
     name: "{{ ironic_deploy_image_kernel_name }}"
   - url: "{{ ironic_deploy_image_server ~ ironic_deploy_image_server_path ~ ironic_deploy_image_initramfs_name }}"
     sha_url: "{{ ironic_deploy_image_server ~ ironic_deploy_image_server_path ~ ironic_deploy_image_initramfs_name ~ '.sha256' }}"
-    container_format: 'bare'
-    disk_format: 'raw'
+    container_format: "bare"
+    disk_format: "raw"
     name: "{{ ironic_deploy_image_initramfs_name }}"
 
 # allow user defined extra images to upload
 ironic_extra_deploy_image_list: []
 
 # Ironic inspector
-ironic_inspector_enable_discovery: True
+ironic_inspector_enable_discovery: true
 ironic_inspector_openstack_db_connection_string: >-
   mysql+pymysql://{{ ironic_inspector_galera_user }}:{{ ironic_inspector_container_mysql_password }}@{{ ironic_inspector_galera_address -}}:{{
     ironic_inspector_galera_port }}/{{ ironic_inspector_galera_database }}?charset=utf8{%
@@ -481,16 +481,16 @@ ironic_inspector_openstack_db_connection_string: >-
 # ironic_inspector_processing_hooks: "$default_processing_hooks,lldp_basic,local_link_connection"
 
 # pass additional kernel paramters to the deploy image
-ironic_inspector_extra_callback_parameters: ''
+ironic_inspector_extra_callback_parameters: ""
 
 # Ironic inspector dhcp
 ironic_inspector_dhcp_address: "{{ ironic_bmaas_address }}"
 ironic_inspector_dhcp_pool_range: 192.168.0.51 192.168.0.150
 ironic_inspector_dhcp_subnet: 192.168.0.0/22
 ironic_inspector_dhcp_subnet_mask: 255.255.252.0
-ironic_insepctor_dhcp_enable_gateway: True
+ironic_insepctor_dhcp_enable_gateway: true
 ironic_inspector_dhcp_gateway: 192.168.0.1
-ironic_inspector_dhcp_enable_nameservers: True
+ironic_inspector_dhcp_enable_nameservers: true
 ironic_inspector_dhcp_nameservers: 192.168.0.1
 ironic_inspector_dhcp_lease_time: 600
 
@@ -543,7 +543,7 @@ ironic_pki_setup_host: "{{ openstack_pki_setup_host | default('localhost') }}"
 ironic_pki_keys_path: "{{ ironic_pki_dir ~ '/certs/private/' }}"
 ironic_pki_certs_path: "{{ ironic_pki_dir ~ '/certs/certs/' }}"
 ironic_pki_intermediate_cert_name: "{{ openstack_pki_service_intermediate_cert_name | default('ExampleCorpIntermediate') }}"
-ironic_pki_regen_cert: ''
+ironic_pki_regen_cert: ""
 ironic_pki_san: "{{ openstack_pki_san | default('DNS:' ~ ansible_facts['hostname'] ~ ',IP:' ~ management_address) }}"
 ironic_pki_certificates:
   - name: "ironic_{{ ansible_facts['hostname'] }}"

@@ -34,13 +34,12 @@
     checksum: "sha256:{{ item.sha_url }}"
     owner: "{{ ironic_system_user_name }}"
     group: "{{ ironic_system_group_name }}"
-    mode: '0644'
+    mode: "0644"
   with_items: "{{ ironic_deploy_image_list }}"
 
 - name: Configure nginx when inspector boot mode is http
   when: ironic_inspector_boot_mode == 'http'
   block:
-
     - name: Disable default nginx configuration
       file:
         path: /etc/nginx/sites-enabled/default
@@ -86,8 +85,8 @@
             systemd_overrides:
               Service:
                 ExecStart:
-                  - ''
-                  - '/usr/sbin/nginx -c /etc/nginx/nginx-nodefault.conf'
+                  - ""
+                  - "/usr/sbin/nginx -c /etc/nginx/nginx-nodefault.conf"
       notify:
         - Restart web server
 

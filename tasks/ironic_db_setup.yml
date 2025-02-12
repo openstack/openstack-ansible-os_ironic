@@ -15,14 +15,14 @@
 
 - name: Update database schema
   command: "{{ ironic_bin }}/ironic-dbsync upgrade"
-  become: yes
+  become: true
   become_user: "{{ ironic_system_user_name }}"
   changed_when: false
   when: inventory_hostname in groups['ironic_conductor'][0]
 
 - name: Update database schema
   command: "{{ ironic_bin }}/ironic-inspector-dbsync --config-file /etc/ironic-inspector/ironic-inspector.conf upgrade"
-  become: yes
+  become: true
   changed_when: false
   when:
     - _ironic_inspector_is_first_play_host
