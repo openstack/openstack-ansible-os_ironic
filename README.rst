@@ -1,17 +1,8 @@
-========================
-Team and repository tags
-========================
-
-.. image:: https://governance.openstack.org/tc/badges/openstack-ansible-os_ironic.svg
-    :target: https://governance.openstack.org/tc/reference/tags/index.html
-
-.. Change things from this point on
-
 ======================================================
-OpenStack-Ansible role for Bare Metal (ironic) service
+OpenStack-Ansible role for Bare Metal (Ironic) service
 ======================================================
 
-This is an OpenStack-Ansible role to deploy the Bare Metal (ironic)
+This is an OpenStack-Ansible role to deploy the Bare Metal (Ironic)
 service.
 
 Documentation for the project can be found at:
