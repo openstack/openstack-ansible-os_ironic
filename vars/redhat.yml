@@ -46,7 +46,7 @@ ironic_library_modules_paths:
   - "/usr/share/syslinux/chain.c32"
   - "/usr/share/syslinux/linux.c32"
   - "/usr/share/ipxe/undionly.kpxe"
-  - "/usr/share/ipxe/ipxe-x86_64.efi"
+  - "{{ '/usr/share/ipxe/ipxe' ~ (ansible_facts['distribution_major_version'] is version(10, '<')) | ternary('', '-snponly') ~ '-x86_64.efi' }}"
 
 ironic_uefi_modules:
   - name: "bootx64.efi"

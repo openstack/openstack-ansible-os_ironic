@@ -67,7 +67,7 @@ ironic_services:
     service_name: ironic-api
     init_config_overrides: "{{ ironic_api_init_config_overrides }}"
     wsgi_app: true
-    wsgi_name: ironic-api-wsgi
+    wsgi: "ironic.wsgi:application"
     uwsgi_overrides: "{{ ironic_api_uwsgi_ini_overrides }}"
     uwsgi_port: "{{ ironic_service_port }}"
     uwsgi_bind_address: "{{ ironic_uwsgi_bind_address }}"
