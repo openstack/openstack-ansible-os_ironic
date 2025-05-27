@@ -100,3 +100,13 @@ ironic_nginx_conf_path: "sites-available"
 ironic_grub_dir: "/tftpboot/grub"
 
 _ironic_ssl_truststore_location: /etc/ssl/certs/ca-certificates.crt
+
+ironic_inspector_apparmor_local:
+  - profile: "usr.sbin.dnsmasq"
+    content: |
+        /etc/ironic-inspector/inspector-dnsmasq.conf r,
+        /var/lib/ironic-inspector/inspector-dnsmasq.leases wr,
+        /etc/ironic-inspector/dhcp-hostsdir/* wr,
+        /etc/ironic-inspector/dhcp-hostsdir/ wr,
+        /etc/ironic-inspector/dhcp-hostsdir r,
+    condition: "{{ ironic_services['ironic-inspector']['group'] in group_names }}"

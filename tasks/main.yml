@@ -115,6 +115,13 @@
   tags:
     - ironic-install
 
+- name: Importing ironic_inspector_apparmor tasks
+  ansible.builtin.import_tasks: ironic_inspector_apparmor.yml
+  when:
+    - ansible_facts['distribution'] | lower == 'ubuntu'
+  tags:
+    - ironic-config
+
 - name: Create and install SSL certificates
   ansible.builtin.include_role:
     name: pki
