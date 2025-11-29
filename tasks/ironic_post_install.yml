@@ -131,16 +131,7 @@
     mode: "0644"
     config_type: yaml
   when:
-    - ironic_policy_overrides | length > 0
-  tags:
-    - ironic-policy-override
-
-- name: Remove legacy policy.yaml file
-  ansible.builtin.file:
-    path: "/etc/ironic/policy.yaml"
-    state: absent
-  when:
-    - ironic_policy_overrides | length == 0
+    - ironic_services['ironic-api']['group'] in group_names
   tags:
     - ironic-policy-override
 
