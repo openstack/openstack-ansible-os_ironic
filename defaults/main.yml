@@ -153,10 +153,10 @@ ironic_bmaas_interface: >-
 #
 ### Hosted Web Server
 #
-# Set this to True to use http web server to host floppy
+# Set this to true to use http web server to host floppy
 # images and generated boot ISO. This requires http_root and
 # http_url to be configured in the [deploy] section of the
-# config file. If this is set to False, then Ironic will use
+# config file. If this is set to false, then Ironic will use
 # Swift to host the floppy images and generated boot_iso.
 ironic_enable_web_server_for_images: false
 ironic_http_bind_address: "{{ ironic_bmaas_address }}"
@@ -219,7 +219,7 @@ ironic_keystone_auth_plugin: password
 # ironic_neutron_cleaning_network_name: "Name of cleaning network in neutron"
 # ironic_neutron_inspection_network_name: "Name of inspection network in neutron"
 
-# Integrated Openstack configuration
+# Integrated OpenStack configuration
 ironic_enabled_network_interfaces_list: "flat,noop{{ (ironic_neutron_provisioning_network_uuid is defined) | ternary(',neutron', '') }}"
 ironic_default_network_interface: "{{ (ironic_neutron_provisioning_network_uuid is defined) | ternary('neutron', 'flat') }}"
 ironic_auth_strategy: keystone
