@@ -4,7 +4,7 @@ Deploying multiple Ironic nodes with different CPU architecures
 
 Ironic can deploy nodes with CPU architectures which do not match
 the CPU architecture of the control plane. The default settings for
-Openstack-Ansible assume an x86-64 control plane deploying x86-64
+OpenStack-Ansible assume an x86-64 control plane deploying x86-64
 Ironic nodes.
 
 This documentation describes how to deploy aarch64 Ironic nodes
@@ -103,7 +103,6 @@ aarch64 Ubuntu host:
   source ./venv/bin/activate
   pip install diskimage-builder
   DIB_RELEASE=jammy DIB_CLOUD_INIT_DATASOURCES=Ec2 disk-image-create -a arm64 ubuntu vm block-device-efi cloud-init-datasources -o baremetal-ubuntu-22.04-efi-arm64.qcow2
-
 
 - The DIB_RELEASE=<name> environment variable tells the 'ubuntu'
   element which version of Ubuntu to create an image for. This defaults

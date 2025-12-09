@@ -3,7 +3,7 @@ Example LXC based Ironic deployment
 ===================================
 
 This section describes a specific deployment of Ironic using
-Openstack-Ansible. A number of design choices are made which
+OpenStack-Ansible. A number of design choices are made which
 illustrate how to configure the Ironic service for a specific
 set of requirements.
 
@@ -29,7 +29,7 @@ simplification.
 This example is illustrative of a specific set of deployment
 requirements but is not intended to be followed rigidly. It
 demonstrates some of the capabilities of Ironic and
-Openstack-Ansible and how to approach most parts of a practical
+OpenStack-Ansible and how to approach most parts of a practical
 deployment of Ironic at small to modest scales.
 
 .. warning::
@@ -45,7 +45,7 @@ deployment of Ironic at small to modest scales.
 
 .. image:: figures/ironic-lxc-example.drawio.png
 
-BMAAS network address plan
+BMaaS network address plan
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In this example the subnet for the ``bmaas`` network is 10.88.104.0/24.
@@ -126,10 +126,10 @@ subnet should be increased and the addresses allocated to meet the
 number of required nodes and maximum number of simultaneous nodes
 being provisioned and inspected.
 
-Openstack-Ansible configuration
+OpenStack-Ansible configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Once the address plan has been decided, the Openstack-Ansible configuration
+Once the address plan has been decided, the OpenStack-Ansible configuration
 can be updated to match.
 
 The existing ``cidr_networks`` and ``used_ips`` sections in
@@ -156,7 +156,7 @@ The hosts for the Ironic control plane containers are assigned.
   It is the responsibility of the deployer to create br-bmaas
   on the controller nodes and ensure that it is connected to
   the correct VLAN ID for the ``bmaas`` network. Configuration of
-  host networking is outside the scope of Openstack-Ansible.
+  host networking is outside the scope of OpenStack-Ansible.
 
 .. note::
 
@@ -191,7 +191,6 @@ The hosts for the Ironic control plane containers are assigned.
           - ironic_api_container
           - ironic_compute_container
           - ironic_inspector_container
-
 
   # ironic API and conductor
   ironic-infra_hosts:
@@ -261,7 +260,7 @@ networking-generic-switch. There is no specific ``device_type`` for NXOS.
       username: "neutron"                    # The user that Neutron will SSH to the switch as
       password: "supersecret"                # The password that Neutron will use to SSH to the switch
       ##  key_file: <ssh key file>           # An SSH key may be used instead of a password
-      ngs_manage_vlans: "False"              # VLANs are already provisioned on the switch so tell neutron not to create/delete VLANs
+      ngs_manage_vlans: "false"              # VLANs are already provisioned on the switch so tell neutron not to create/delete VLANs
 
 .. note::
 
@@ -437,7 +436,7 @@ In ``/etc/openstack_deploy/user_variables_ironic.yml``
   ironic_ironic_conf_overrides:
     # Disable full device erasure (slow) and just metadata erasure, and replace with "Express erasure"
     # which tries to use firmware secure-erase command, but if that fails, reverts to metadata erasure.
-    # See: https://docs.openstack.org/ironic/yoga/admin/cleaning.html#storage-cleaning-options
+    # See: https://docs.openstack.org/ironic/latest/admin/cleaning.html#storage-cleaning-options
     deploy:
       erase_devices_priority: 0
       erase_devices_metadata_priority: 0
@@ -471,8 +470,8 @@ In ``/etc/openstack_deploy/user_variables_ironic.yml``
   ironic_inspector_dhcp_pool_range: 10.88.104.96 10.88.104.127
   ironic_inspector_dhcp_subnet: 10.88.104.0/24
   ironic_inspector_dhcp_subnet_mask: 255.255.255.0
-  ironic_inspector_dhcp_enable_gateway: False
-  ironic_inspector_dhcp_enable_nameservers: False
+  ironic_inspector_dhcp_enable_gateway: false
+  ironic_inspector_dhcp_enable_nameservers: false
 
   ironic_inspector_dhcp_interface: eth15   # connected to br-bmaas on the host
 

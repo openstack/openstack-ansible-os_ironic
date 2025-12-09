@@ -15,7 +15,7 @@
 
 galaxy_info:
   author: OpenStack
-  description: Baremetal provisioning for Openstack
+  description: Bare metal provisioning for OpenStack
   company: OpenStack
   license: Apache
   role_name: os_ironic
