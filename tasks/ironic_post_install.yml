@@ -94,7 +94,7 @@
     mode: "0644"
     config_overrides: "{{ item.config_overrides }}"
     config_type: "{{ item.config_type }}"
-  when: item.condition | default(True)
+  when: item.condition | default(true)
   with_items:
     - src: "ironic.conf.j2"
       dest: "/etc/ironic/ironic.conf"
@@ -110,14 +110,14 @@
       dest: "/etc/ironic-inspector/ironic-inspector.conf"
       config_overrides: "{{ ironic_inspector_conf_overrides }}"
       config_type: "ini"
-      condition: inventory_hostname in groups['ironic-inspector']
+      condition: "{{ (inventory_hostname in groups[ironic_services['ironic-inspector']['group']]) | bool }}"
     - src: "rootwrap.conf.j2"
       dest: "/etc/ironic-inspector/rootwrap.conf"
       owner: "root"
       group: "root"
       config_overrides: "{{ ironic_inspector_rootwrap_conf_overrides }}"
       config_type: "ini"
-      condition: inventory_hostname in groups['ironic-inspector']
+      condition: "{{ (inventory_hostname in groups[ironic_services['ironic-inspector']['group']]) | bool }}"
   notify:
     - Restart ironic services
     - Restart uwsgi services

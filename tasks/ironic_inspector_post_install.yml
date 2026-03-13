@@ -16,7 +16,9 @@
 - name: Default pxelinux.0 config
   ansible.builtin.template:
     src: pxelinux-default.j2
-    dest: "{{ ironic_inspector_tftpboot_dir }}/pxelinux.cfg/default"
+    dest: "{{ ironic_tftpd_root }}/pxelinux.cfg/default"
+    owner: "{{ ironic_system_user_name }}"
+    group: "{{ ironic_system_group_name }}"
     mode: "0644"
 
 - name: Copy Inspector iPXE Configuration
@@ -30,7 +32,7 @@
 - name: Download IPA Images
   ansible.builtin.get_url:
     url: "{{ item.url }}"
-    dest: "{{ ironic_inspector_httpboot_dir }}/{{ item.name }}"
+    dest: "{{ ironic_http_root }}/{{ item.name }}"
     checksum: "sha256:{{ item.sha_url }}"
     owner: "{{ ironic_system_user_name }}"
     group: "{{ ironic_system_group_name }}"

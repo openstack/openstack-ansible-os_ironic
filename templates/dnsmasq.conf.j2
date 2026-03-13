@@ -5,7 +5,7 @@ bind-interfaces
 interface={{ ironic_inspector_dhcp_interface }}
 listen-address={{ ironic_inspector_dhcp_address }}
 dhcp-range={{ ironic_inspector_dhcp_pool_range | regex_replace(' ', ',') }}
-tftp-root={{ ironic_inspector_tftpboot_dir }}
+tftp-root={{ ironic_tftpd_root }}
 dhcp-option=3,{{ ironic_inspector_dhcp_gateway }}
 dhcp-option=6,{{ ironic_inspector_dhcp_nameservers }}
 dhcp-match=ipxe,175
