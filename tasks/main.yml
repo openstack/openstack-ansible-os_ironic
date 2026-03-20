@@ -131,9 +131,10 @@
         - ironic-config
         - pki
   vars:
+    pki_backend: "{{ ironic_pki_backend }}"
     pki_setup_host: "{{ ironic_pki_setup_host }}"
     pki_dir: "{{ ironic_pki_dir }}"
-    pki_create_certificates: "{{ ironic_user_ssl_cert is not defined and ironic_user_ssl_key is not defined }}"
+    pki_create_certificates: "{{ ironic_user_ssl_cert | length == 0 and ironic_user_ssl_key | length == 0 }}"
     pki_regen_cert: "{{ ironic_pki_regen_cert }}"
     pki_certificates: "{{ ironic_pki_certificates }}"
     pki_install_certificates: "{{ ironic_pki_install_certificates }}"

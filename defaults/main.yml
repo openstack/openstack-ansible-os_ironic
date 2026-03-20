@@ -542,12 +542,14 @@ ironic_pki_keys_path: "{{ ironic_pki_dir ~ '/certs/private/' }}"
 ironic_pki_certs_path: "{{ ironic_pki_dir ~ '/certs/certs/' }}"
 ironic_pki_intermediate_cert_name: "{{ openstack_pki_service_intermediate_cert_name | default('ExampleCorpIntermediate') }}"
 ironic_pki_regen_cert: ""
-ironic_pki_san: "{{ openstack_pki_san | default('DNS:' ~ ansible_facts['hostname'] ~ ',IP:' ~ management_address) }}"
+ironic_pki_san: "{{ openstack_pki_san | default({'dns': [ansible_facts['hostname']], 'ip': [management_address]}) }}"
+ironic_pki_backend: "{{ openstack_pki_backend | default('standalone') }}"
 ironic_pki_certificates:
   - name: "ironic_{{ ansible_facts['hostname'] }}"
-    provider: ownca
     cn: "{{ ansible_facts['hostname'] }}"
     san: "{{ ironic_pki_san }}"
+    # standalone backend only
+    provider: ownca
     signed_by: "{{ ironic_pki_intermediate_cert_name }}"
 
 # ironic destination files for SSL certificates
@@ -556,17 +558,21 @@ ironic_ssl_key: /etc/ironic/ironic.key
 
 # Installation details for SSL certificates
 ironic_pki_install_certificates:
-  - src: "{{ ironic_user_ssl_cert | default(ironic_pki_certs_path ~ 'ironic_' ~ ansible_facts['hostname'] ~ '-chain.crt') }}"
+  - name: "ironic_{{ ansible_facts['hostname'] }}"
+    type: "certificate_chain"
     dest: "{{ ironic_ssl_cert }}"
     owner: "{{ ironic_system_user_name }}"
     group: "{{ ironic_system_user_name }}"
-    mode: "0644"
-  - src: "{{ ironic_user_ssl_key | default(ironic_pki_keys_path ~ 'ironic_' ~ ansible_facts['hostname'] ~ '.key.pem') }}"
+    # standalone backend only
+    src: "{{ ironic_user_ssl_cert | default(ironic_pki_certs_path ~ 'ironic_' ~ ansible_facts['hostname'] ~ '-chain.crt') }}"
+  - name: "ironic_{{ ansible_facts['hostname'] }}"
+    type: "private_key"
     dest: "{{ ironic_ssl_key }}"
     owner: "{{ ironic_system_user_name }}"
     group: "{{ ironic_system_user_name }}"
-    mode: "0600"
+    # standalone backend only
+    src: "{{ ironic_user_ssl_key | default(ironic_pki_keys_path ~ 'ironic_' ~ ansible_facts['hostname'] ~ '.key.pem') }}"
 
 # Define user-provided SSL certificates
-# ironic_user_ssl_cert: <path to cert on ansible deployment host>
-# ironic_user_ssl_key: <path to cert on ansible deployment host>
+ironic_user_ssl_cert: ""
+ironic_user_ssl_key: ""
