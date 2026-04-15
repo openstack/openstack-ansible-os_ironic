@@ -480,7 +480,7 @@ Deploy Neutron changes
 
 .. code-block:: bash
 
-  openstack-ansible playbooks/os-neutron-install.yml
+  openstack-ansible openstack.osa.neutron
 
 Deploy the ironic-specific nova services
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -488,9 +488,9 @@ Deploy the ironic-specific nova services
 This deploys nova compute and nova console services
 to the ironic compute containers.
 
-.. code-block::
+.. code-block:: bash
 
-  playbooks/os-nova-install.yml --limit ironic_all
+  openstack-ansible openstack.osa.nova --limit ironic_all
 
 Deploy changes to HAProxy
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -500,21 +500,21 @@ endpoints.
 
 .. code-block:: bash
 
-  openstack-ansible playbooks/haproxy-install.yml --tags haproxy_server-config
+  openstack-ansible openstack.osa.haproxy --tags haproxy_server-config
 
 Deploy the Ironic and Inspector services
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. code-block::
+.. code-block:: bash
 
-  openstack-ansible playbooks/os-ironic-install.yml
+  openstack-ansible openstack.osa.ironic
 
 Deploy the Horizon dashbaords for Ironic
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: bash
 
-  openstack-ansible playbooks/os-horizon-install.yml
+  openstack-ansible openstack.osa.horizon
 
 Using Ironic
 ~~~~~~~~~~~~

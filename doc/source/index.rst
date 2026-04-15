@@ -18,7 +18,7 @@ service. See the `role-ironic spec`_ for more information.
 
 
 To clone or view the source code for this repository, visit the role repository
-for `os_ironic <https://github.com/openstack/openstack-ansible-os_ironic>`_.
+for `os_ironic <https://opendev.org/openstack/openstack-ansible-os_ironic>`_.
 
 Default variables
 ~~~~~~~~~~~~~~~~~
@@ -26,11 +26,6 @@ Default variables
 .. literalinclude:: ../../defaults/main.yml
    :language: yaml
    :start-after: under the License.
-
-Dependencies
-~~~~~~~~~~~~
-
-This role needs pip >= 7.1 installed on the target host.
 
 Example playbook
 ~~~~~~~~~~~~~~~~
