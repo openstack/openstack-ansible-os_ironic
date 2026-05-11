@@ -36,15 +36,15 @@
     owner: "{{ item.owner | default(ironic_system_user_name) }}"
     group: "{{ item.group | default(ironic_system_group_name) }}"
     mode: "{{ item.mode | default('0755') }}"
-  when: item.condition | default(True)
+  when: item.condition | default(true)
   with_items:
     - { path: "/openstack/venvs", mode: "0755", owner: "root", group: "root" }
     - { path: "/etc/ironic" }
     - path: "/etc/ironic-inspector"
-      condition: inventory_hostname in groups['ironic-inspector']
+      condition: "{{ (inventory_hostname in groups[ironic_services['ironic-inspector']['group']]) }}"
     - { path: "/etc/ironic/rootwrap.d" }
     - path: "/etc/ironic-inspector/rootwrap.d"
-      condition: inventory_hostname in groups['ironic-inspector']
+      condition: "{{ (inventory_hostname in groups[ironic_services['ironic-inspector']['group']]) }}"
     - { path: "/etc/sudoers.d", mode: "0750", owner: "root", group: "root" }
     - { path: "/var/log/ironic" }
     - { path: "{{ ironic_system_home_folder }}" }
@@ -52,7 +52,7 @@
     - { path: "{{ ironic_system_home_folder }}/images" }
     - { path: "{{ ironic_system_home_folder }}/master_images" }
     - { path: "{{ ironic_system_home_folder }}/cache/api", mode: "0700" }
-    - path: "{{ ironic_inspector_tftpboot_dir }}/pxelinux.cfg"
-      condition: inventory_hostname in groups['ironic-inspector']
-    - path: "/httpboot"
-      condition: inventory_hostname in groups['ironic-inspector']
+    - path: "{{ ironic_tftpd_root }}/pxelinux.cfg"
+      condition: "{{ (inventory_hostname in groups[ironic_services['ironic-conductor']['group']]) | bool }}"
+    - path: "{{ ironic_http_root }}"
+      condition: "{{ (inventory_hostname in groups[ironic_services['ironic-conductor']['group']]) | bool }}"

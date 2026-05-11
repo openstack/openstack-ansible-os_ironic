@@ -35,7 +35,7 @@
   vars:
     default_network_interface_name: "{{ container_networks[ironic_container_network_name]['bridge'] | default }}"
   when:
-    - is_metal
+    - is_metal | bool
     - (dynamic_address_gather_filter is defined) or (default_network_interface_name | length > 0)
   tags:
     - always
@@ -138,7 +138,7 @@
     pki_certificates: "{{ ironic_pki_certificates }}"
     pki_install_certificates: "{{ ironic_pki_install_certificates }}"
   when:
-    - ironic_backend_ssl
+    - ironic_backend_ssl | bool
     - "'ironic_api' in group_names or 'ironic_inspector' in group_names"
   tags:
     - always
@@ -179,7 +179,8 @@
 
 - name: Importing ironic_conductor_post_install tasks
   ansible.builtin.import_tasks: ironic_conductor_post_install.yml
-  when: "ironic_services['ironic-conductor']['group'] in group_names"
+  when:
+    - ironic_services['ironic-conductor']['group'] in group_names
   tags:
     - ironic-config
 
@@ -190,7 +191,8 @@
 
 - name: Importing ironic_inspector_pre_install tasks
   ansible.builtin.import_tasks: ironic_inspector_pre_install.yml
-  when: inventory_hostname in groups['ironic_inspector']
+  when:
+    - inventory_hostname in groups['ironic_inspector']
   tags:
     - ironic-inspector
 
@@ -229,13 +231,15 @@
     _service_users: "{{ ironic_service_user_list }}"
     _service_endpoints: "{{ ironic_service_endpoint_list }}"
     _service_catalog: "{{ ironic_service_catalog_list }}"
-  when: (_ironic_api_is_first_play_host or _ironic_inspector_is_first_play_host)
+  when:
+    - (_ironic_api_is_first_play_host or _ironic_inspector_is_first_play_host)
   tags:
     - always
 
 - name: Importing ironic_inspector_post_install tasks
   ansible.builtin.import_tasks: ironic_inspector_post_install.yml
-  when: inventory_hostname in groups['ironic_inspector']
+  when:
+    - inventory_hostname in groups['ironic_inspector']
   tags:
     - ironic-inspector
 
@@ -247,6 +251,6 @@
         - ironic-deploy-image
   when:
     - _ironic_api_is_first_play_host
-    - ironic_deploy_image_glance_upload
+    - ironic_deploy_image_glance_upload | bool
   tags:
     - always

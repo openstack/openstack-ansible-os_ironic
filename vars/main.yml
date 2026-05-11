@@ -59,7 +59,7 @@ ironic_driver_types:
     hardware_type: ipmi
     boot: pxe
     deploy: direct
-    inspect: inspector
+    inspect: agent
     management: ipmitool
     power: ipmitool
     console: no-console
@@ -68,7 +68,7 @@ ironic_driver_types:
     hardware_type: ipmi
     boot: pxe
     deploy: direct
-    inspect: inspector
+    inspect: agent
     management: ipmitool
     power: ipmitool
     console: ipmitool-socat
@@ -95,7 +95,7 @@ ironic_driver_types:
     hardware_type: idrac
     boot: pxe
     deploy: direct
-    inspect: inspector
+    inspect: agent
     management: idrac-redfish
     power: idrac-redfish
     console: no-console
@@ -113,7 +113,7 @@ ironic_driver_types:
     hardware_type: ipmi
     boot: pxe
     deploy: direct
-    inspect: inspector
+    inspect: agent
     management: ipmitool
     power: ipmitool
     console: no-console
@@ -122,7 +122,7 @@ ironic_driver_types:
     hardware_type: ipmi
     boot: pxe
     deploy: direct
-    inspect: inspector
+    inspect: agent
     management: ipmitool
     power: ipmitool
     console: ipmitool-socat
@@ -293,7 +293,7 @@ filtered_ironic_services: |-
   {%     set _ = value.update(
            {
              'service_key': key,
-             'enabled': value['enabled'] | default(True),
+             'enabled': value['enabled'] | default(true),
              'state': value['state'] | default('started'),
              'config_overrides': value.init_config_overrides
            }
@@ -336,7 +336,7 @@ filtered_ironic_drivers: |-
   {% else %}
   {% set concat_drivers = [] %}
   {% endif %}
-  {% set _driver_types = ironic_driver_types | combine(ironic_user_driver_types, recursive=True) %}
+  {% set _driver_types = ironic_driver_types | combine(ironic_user_driver_types, recursive=true) %}
   {% for driver in ironic_drivers_enabled %}
   {%   if driver in _driver_types.keys() %}
   {%     set _ = concat_drivers.append(_driver_types[driver]) %}

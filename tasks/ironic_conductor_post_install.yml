@@ -95,7 +95,8 @@
   ansible.builtin.file:
     path: /etc/nginx/sites-enabled/default
     state: absent
-  when: "ironic_ipxe_enabled | bool"
+  when:
+    - ironic_ipxe_enabled | bool
   notify:
     - Restart web server
 
@@ -103,7 +104,8 @@
   ansible.builtin.file:
     path: /etc/nginx/conf.d/default.conf
     state: absent
-  when: "ironic_ipxe_enabled | bool"
+  when:
+    - ironic_ipxe_enabled | bool
   notify:
     - Restart web server
 
@@ -112,7 +114,8 @@
     path: "{{ item }}"
     state: directory
     mode: "0755"
-  when: "ironic_ipxe_enabled | bool"
+  when:
+    - ironic_ipxe_enabled | bool
   with_items:
     - "/etc/nginx/{{ ironic_nginx_conf_path }}"
 
@@ -149,7 +152,8 @@
     src: ironic-ipxe.conf.j2
     dest: "/etc/nginx/{{ ironic_nginx_conf_path }}/ironic-ipxe.conf"
     mode: "0644"
-  when: "ironic_ipxe_enabled | bool"
+  when:
+    - ironic_ipxe_enabled | bool
   notify:
     - Restart web server
 
@@ -160,6 +164,6 @@
     state: link
   when:
     - ansible_facts['os_family'] == "Debian"
-    - "ironic_ipxe_enabled | bool"
+    - ironic_ipxe_enabled | bool
   notify:
     - Restart web server
