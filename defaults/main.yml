@@ -244,7 +244,7 @@ ironic_tftp_server_address: "{{ ironic_bmaas_address }}"
 ironic_tftp_extra_content: []
 
 ironic_pip_packages:
-  - "git+{{ ironic_git_repo }}@{{ ironic_git_install_branch }}#egg=ironic"
+  - "ironic@git+{{ ironic_git_repo }}@{{ ironic_git_install_branch }}"
   - cryptography
   - osprofiler
   - proliantutils
@@ -269,7 +269,7 @@ ironic_socat_port_range: "10000:10099"
 ironic_user_pip_packages: []
 
 ironic_inspector_pip_packages:
-  - "git+{{ ironic_inspector_git_repo }}@{{ ironic_inspector_git_install_branch }}#egg=ironic-inspector"
+  - "ironic-inspector@git+{{ ironic_inspector_git_repo }}@{{ ironic_inspector_git_install_branch }}"
   - python-ironic-inspector-client
 
 # Specific pip packages provided by the user for the ironic inspector service
